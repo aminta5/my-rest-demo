@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class PostDaoImpl implements PostDaoService {
 
-    PostRepository postRepository;
+    private final PostRepository postRepository;
 
     //constructor injection
 
@@ -42,7 +42,7 @@ public class PostDaoImpl implements PostDaoService {
     @Override
     public List<Post> findPostByTitle(String title){
         List<Post> posts = new ArrayList<>();
-        findAllPosts().stream().filter(p -> p.getTitle() == title).forEach(posts :: add);
+        findAllPosts().stream().filter(p -> p.getTitle().equalsIgnoreCase(title)).forEach(posts :: add);
         return posts;
 
     }

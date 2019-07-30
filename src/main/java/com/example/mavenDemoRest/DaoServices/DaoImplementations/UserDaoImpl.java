@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public class UserDaoImpl implements UserDaoService{
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserDaoImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -36,7 +36,7 @@ public class UserDaoImpl implements UserDaoService{
     @Override
     public List<User> findUserByNickname(String nickname){
         List<User> users = new ArrayList<>();
-        findAllUsers().stream().filter(u -> u.getNickname() == nickname).forEach(users :: add);
+        findAllUsers().stream().filter(u -> u.getNickname().equalsIgnoreCase(nickname)).forEach(users :: add);
         return users;
     }
 

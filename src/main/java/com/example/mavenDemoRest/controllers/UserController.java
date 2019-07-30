@@ -14,7 +14,7 @@ import java.util.Optional;
 @RestController
 public class UserController {
 
-    UserDaoService userDaoService;
+    private final UserDaoService userDaoService;
 
     public UserController(UserDaoService userDaoService) {
         this.userDaoService = userDaoService;
@@ -33,7 +33,7 @@ public class UserController {
         return optionalUser.orElse(null);
     }
 
-    @RequestMapping(path = "/users/{id}/delete")
+    @GetMapping(path = "/users/{id}/delete")
     public List<User> deleteUser(@PathVariable String id){
         Optional<User> optUser = userDaoService.findAllUsers().stream().filter(u -> u.getId() == Long.parseLong(id)).findFirst();
         if(optUser.isPresent()){
@@ -48,7 +48,20 @@ public class UserController {
 
     @PostMapping(path = "/users")
     public ResponseEntity<Object> createUser(@RequestBody User user){
-        User savedUser = DataStore.saveUser(user);
+        User savedUser = userDaoService.createUser(user);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedUser.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
+    }
+
+    //TODO
+    @PutMapping(path = "/users/{id}/update")
+    public ResponseEntity<Object> updateUser(@PathVariable String id, @RequestBody User user){
+        User savedUser = userDaoService.createUser(user);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

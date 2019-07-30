@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public DataLoader(UserRepository userRepository) {
         this.userRepository = userRepository;

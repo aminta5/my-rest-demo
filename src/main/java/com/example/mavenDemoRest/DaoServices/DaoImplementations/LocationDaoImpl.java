@@ -12,19 +12,16 @@ import java.util.List;
 @Service
 public class LocationDaoImpl implements LocationDaoService {
 
-    LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
 
     public LocationDaoImpl(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
     }
 
     @Override
-    public List<User> findUsersByLocation(Location location){
-        return location.getUsers();
+    public List<Location> findAllLocations(){
+        List<Location> locations = (List)locationRepository.findAll();
+        return locations;
     }
 
-    @Override
-    public List<Post> findPostsByLocation(Location location){
-        return location.getPosts();
-    }
 }
