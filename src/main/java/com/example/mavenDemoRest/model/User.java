@@ -5,20 +5,35 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "user")
 public class User extends BaseEntity{
+
+    @Size(max = 40)
     @Column
     private String firstName;
+
+    @Size(max = 40)
     @Column
     private String lastName;
-    @Column
+
+    @NotNull
+    @Size(max = 20)
+    @Column(unique = true)
     private String nickname;
+
     @Column
+    @Email
+    @NotNull
+    @Size(max = 120)
     private String email;
+
+    @Pattern(regexp = "^[A-Za-z0-9]+$")
+    @Size(min = 8, max = 12)
     @Column
     private String password;
 

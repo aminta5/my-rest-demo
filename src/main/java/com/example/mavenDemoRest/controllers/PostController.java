@@ -76,7 +76,6 @@ public class PostController {
     }
 
     //update post
-    //TODO
     @PutMapping(path = "/posts/update/{postId}")
     public ResponseEntity<Object> updatePost(@RequestBody PostCommand postCommand, @PathVariable String postId){
         Post postToUpdate = postDaoService.findPostById(Long.parseLong(postId));

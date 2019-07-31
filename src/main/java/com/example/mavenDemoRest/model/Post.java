@@ -4,16 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "post")
 public class Post extends BaseEntity{
 
     //title required max 120chars
+    @Size(max = 120)
     @Column
     private String title;
 
     //description 1000 chars max
+    @Size(max = 1000)
     @Column
     private String description;
 

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,16 +14,22 @@ import java.util.List;
 public class Location extends BaseEntity{
 
     //city max 120 chars
+    @NotNull
+    @Size(max = 120)
     @Column
     private String city;
 
     //country max 120 chars
+    @NotNull
+    @Size(max = 120)
     @Column
     private String country;
 
+    @NotNull
     @Column
     private float longitude;
 
+    @NotNull
     @Column
     private float latitude;
 
