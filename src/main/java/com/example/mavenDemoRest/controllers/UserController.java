@@ -85,10 +85,12 @@ public class UserController {
         userToUpdate.setPassword(userCommand.getPassword());
 
         //updating the location
-        locationToUpdate.setCity(newLocation.getCity());
-        locationToUpdate.setCountry(newLocation.getCountry());
-        locationToUpdate.setLongitude(newLocation.getLongitude());
-        locationToUpdate.setLatitude(newLocation.getLatitude());
+        if(newLocation != null){
+            locationToUpdate.setCity(newLocation.getCity());
+            locationToUpdate.setCountry(newLocation.getCountry());
+            locationToUpdate.setLongitude(newLocation.getLongitude());
+            locationToUpdate.setLatitude(newLocation.getLatitude());
+        }
 
         userToUpdate.setLocation(locationToUpdate);
 

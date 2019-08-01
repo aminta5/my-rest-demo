@@ -87,10 +87,13 @@ public class PostController {
         Location locationToUpdate = postToUpdate.getLocation();
         Location newLocation = post.getLocation();
         //System.out.println(locationToUpdate + " location" + " " + post.getLocation().getCity());
-        locationToUpdate.setCity(newLocation.getCity());
-        locationToUpdate.setCountry(newLocation.getCountry());
-        locationToUpdate.setLongitude(newLocation.getLongitude());
-        locationToUpdate.setLatitude(newLocation.getLatitude());
+
+        if(newLocation != null){
+            locationToUpdate.setCity(newLocation.getCity());
+            locationToUpdate.setCountry(newLocation.getCountry());
+            locationToUpdate.setLongitude(newLocation.getLongitude());
+            locationToUpdate.setLatitude(newLocation.getLatitude());
+        }
 
 
         postToUpdate.setLocation(locationToUpdate);
