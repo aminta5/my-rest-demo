@@ -9,15 +9,16 @@ import com.example.mavenDemoRest.converters.UserCommandToUser;
 import com.example.mavenDemoRest.model.Location;
 import com.example.mavenDemoRest.model.Post;
 import com.example.mavenDemoRest.model.User;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-@Lazy
+
+@EnableResourceServer
 @RestController
 public class PostController {
 

@@ -6,12 +6,16 @@ import com.example.mavenDemoRest.DaoServices.UserDaoService;
 import com.example.mavenDemoRest.model.Location;
 import com.example.mavenDemoRest.model.Post;
 import com.example.mavenDemoRest.model.User;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
 
+@EnableResourceServer
+@RestController
 public class SearchController {
     private final PostDaoService postDaoService;
     private final UserDaoService userDaoService;
