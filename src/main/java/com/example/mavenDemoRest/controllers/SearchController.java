@@ -1,8 +1,8 @@
 package com.example.mavenDemoRest.controllers;
 
-import com.example.mavenDemoRest.DaoServices.LocationDaoService;
-import com.example.mavenDemoRest.DaoServices.PostDaoService;
-import com.example.mavenDemoRest.DaoServices.UserDaoService;
+import com.example.mavenDemoRest.daoServices.LocationDaoService;
+import com.example.mavenDemoRest.daoServices.PostDaoService;
+import com.example.mavenDemoRest.daoServices.UserDaoService;
 import com.example.mavenDemoRest.model.Location;
 import com.example.mavenDemoRest.model.Post;
 import com.example.mavenDemoRest.model.User;

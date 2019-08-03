@@ -1,24 +1,22 @@
-package com.example.mavenDemoRest.commands;
+package com.example.mavenDemoRest.requestBodies;
 
-import com.example.mavenDemoRest.model.Post;
-import com.example.mavenDemoRest.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocationCommand {
+public class RequestBodyLocation {
     private Long id;
     private String city;
     private String country;
     private float longitude;
     private float latitude;
-    private List<UserCommand> users = new ArrayList<>();
-    private List<PostCommand> posts = new ArrayList<>();
+    private List<RequestBodyUser> users = new ArrayList<>();
+    private List<RequestBodyPost> posts = new ArrayList<>();
 
     //constructors
-    public LocationCommand() {
+    public RequestBodyLocation() {
     }
 
-    public LocationCommand(Long id, String city, String country, float longitude, float latitude, List<UserCommand> users, List<PostCommand> posts) {
+    public RequestBodyLocation(Long id, String city, String country, float longitude, float latitude, List<RequestBodyUser> users, List<RequestBodyPost> posts) {
         this.id = id;
         this.city = city;
         this.country = country;
@@ -70,19 +68,19 @@ public class LocationCommand {
         this.latitude = latitude;
     }
 
-    public List<UserCommand> getUsers() {
+    public List<RequestBodyUser> getUsers() {
         return users;
     }
 
-    public void setUsers(List<UserCommand> users) {
+    public void setUsers(List<RequestBodyUser> users) {
         this.users = users;
     }
 
-    public List<PostCommand> getPosts() {
+    public List<RequestBodyPost> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<PostCommand> posts) {
+    public void setPosts(List<RequestBodyPost> posts) {
         this.posts = posts;
     }
 }

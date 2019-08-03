@@ -1,10 +1,9 @@
 package com.example.mavenDemoRest.controllers;
 
-import com.example.mavenDemoRest.DaoServices.UserDaoService;
-import com.example.mavenDemoRest.commands.UserCommand;
-import com.example.mavenDemoRest.converters.LocationCommandToLocation;
-import com.example.mavenDemoRest.converters.UserCommandToUser;
-import com.example.mavenDemoRest.model.Location;
+import com.example.mavenDemoRest.daoServices.UserDaoService;
+import com.example.mavenDemoRest.requestBodies.RequestBodyUser;
+import com.example.mavenDemoRest.converters.RequestBodyLocationToLocation;
+import com.example.mavenDemoRest.converters.RequestBodyUserToUser;
 import com.example.mavenDemoRest.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +17,13 @@ import java.util.Optional;
 public class UserController {
 
     private final UserDaoService userDaoService;
-    private final UserCommandToUser userCommandToUser;
-    private final LocationCommandToLocation locationCommandToLocation;
+    private final RequestBodyUserToUser requestBodyUserToUser;
+    private final RequestBodyLocationToLocation requestBodyLocationToLocation;
 
-    public UserController(UserDaoService userDaoService, UserCommandToUser userCommandToUser, LocationCommandToLocation locationCommandToLocation) {
+    public UserController(UserDaoService userDaoService, RequestBodyUserToUser requestBodyUserToUser, RequestBodyLocationToLocation requestBodyLocationToLocation) {
         this.userDaoService = userDaoService;
-        this.userCommandToUser = userCommandToUser;
-        this.locationCommandToLocation = locationCommandToLocation;
+        this.requestBodyUserToUser = requestBodyUserToUser;
+        this.requestBodyLocationToLocation = requestBodyLocationToLocation;
     }
 
     //find all users
@@ -58,8 +57,8 @@ public class UserController {
 
     //create user
     @PostMapping(path = "/users/create")
-    public ResponseEntity<Object> createUser(@RequestBody UserCommand userCommand){
-        User savedUser = userDaoService.saveUser(userCommand);
+    public ResponseEntity<Object> createUser(@RequestBody RequestBodyUser requestBodyUser){
+        User savedUser = userDaoService.saveUser(requestBodyUser);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -70,9 +69,9 @@ public class UserController {
 
     //update user
     @PutMapping(path = "/users/update/{userId}")
-    public ResponseEntity<Object> updateUser(@PathVariable String userId, @RequestBody UserCommand userCommand){
+    public ResponseEntity<Object> updateUser(@PathVariable String userId, @RequestBody RequestBodyUser requestBodyUser){
 
-        User savedUser = userDaoService.updateUser(userCommand, Long.parseLong(userId));
+        User savedUser = userDaoService.updateUser(requestBodyUser, Long.parseLong(userId));
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

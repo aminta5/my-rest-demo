@@ -1,9 +1,8 @@
-package com.example.mavenDemoRest.DaoServices;
+package com.example.mavenDemoRest.daoServices;
 
-import com.example.mavenDemoRest.commands.PostCommand;
+import com.example.mavenDemoRest.requestBodies.RequestBodyPost;
 import com.example.mavenDemoRest.model.Location;
 import com.example.mavenDemoRest.model.Post;
-import com.example.mavenDemoRest.model.User;
 
 import java.util.List;
 
@@ -12,8 +11,8 @@ public interface PostDaoService {
     Post findPostById(Long Id);
     Location findPostLocation(Post post);
     List<Post> findPostByTitle(String title);
-    Post savePost(PostCommand postCommand);
-    Post updatePost(PostCommand postCommand, Long postId);
+    Post savePost(RequestBodyPost requestBodyPost);
+    Post updatePost(RequestBodyPost requestBodyPost, Long postId);
     void deletePost(Post post);
 
 }

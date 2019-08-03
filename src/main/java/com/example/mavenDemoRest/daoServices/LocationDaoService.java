@@ -1,8 +1,6 @@
-package com.example.mavenDemoRest.DaoServices;
+package com.example.mavenDemoRest.daoServices;
 
 import com.example.mavenDemoRest.model.Location;
-import com.example.mavenDemoRest.model.Post;
-import com.example.mavenDemoRest.model.User;
 
 import java.util.List;
 

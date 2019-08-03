@@ -1,9 +1,9 @@
-package com.example.mavenDemoRest.DaoServices.DaoImplementations;
+package com.example.mavenDemoRest.daoServices.DaoImplementations;
 
-import com.example.mavenDemoRest.DaoServices.PostDaoService;
-import com.example.mavenDemoRest.commands.PostCommand;
-import com.example.mavenDemoRest.converters.LocationCommandToLocation;
-import com.example.mavenDemoRest.converters.PostCommandToPost;
+import com.example.mavenDemoRest.daoServices.PostDaoService;
+import com.example.mavenDemoRest.requestBodies.RequestBodyPost;
+import com.example.mavenDemoRest.converters.RequestBodyLocationToLocation;
+import com.example.mavenDemoRest.converters.RequestBodyPostToPost;
 import com.example.mavenDemoRest.model.Location;
 import com.example.mavenDemoRest.model.Post;
 import com.example.mavenDemoRest.model.User;
@@ -20,16 +20,16 @@ public class PostDaoImpl implements PostDaoService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final LocationCommandToLocation locationCommandToLocation;
-    private final PostCommandToPost postCommandToPost;
+    private final RequestBodyLocationToLocation requestBodyLocationToLocation;
+    private final RequestBodyPostToPost requestBodyPostToPost;
 
     //constructor injection
 
-    public PostDaoImpl(PostRepository postRepository, UserRepository userRepository, LocationCommandToLocation locationCommandToLocation, PostCommandToPost postCommandToPost) {
+    public PostDaoImpl(PostRepository postRepository, UserRepository userRepository, RequestBodyLocationToLocation requestBodyLocationToLocation, RequestBodyPostToPost requestBodyPostToPost) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
-        this.locationCommandToLocation = locationCommandToLocation;
-        this.postCommandToPost = postCommandToPost;
+        this.requestBodyLocationToLocation = requestBodyLocationToLocation;
+        this.requestBodyPostToPost = requestBodyPostToPost;
     }
 
     @Override
@@ -60,26 +60,26 @@ public class PostDaoImpl implements PostDaoService {
     }
 
     @Override
-    public Post savePost(PostCommand postCommand){
-        Optional<User> userOptional = userRepository.findById(postCommand.getUserId());
+    public Post savePost(RequestBodyPost requestBodyPost){
+        Optional<User> userOptional = userRepository.findById(requestBodyPost.getUserId());
         User user = userOptional.orElseThrow(() -> new RuntimeException("User not found"));
-        Post newPost = postCommandToPost.convert(postCommand);
+        Post newPost = requestBodyPostToPost.convert(requestBodyPost);
         newPost.setUser(user);
         Post savedPost = postRepository.save(newPost);
         return savedPost;
     }
 
     @Override
-    public Post updatePost(PostCommand postCommand, Long postId){
+    public Post updatePost(RequestBodyPost requestBodyPost, Long postId){
         Optional<Post> postToUpdateOptional = postRepository.findById(postId);
         Post postToUpdate = postToUpdateOptional.orElseThrow(() -> new RuntimeException("Post Not found"));
 
         //update post
-        if(postCommand.getTitle() != null){
-            postToUpdate.setTitle(postCommand.getTitle());
+        if(requestBodyPost.getTitle() != null){
+            postToUpdate.setTitle(requestBodyPost.getTitle());
         }
-        if(postCommand.getDescription() != null){
-            postToUpdate.setDescription(postCommand.getDescription());
+        if(requestBodyPost.getDescription() != null){
+            postToUpdate.setDescription(requestBodyPost.getDescription());
         }
 
         //update of the location
@@ -87,7 +87,7 @@ public class PostDaoImpl implements PostDaoService {
         if(locationToUpdate == null){
             locationToUpdate = new Location();
         }
-        Location newLocation = locationCommandToLocation.convert(postCommand.getLocation());
+        Location newLocation = requestBodyLocationToLocation.convert(requestBodyPost.getLocation());
 
         if(newLocation != null){
             if(newLocation.getCity() != null){

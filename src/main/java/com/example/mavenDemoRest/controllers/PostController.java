@@ -1,14 +1,12 @@
 package com.example.mavenDemoRest.controllers;
 
-import com.example.mavenDemoRest.DaoServices.PostDaoService;
-import com.example.mavenDemoRest.DaoServices.UserDaoService;
-import com.example.mavenDemoRest.commands.PostCommand;
+import com.example.mavenDemoRest.daoServices.PostDaoService;
+import com.example.mavenDemoRest.daoServices.UserDaoService;
+import com.example.mavenDemoRest.requestBodies.RequestBodyPost;
 //import com.example.mavenDemoRest.converters.PostCommandToPost;
-import com.example.mavenDemoRest.converters.PostCommandToPost;
-import com.example.mavenDemoRest.converters.UserCommandToUser;
-import com.example.mavenDemoRest.model.Location;
+import com.example.mavenDemoRest.converters.RequestBodyPostToPost;
+import com.example.mavenDemoRest.converters.RequestBodyUserToUser;
 import com.example.mavenDemoRest.model.Post;
-import com.example.mavenDemoRest.model.User;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,14 +21,14 @@ public class PostController {
 
     private final PostDaoService postDaoService;
     private final UserDaoService userDaoService;
-    private final PostCommandToPost postCommandToPost;
-    private final UserCommandToUser userCommandToUser;
+    private final RequestBodyPostToPost requestBodyPostToPost;
+    private final RequestBodyUserToUser requestBodyUserToUser;
 
-    public PostController(PostDaoService postDaoService, UserDaoService userDaoService, PostCommandToPost postCommandToPost, UserCommandToUser userCommandToUser) {
+    public PostController(PostDaoService postDaoService, UserDaoService userDaoService, RequestBodyPostToPost requestBodyPostToPost, RequestBodyUserToUser requestBodyUserToUser) {
         this.postDaoService = postDaoService;
         this.userDaoService = userDaoService;
-        this.postCommandToPost = postCommandToPost;
-        this.userCommandToUser = userCommandToUser;
+        this.requestBodyPostToPost = requestBodyPostToPost;
+        this.requestBodyUserToUser = requestBodyUserToUser;
     }
 
     //find all posts
@@ -57,8 +55,8 @@ public class PostController {
 
     //create post
     @PostMapping(path="/posts/create")
-    public ResponseEntity<Object> createPost(@RequestBody PostCommand postCommand){
-        Post savedPost = postDaoService.savePost(postCommand);
+    public ResponseEntity<Object> createPost(@RequestBody RequestBodyPost requestBodyPost){
+        Post savedPost = postDaoService.savePost(requestBodyPost);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -70,8 +68,8 @@ public class PostController {
 
     //update post
     @PutMapping(path = "/posts/update/{postId}")
-    public ResponseEntity<Object> updatePost(@RequestBody PostCommand postCommand, @PathVariable String postId){
-        Post savedPost = postDaoService.updatePost(postCommand, Long.parseLong(postId));
+    public ResponseEntity<Object> updatePost(@RequestBody RequestBodyPost requestBodyPost, @PathVariable String postId){
+        Post savedPost = postDaoService.updatePost(requestBodyPost, Long.parseLong(postId));
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

@@ -1,9 +1,7 @@
-package com.example.mavenDemoRest.DaoServices.DaoImplementations;
+package com.example.mavenDemoRest.daoServices.DaoImplementations;
 
-import com.example.mavenDemoRest.DaoServices.LocationDaoService;
+import com.example.mavenDemoRest.daoServices.LocationDaoService;
 import com.example.mavenDemoRest.model.Location;
-import com.example.mavenDemoRest.model.Post;
-import com.example.mavenDemoRest.model.User;
 import com.example.mavenDemoRest.repositories.LocationRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,9 @@
-package com.example.mavenDemoRest.DaoServices.DaoImplementations;
+package com.example.mavenDemoRest.daoServices.DaoImplementations;
 
-import com.example.mavenDemoRest.DaoServices.UserDaoService;
-import com.example.mavenDemoRest.commands.UserCommand;
-import com.example.mavenDemoRest.converters.LocationCommandToLocation;
-import com.example.mavenDemoRest.converters.UserCommandToUser;
+import com.example.mavenDemoRest.daoServices.UserDaoService;
+import com.example.mavenDemoRest.requestBodies.RequestBodyUser;
+import com.example.mavenDemoRest.converters.RequestBodyLocationToLocation;
+import com.example.mavenDemoRest.converters.RequestBodyUserToUser;
 import com.example.mavenDemoRest.model.Location;
 import com.example.mavenDemoRest.model.User;
 import com.example.mavenDemoRest.repositories.UserRepository;
@@ -17,13 +17,13 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDaoService{
 
     private final UserRepository userRepository;
-    private final LocationCommandToLocation locationCommandToLocation;
-    private final UserCommandToUser userCommandToUser;
+    private final RequestBodyLocationToLocation requestBodyLocationToLocation;
+    private final RequestBodyUserToUser requestBodyUserToUser;
 
-    public UserDaoImpl(UserRepository userRepository, LocationCommandToLocation locationCommandToLocation, UserCommandToUser userCommandToUser) {
+    public UserDaoImpl(UserRepository userRepository, RequestBodyLocationToLocation requestBodyLocationToLocation, RequestBodyUserToUser requestBodyUserToUser) {
         this.userRepository = userRepository;
-        this.locationCommandToLocation = locationCommandToLocation;
-        this.userCommandToUser = userCommandToUser;
+        this.requestBodyLocationToLocation = requestBodyLocationToLocation;
+        this.requestBodyUserToUser = requestBodyUserToUser;
     }
 
     @Override
@@ -54,37 +54,37 @@ public class UserDaoImpl implements UserDaoService{
     }
 
     @Override
-    public User saveUser(UserCommand userCommand){
-        User savedUser = userRepository.save(userCommandToUser.convert(userCommand));
+    public User saveUser(RequestBodyUser requestBodyUser){
+        User savedUser = userRepository.save(requestBodyUserToUser.convert(requestBodyUser));
         return savedUser;
     }
 
 
     @Override
-    public User updateUser(UserCommand userCommand, Long userId){
+    public User updateUser(RequestBodyUser requestBodyUser, Long userId){
         Optional<User> userToUpdateOptional = userRepository.findById(userId);
         User userToUpdate = userToUpdateOptional.orElseThrow(() -> new RuntimeException("User is Not found"));
         Location locationToUpdate = userToUpdate.getLocation();
         if(locationToUpdate == null){
             locationToUpdate = new Location();
         }
-        Location newLocation = locationCommandToLocation.convert(userCommand.getLocation());
+        Location newLocation = requestBodyLocationToLocation.convert(requestBodyUser.getLocation());
 
         //updating the user
-        if(userCommand.getFirstName() != null){
-            userToUpdate.setFirstName(userCommand.getFirstName());
+        if(requestBodyUser.getFirstName() != null){
+            userToUpdate.setFirstName(requestBodyUser.getFirstName());
         }
-        if(userCommand.getLastName() != null){
-            userToUpdate.setLastName(userCommand.getLastName());
+        if(requestBodyUser.getLastName() != null){
+            userToUpdate.setLastName(requestBodyUser.getLastName());
         }
-        if(userCommand.getNickname() != null){
-            userToUpdate.setNickname(userCommand.getNickname());
+        if(requestBodyUser.getNickname() != null){
+            userToUpdate.setNickname(requestBodyUser.getNickname());
         }
-        if(userCommand.getEmail() != null){
-            userToUpdate.setEmail(userCommand.getEmail());
+        if(requestBodyUser.getEmail() != null){
+            userToUpdate.setEmail(requestBodyUser.getEmail());
         }
-        if(userCommand.getPassword() != null){
-            userToUpdate.setPassword(userCommand.getPassword());
+        if(requestBodyUser.getPassword() != null){
+            userToUpdate.setPassword(requestBodyUser.getPassword());
         }
 
         //updating the location

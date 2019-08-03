@@ -1,17 +1,16 @@
 package com.example.mavenDemoRest.converters;
 
-import com.example.mavenDemoRest.commands.LocationCommand;
+import com.example.mavenDemoRest.requestBodies.RequestBodyLocation;
 import com.example.mavenDemoRest.model.Location;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 //@Lazy
 @Component
-public class LocationCommandToLocation implements Converter<LocationCommand, Location> {
-    private  UserCommandToUser userCommandToUser;
-    private  PostCommandToPost postCommandToPost;
+public class RequestBodyLocationToLocation implements Converter<RequestBodyLocation, Location> {
+    private RequestBodyUserToUser requestBodyUserToUser;
+    private RequestBodyPostToPost requestBodyPostToPost;
 
 
     //constructors
@@ -20,29 +19,29 @@ public class LocationCommandToLocation implements Converter<LocationCommand, Loc
         this.postCommandToPost = postCommandToPost;
     }*/
 
-    public LocationCommandToLocation() {
+    public RequestBodyLocationToLocation() {
     }
 
-    public UserCommandToUser getUserCommandToUser() {
-        return userCommandToUser;
-    }
-
-    @Autowired
-    public void setUserCommandToUser(UserCommandToUser userCommandToUser) {
-        this.userCommandToUser = userCommandToUser;
-    }
-
-    public PostCommandToPost getPostCommandToPost() {
-        return postCommandToPost;
+    public RequestBodyUserToUser getRequestBodyUserToUser() {
+        return requestBodyUserToUser;
     }
 
     @Autowired
-    public void setPostCommandToPost(PostCommandToPost postCommandToPost) {
-        this.postCommandToPost = postCommandToPost;
+    public void setRequestBodyUserToUser(RequestBodyUserToUser requestBodyUserToUser) {
+        this.requestBodyUserToUser = requestBodyUserToUser;
+    }
+
+    public RequestBodyPostToPost getRequestBodyPostToPost() {
+        return requestBodyPostToPost;
+    }
+
+    @Autowired
+    public void setRequestBodyPostToPost(RequestBodyPostToPost requestBodyPostToPost) {
+        this.requestBodyPostToPost = requestBodyPostToPost;
     }
 
     @Override
-    public Location convert(LocationCommand source) {
+    public Location convert(RequestBodyLocation source) {
         if(source == null){
             return null;
         }
@@ -53,10 +52,10 @@ public class LocationCommandToLocation implements Converter<LocationCommand, Loc
         location.setLongitude(source.getLongitude());
         location.setLatitude(source.getLatitude());
         if(source.getUsers() != null && source.getUsers().size() > 0){
-            source.getUsers().forEach(userCommand -> location.getUsers().add(userCommandToUser.convert(userCommand)));
+            source.getUsers().forEach(userCommand -> location.getUsers().add(requestBodyUserToUser.convert(userCommand)));
         }
         if(source.getPosts() != null && source.getPosts().size() > 0){
-            source.getPosts().forEach(postCommand -> location.getPosts().add(postCommandToPost.convert(postCommand)));
+            source.getPosts().forEach(postCommand -> location.getPosts().add(requestBodyPostToPost.convert(postCommand)));
         }
         return location;
     }

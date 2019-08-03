@@ -1,27 +1,26 @@
-package com.example.mavenDemoRest.commands;
+package com.example.mavenDemoRest.requestBodies;
 
 import com.example.mavenDemoRest.constants.UserType;
-import com.example.mavenDemoRest.model.Location;
-import com.example.mavenDemoRest.model.Post;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserCommand {
+public class RequestBodyUser {
     private Long id;
     private String firstName;
     private String lastName;
     private String nickname;
     private String email;
     private String password;
-    private List<PostCommand> posts = new ArrayList<>();
-    private LocationCommand location;
+    private List<RequestBodyPost> posts = new ArrayList<>();
+    private RequestBodyLocation location;
     private UserType userType;
 
     //constructors
-    public UserCommand() {
+    public RequestBodyUser() {
     }
 
-    public UserCommand(Long id, String firstName, String lastName, String nickname, String email, String password, List<PostCommand> posts, LocationCommand location, UserType userType) {
+    public RequestBodyUser(Long id, String firstName, String lastName, String nickname, String email, String password, List<RequestBodyPost> posts, RequestBodyLocation location, UserType userType) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -83,19 +82,19 @@ public class UserCommand {
         this.password = password;
     }
 
-    public List<PostCommand> getPost() {
+    public List<RequestBodyPost> getPost() {
         return posts;
     }
 
-    public void setPost(List<PostCommand> post) {
+    public void setPost(List<RequestBodyPost> post) {
         this.posts = post;
     }
 
-    public LocationCommand getLocation() {
+    public RequestBodyLocation getLocation() {
         return location;
     }
 
-    public void setLocation(LocationCommand location) {
+    public void setLocation(RequestBodyLocation location) {
         this.location = location;
     }
 
