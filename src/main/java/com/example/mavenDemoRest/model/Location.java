@@ -27,11 +27,11 @@ public class Location extends BaseEntity{
 
     @NotNull
     @Column
-    private float longitude;
+    private Float longitude;
 
     @NotNull
     @Column
-    private float latitude;
+    private Float latitude;
 
     @JsonIgnore
     @OneToMany(mappedBy = "location")
@@ -77,16 +77,16 @@ public class Location extends BaseEntity{
     public void setCountry(String country) {
         this.country = country;
     }
-    public float getLongitude() {
+    public Float getLongitude() {
             return longitude;
     }
-    public void setLongitude(float longitude) {
+    public void setLongitude(Float longitude) {
         this.longitude = longitude;
     }
-    public float getLatitude() {
+    public Float getLatitude() {
         return latitude;
     }
-    public void setLatitude(float latitude) {
+    public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }
 

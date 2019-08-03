@@ -25,7 +25,7 @@ public class Post extends BaseEntity{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(cascade=CascadeType.ALL)
     private Location location;
 

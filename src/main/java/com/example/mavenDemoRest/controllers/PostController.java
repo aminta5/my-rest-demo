@@ -48,7 +48,7 @@ public class PostController {
     }
 
     //delete post
-    @GetMapping(path = "/posts/{id}/delete")
+    @DeleteMapping(path = "/posts/{id}/delete")
     public List<Post> deletePost(@PathVariable String id){
         Post post = postDaoService.findPostById(Long.parseLong(id));
         postDaoService.deletePost(post);
@@ -80,19 +80,36 @@ public class PostController {
     public ResponseEntity<Object> updatePost(@RequestBody PostCommand postCommand, @PathVariable String postId){
         Post postToUpdate = postDaoService.findPostById(Long.parseLong(postId));
         Post post = postCommandToPost.convert(postCommand);
-        postToUpdate.setTitle(post.getTitle());
-        postToUpdate.setDescription(post.getDescription());
+
+        //update post
+        if(post.getTitle() != null){
+            postToUpdate.setTitle(post.getTitle());
+        }
+        if(post.getDescription() != null){
+            postToUpdate.setDescription(post.getDescription());
+        }
 
         //update of the location
         Location locationToUpdate = postToUpdate.getLocation();
+        if(locationToUpdate == null){
+            locationToUpdate = new Location();
+        }
         Location newLocation = post.getLocation();
         //System.out.println(locationToUpdate + " location" + " " + post.getLocation().getCity());
 
         if(newLocation != null){
-            locationToUpdate.setCity(newLocation.getCity());
-            locationToUpdate.setCountry(newLocation.getCountry());
-            locationToUpdate.setLongitude(newLocation.getLongitude());
-            locationToUpdate.setLatitude(newLocation.getLatitude());
+            if(newLocation.getCity() != null){
+                locationToUpdate.setCity(newLocation.getCity());
+            }
+            if(newLocation.getCountry() != null){
+                locationToUpdate.setCountry(newLocation.getCountry());
+            }
+            if(newLocation.getLongitude() != null && newLocation.getLongitude() != 0.0){
+                locationToUpdate.setLongitude(newLocation.getLongitude());
+            }
+            if(newLocation.getLatitude() != null && newLocation.getLatitude() != 0.0){
+                locationToUpdate.setLatitude(newLocation.getLatitude());
+            }
         }
 
 

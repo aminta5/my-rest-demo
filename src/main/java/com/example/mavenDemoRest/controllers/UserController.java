@@ -43,7 +43,7 @@ public class UserController {
     }
 
     //delete user
-    @GetMapping(path = "/users/{id}/delete")
+    @DeleteMapping(path = "/users/{id}/delete")
     public List<User> deleteUser(@PathVariable String id){
         Optional<User> optUser = userDaoService.findAllUsers().stream().filter(u -> u.getId() == Long.parseLong(id)).findFirst();
         if(optUser.isPresent()){
@@ -76,20 +76,42 @@ public class UserController {
     public ResponseEntity<Object> updateUser(@PathVariable String userId, @RequestBody UserCommand userCommand){
         User userToUpdate = userDaoService.findUserById(Long.parseLong(userId));
         Location locationToUpdate = userToUpdate.getLocation();
+        if(locationToUpdate == null){
+            locationToUpdate = new Location();
+        }
         Location newLocation = locationCommandToLocation.convert(userCommand.getLocation());
 
-        userToUpdate.setFirstName(userCommand.getFirstName());
-        userToUpdate.setLastName(userCommand.getLastName());
-        userToUpdate.setNickname(userCommand.getNickname());
-        userToUpdate.setEmail(userCommand.getEmail());
-        userToUpdate.setPassword(userCommand.getPassword());
+        //updating the user
+        if(userCommand.getFirstName() != null){
+            userToUpdate.setFirstName(userCommand.getFirstName());
+        }
+        if(userCommand.getLastName() != null){
+            userToUpdate.setLastName(userCommand.getLastName());
+        }
+        if(userCommand.getNickname() != null){
+            userToUpdate.setNickname(userCommand.getNickname());
+        }
+        if(userCommand.getEmail() != null){
+            userToUpdate.setEmail(userCommand.getEmail());
+        }
+        if(userCommand.getPassword() != null){
+            userToUpdate.setPassword(userCommand.getPassword());
+        }
 
         //updating the location
         if(newLocation != null){
-            locationToUpdate.setCity(newLocation.getCity());
-            locationToUpdate.setCountry(newLocation.getCountry());
-            locationToUpdate.setLongitude(newLocation.getLongitude());
-            locationToUpdate.setLatitude(newLocation.getLatitude());
+            if(newLocation.getCity() != null){
+                locationToUpdate.setCity(newLocation.getCity());
+            }
+            if(newLocation.getCountry() != null){
+                locationToUpdate.setCountry(newLocation.getCountry());
+            }
+            if(newLocation.getLongitude() != null && newLocation.getLongitude() != 0.0){
+                locationToUpdate.setLongitude(newLocation.getLongitude());
+            }
+            if(newLocation.getLatitude() != null && newLocation.getLatitude() != 0.0){
+                locationToUpdate.setLatitude(newLocation.getLatitude());
+            }
         }
 
         userToUpdate.setLocation(locationToUpdate);

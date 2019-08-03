@@ -41,7 +41,7 @@ public class User extends BaseEntity{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(cascade=CascadeType.ALL)
     private Location location;
     @Enumerated(value = EnumType.STRING)
