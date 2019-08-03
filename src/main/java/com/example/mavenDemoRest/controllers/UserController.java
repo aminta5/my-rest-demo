@@ -37,7 +37,6 @@ public class UserController {
     @GetMapping(path = "/users/{id}")
     public User getUser(@PathVariable String id){
         long longId = Long.parseLong(id);
-        //return DataStore.getUsers().stream().filter(u -> u.getId() == longId).findFirst().get();
         Optional<User> optionalUser = userDaoService.findAllUsers().stream().filter(u -> u.getId() == longId).findFirst();
         return optionalUser.orElse(null);
     }
@@ -58,11 +57,9 @@ public class UserController {
 
 
     //create user
-    @PostMapping(path = "/users")
+    @PostMapping(path = "/users/create")
     public ResponseEntity<Object> createUser(@RequestBody UserCommand userCommand){
-        User savedUser = userDaoService.createUser(userCommandToUser.convert(userCommand));
-        //User savedUser = userDaoService.createUser(user);
-
+        User savedUser = userDaoService.saveUser(userCommand);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -74,49 +71,8 @@ public class UserController {
     //update user
     @PutMapping(path = "/users/update/{userId}")
     public ResponseEntity<Object> updateUser(@PathVariable String userId, @RequestBody UserCommand userCommand){
-        User userToUpdate = userDaoService.findUserById(Long.parseLong(userId));
-        Location locationToUpdate = userToUpdate.getLocation();
-        if(locationToUpdate == null){
-            locationToUpdate = new Location();
-        }
-        Location newLocation = locationCommandToLocation.convert(userCommand.getLocation());
 
-        //updating the user
-        if(userCommand.getFirstName() != null){
-            userToUpdate.setFirstName(userCommand.getFirstName());
-        }
-        if(userCommand.getLastName() != null){
-            userToUpdate.setLastName(userCommand.getLastName());
-        }
-        if(userCommand.getNickname() != null){
-            userToUpdate.setNickname(userCommand.getNickname());
-        }
-        if(userCommand.getEmail() != null){
-            userToUpdate.setEmail(userCommand.getEmail());
-        }
-        if(userCommand.getPassword() != null){
-            userToUpdate.setPassword(userCommand.getPassword());
-        }
-
-        //updating the location
-        if(newLocation != null){
-            if(newLocation.getCity() != null){
-                locationToUpdate.setCity(newLocation.getCity());
-            }
-            if(newLocation.getCountry() != null){
-                locationToUpdate.setCountry(newLocation.getCountry());
-            }
-            if(newLocation.getLongitude() != null && newLocation.getLongitude() != 0.0){
-                locationToUpdate.setLongitude(newLocation.getLongitude());
-            }
-            if(newLocation.getLatitude() != null && newLocation.getLatitude() != 0.0){
-                locationToUpdate.setLatitude(newLocation.getLatitude());
-            }
-        }
-
-        userToUpdate.setLocation(locationToUpdate);
-
-        User savedUser = userDaoService.createUser(userToUpdate);
+        User savedUser = userDaoService.updateUser(userCommand, Long.parseLong(userId));
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
