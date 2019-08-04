@@ -8,10 +8,12 @@ import com.example.mavenDemoRest.model.Post;
 import com.example.mavenDemoRest.model.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
 
+@RestController
 public class SearchController {
     private final PostDaoService postDaoService;
     private final UserDaoService userDaoService;
@@ -33,12 +35,8 @@ public class SearchController {
     @GetMapping(path="/users/location/{city}")
     public List<User> findUsersByLocation(@PathVariable String city){
         Optional<Location> optinalLocation = locationDaoService.findAllLocations().stream().filter(l -> l.getCity().equalsIgnoreCase(city)).findFirst();
-        if(optinalLocation.isPresent()){
-            return optinalLocation.get().getUsers();
-        }
-        else{
-            return null;
-        }
+        Location location = optinalLocation.orElseThrow(() -> new RuntimeException("Location for users not found"));
+        return location.getUsers();
     }
     //Search Posts by title
     @GetMapping(path="/posts/find/{title}")
@@ -50,11 +48,7 @@ public class SearchController {
     @GetMapping(path = "/posts/location/{city}")
     public List<Post> findPostsByLocation(@PathVariable String city){
         Optional<Location> optinalLocation = locationDaoService.findAllLocations().stream().filter(l -> l.getCity().equalsIgnoreCase(city)).findFirst();
-        if(optinalLocation.isPresent()){
-            return optinalLocation.get().getPosts();
-        }
-        else{
-            return null;
-        }
+        Location location = optinalLocation.orElseThrow(() -> new RuntimeException("Location for posts not found"));
+        return location.getPosts();
     }
 }

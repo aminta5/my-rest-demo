@@ -20,15 +20,9 @@ import java.util.Optional;
 public class PostController {
 
     private final PostDaoService postDaoService;
-    private final UserDaoService userDaoService;
-    private final RequestBodyPostToPost requestBodyPostToPost;
-    private final RequestBodyUserToUser requestBodyUserToUser;
 
-    public PostController(PostDaoService postDaoService, UserDaoService userDaoService, RequestBodyPostToPost requestBodyPostToPost, RequestBodyUserToUser requestBodyUserToUser) {
+    public PostController(PostDaoService postDaoService) {
         this.postDaoService = postDaoService;
-        this.userDaoService = userDaoService;
-        this.requestBodyPostToPost = requestBodyPostToPost;
-        this.requestBodyUserToUser = requestBodyUserToUser;
     }
 
     //find all posts

@@ -12,25 +12,12 @@ public class RequestBodyPostToPost implements Converter<RequestBodyPost, Post> {
     private RequestBodyLocationToLocation requestBodyLocationToLocation;
     private RequestBodyUserToUser requestBodyUserToUser;
 
-    /*public PostCommandToPost(LocationCommandToLocation locationCommandToLocation, UserCommandToUser userCommandToUser) {
-        this.locationCommandToLocation = locationCommandToLocation;
-        this.userCommandToUser = userCommandToUser;
-    }*/
 
-    //getter and setter
-
-
-    public RequestBodyLocationToLocation getRequestBodyLocationToLocation() {
-        return requestBodyLocationToLocation;
-    }
+    //setter  for injection
 
     @Autowired
     public void setRequestBodyLocationToLocation(RequestBodyLocationToLocation requestBodyLocationToLocation) {
         this.requestBodyLocationToLocation = requestBodyLocationToLocation;
-    }
-
-    public RequestBodyUserToUser getRequestBodyUserToUser() {
-        return requestBodyUserToUser;
     }
 
     @Autowired
@@ -49,7 +36,6 @@ public class RequestBodyPostToPost implements Converter<RequestBodyPost, Post> {
         post.setTitle(source.getTitle());
         post.setDescription(source.getDescription());
 
-        //post.setUser(userCommandToUser.convert(source.getUser()));
         if(source.getId() != null){
             User user = new User();
             user.setId(source.getUserId());

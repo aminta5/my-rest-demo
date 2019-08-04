@@ -17,13 +17,11 @@ import java.util.Optional;
 public class UserController {
 
     private final UserDaoService userDaoService;
-    private final RequestBodyUserToUser requestBodyUserToUser;
-    private final RequestBodyLocationToLocation requestBodyLocationToLocation;
 
-    public UserController(UserDaoService userDaoService, RequestBodyUserToUser requestBodyUserToUser, RequestBodyLocationToLocation requestBodyLocationToLocation) {
+
+    public UserController(UserDaoService userDaoService) {
         this.userDaoService = userDaoService;
-        this.requestBodyUserToUser = requestBodyUserToUser;
-        this.requestBodyLocationToLocation = requestBodyLocationToLocation;
+
     }
 
     //find all users

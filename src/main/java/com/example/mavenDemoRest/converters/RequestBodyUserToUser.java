@@ -6,31 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-//@Lazy
+
 @Component
 public class RequestBodyUserToUser implements Converter<RequestBodyUser, User> {
     private RequestBodyPostToPost requestBodyPostToPost;
     private RequestBodyLocationToLocation requestBodyLocationToLocation;
 
-    /*public UserCommandToUser(PostCommandToPost postCommandToPost, LocationCommandToLocation locationCommandToLocation) {
-        this.postCommandToPost = postCommandToPost;
-        this.locationCommandToLocation = locationCommandToLocation;
-    }*/
-
-    //getters and setters
-
-
-    public RequestBodyPostToPost getRequestBodyPostToPost() {
-        return requestBodyPostToPost;
-    }
+    //setters for injection
 
     @Autowired
     public void setRequestBodyPostToPost(RequestBodyPostToPost requestBodyPostToPost) {
         this.requestBodyPostToPost = requestBodyPostToPost;
-    }
-
-    public RequestBodyLocationToLocation getRequestBodyLocationToLocation() {
-        return requestBodyLocationToLocation;
     }
 
     @Autowired
