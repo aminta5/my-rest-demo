@@ -6,6 +6,7 @@ import com.example.mavenDemoRest.converters.RequestBodyLocationToLocation;
 import com.example.mavenDemoRest.converters.RequestBodyUserToUser;
 import com.example.mavenDemoRest.model.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -13,6 +14,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+@EnableResourceServer
 @RestController
 public class UserController {
 

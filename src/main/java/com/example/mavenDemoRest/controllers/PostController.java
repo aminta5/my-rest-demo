@@ -1,21 +1,18 @@
 package com.example.mavenDemoRest.controllers;
 
 import com.example.mavenDemoRest.daoServices.PostDaoService;
-import com.example.mavenDemoRest.daoServices.UserDaoService;
-import com.example.mavenDemoRest.requestBodies.RequestBodyPost;
-//import com.example.mavenDemoRest.converters.PostCommandToPost;
-import com.example.mavenDemoRest.converters.RequestBodyPostToPost;
-import com.example.mavenDemoRest.converters.RequestBodyUserToUser;
 import com.example.mavenDemoRest.model.Post;
-import org.springframework.context.annotation.Lazy;
+import com.example.mavenDemoRest.requestBodies.RequestBodyPost;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-@Lazy
+
+@EnableResourceServer
 @RestController
 public class PostController {
 
