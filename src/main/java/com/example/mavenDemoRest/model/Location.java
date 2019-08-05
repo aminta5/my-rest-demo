@@ -2,6 +2,7 @@ package com.example.mavenDemoRest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
