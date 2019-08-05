@@ -1,14 +1,8 @@
 package com.example.mavenDemoRest.controllers;
 
-import com.example.mavenDemoRest.DaoServices.PostDaoService;
-import com.example.mavenDemoRest.DaoServices.UserDaoService;
-import com.example.mavenDemoRest.commands.PostCommand;
-//import com.example.mavenDemoRest.converters.PostCommandToPost;
-import com.example.mavenDemoRest.converters.PostCommandToPost;
-import com.example.mavenDemoRest.converters.UserCommandToUser;
-import com.example.mavenDemoRest.model.Location;
+import com.example.mavenDemoRest.daoServices.PostDaoService;
 import com.example.mavenDemoRest.model.Post;
-import com.example.mavenDemoRest.model.User;
+import com.example.mavenDemoRest.requestBodies.RequestBodyPost;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.bind.annotation.*;
@@ -23,15 +17,9 @@ import java.util.Optional;
 public class PostController {
 
     private final PostDaoService postDaoService;
-    private final UserDaoService userDaoService;
-    private final PostCommandToPost postCommandToPost;
-    private final UserCommandToUser userCommandToUser;
 
-    public PostController(PostDaoService postDaoService, UserDaoService userDaoService, PostCommandToPost postCommandToPost, UserCommandToUser userCommandToUser) {
+    public PostController(PostDaoService postDaoService) {
         this.postDaoService = postDaoService;
-        this.userDaoService = userDaoService;
-        this.postCommandToPost = postCommandToPost;
-        this.userCommandToUser = userCommandToUser;
     }
 
     //find all posts
@@ -49,7 +37,7 @@ public class PostController {
     }
 
     //delete post
-    @GetMapping(path = "/posts/{id}/delete")
+    @DeleteMapping(path = "/posts/{id}/delete")
     public List<Post> deletePost(@PathVariable String id){
         Post post = postDaoService.findPostById(Long.parseLong(id));
         postDaoService.deletePost(post);
@@ -58,15 +46,8 @@ public class PostController {
 
     //create post
     @PostMapping(path="/posts/create")
-    public ResponseEntity<Object> createPost(@RequestBody PostCommand post){
-        User user = userDaoService.findUserById(post.getUserId());
-        Post newPost = postCommandToPost.convert(post);
-        newPost.setUser(user);
-        Post savedPost = postDaoService.createPost(newPost);
-
-        /*User user = userCommandToUser.convert(post.getUser());
-        user.getPosts().add(postCommandToPost.convert(post));
-        Post savedPost = postDaoService.createPost(postCommandToPost.convert(post));*/
+    public ResponseEntity<Object> createPost(@RequestBody RequestBodyPost requestBodyPost){
+        Post savedPost = postDaoService.savePost(requestBodyPost);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -78,33 +59,8 @@ public class PostController {
 
     //update post
     @PutMapping(path = "/posts/update/{postId}")
-    public ResponseEntity<Object> updatePost(@RequestBody PostCommand postCommand, @PathVariable String postId){
-        Post postToUpdate = postDaoService.findPostById(Long.parseLong(postId));
-        Post post = postCommandToPost.convert(postCommand);
-        postToUpdate.setTitle(post.getTitle());
-        postToUpdate.setDescription(post.getDescription());
-
-        //update of the location
-        Location locationToUpdate = postToUpdate.getLocation();
-        Location newLocation = post.getLocation();
-        //System.out.println(locationToUpdate + " location" + " " + post.getLocation().getCity());
-
-        if(newLocation != null){
-            locationToUpdate.setCity(newLocation.getCity());
-            locationToUpdate.setCountry(newLocation.getCountry());
-            locationToUpdate.setLongitude(newLocation.getLongitude());
-            locationToUpdate.setLatitude(newLocation.getLatitude());
-        }
-
-
-        postToUpdate.setLocation(locationToUpdate);
-        /*User user = userDaoService.findUserById(Long.parseLong(user_id));
-        Post postToDelete = postDaoService.findPostById(Long.parseLong(post_id));
-        user.getPosts().remove(postToDelete);
-        user.getPosts().add(post);*/
-        //User savedUser = userDaoService.createUser(user);
-
-        Post savedPost = postDaoService.createPost(postToUpdate);
+    public ResponseEntity<Object> updatePost(@RequestBody RequestBodyPost requestBodyPost, @PathVariable String postId){
+        Post savedPost = postDaoService.updatePost(requestBodyPost, Long.parseLong(postId));
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

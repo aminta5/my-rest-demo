@@ -1,21 +1,18 @@
-package com.example.mavenDemoRest.commands;
-
-import com.example.mavenDemoRest.model.Location;
-import com.example.mavenDemoRest.model.User;
+package com.example.mavenDemoRest.requestBodies;
 
 
-public class PostCommand {
+public class RequestBodyPost {
     private Long id;
     private String title;
     private String description;
     private Long userId;
-    private LocationCommand location;
+    private RequestBodyLocation location;
 
     //constructors
-    public PostCommand() {
+    public RequestBodyPost() {
     }
 
-    public PostCommand(Long id, String title, String description, Long userId, LocationCommand location) {
+    public RequestBodyPost(Long id, String title, String description, Long userId, RequestBodyLocation location) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -57,11 +54,11 @@ public class PostCommand {
         this.userId = userId;
     }
 
-    public LocationCommand getLocation() {
+    public RequestBodyLocation getLocation() {
         return location;
     }
 
-    public void setLocation(LocationCommand location) {
+    public void setLocation(RequestBodyLocation location) {
         this.location = location;
     }
 }

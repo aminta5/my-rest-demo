@@ -1,7 +1,7 @@
 /*
 package com.example.mavenDemoRest.controllers;
 
-import com.example.mavenDemoRest.DaoServices.UserDaoService;
+import com.example.mavenDemoRest.daoServices.UserDaoService;
 import com.example.mavenDemoRest.converters.LocationCommandToLocation;
 import com.example.mavenDemoRest.converters.UserCommandToUser;
 import org.junit.Before;
