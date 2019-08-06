@@ -26,6 +26,7 @@ public class PostController {
     @GetMapping(path = "/posts")
     public List<Post> getPosts(){
 
+
         return postDaoService.findAllPosts();
     }
 
