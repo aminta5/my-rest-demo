@@ -14,17 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-@RestController
 @SpringBootApplication
 public class Oauth2serverApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(Oauth2serverApplication.class, args);
     }
-    @RequestMapping("/validateUser")
+    /*@RequestMapping("/validateUser")
     public Principal user(Principal user) {
         return user;
-    }
+    }*/
 
     @Configuration
     protected static class AuthenticationManagerConfiguration extends GlobalAuthenticationConfigurerAdapter {
