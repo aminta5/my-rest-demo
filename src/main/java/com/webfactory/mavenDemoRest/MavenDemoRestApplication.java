@@ -6,7 +6,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 
 //import com.example.mavenDemoRest.services.PostService;
 
-@EnableResourceServer
+//@EnableResourceServer
 @SpringBootApplication
 
 public class MavenDemoRestApplication {

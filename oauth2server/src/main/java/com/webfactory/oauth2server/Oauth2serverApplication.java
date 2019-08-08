@@ -20,20 +20,5 @@ public class Oauth2serverApplication {
     public static void main(String[] args) {
         SpringApplication.run(Oauth2serverApplication.class, args);
     }
-    /*@RequestMapping("/validateUser")
-    public Principal user(Principal user) {
-        return user;
-    }*/
-
-    @Configuration
-    protected static class AuthenticationManagerConfiguration extends GlobalAuthenticationConfigurerAdapter {
-
-
-        @Override
-        public void init(AuthenticationManagerBuilder auth) throws Exception {
-            auth.inMemoryAuthentication().withUser("filip-user").password("filip-pass").roles("USER");
-        }
-
-    }
 
 }
