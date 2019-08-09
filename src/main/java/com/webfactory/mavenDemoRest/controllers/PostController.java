@@ -4,6 +4,7 @@ import com.webfactory.mavenDemoRest.daoServices.PostDaoService;
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyPost;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

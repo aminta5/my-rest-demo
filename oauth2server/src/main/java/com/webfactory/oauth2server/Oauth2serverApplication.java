@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+//@RestController
+//@EnableResourceServer
+
 @SpringBootApplication
 public class Oauth2serverApplication {
 
@@ -25,7 +28,7 @@ public class Oauth2serverApplication {
         return user;
     }*/
 
-    @Configuration
+   /* @Configuration
     protected static class AuthenticationManagerConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
 
@@ -34,6 +37,6 @@ public class Oauth2serverApplication {
             auth.inMemoryAuthentication().withUser("filip-user").password("filip-pass").roles("USER");
         }
 
-    }
+    }*/
 
 }
