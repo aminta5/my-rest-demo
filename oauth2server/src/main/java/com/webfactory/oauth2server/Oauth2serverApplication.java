@@ -23,8 +23,7 @@ public class Oauth2serverApplication {
     public static void main(String[] args) {
         SpringApplication.run(Oauth2serverApplication.class, args);
     }
-<<<<<<< HEAD
-=======
+
     /*@RequestMapping("/validateUser")
     public Principal user(Principal user) {
         return user;
@@ -40,6 +39,6 @@ public class Oauth2serverApplication {
         }
 
     }*/
->>>>>>> 5b095974efdbacd57bf8be1b79f40f39f86127c6
+
 
 }

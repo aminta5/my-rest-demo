@@ -33,13 +33,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         resources.resourceId(RESOURCE_ID).stateless(false);
     }*/
 
-    /*@Override
+    @Override
     public void configure(HttpSecurity http) throws Exception {
         http.
-                anonymous().disable()
+                anonymous().and()
                 .authorizeRequests()
+                .antMatchers("/users/create").permitAll()
                 .antMatchers("/**").authenticated()
                 .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
-    }*/
+    }
 }
 

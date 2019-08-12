@@ -1,3 +1,4 @@
+/*
 package com.webfactory.oauth2server.config;
 
 import org.springframework.context.annotation.ComponentScan;
@@ -9,10 +10,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 public class AuthenticationManagerConfiguration extends GlobalAuthenticationConfigurerAdapter {
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("Jonny").password("password").roles("USER");
+        auth.inMemoryAuthentication().withUser("filip-user").password("filip-pass").roles("USER");
     }
 }
-<<<<<<< HEAD
-=======
+
 */
->>>>>>> 5b095974efdbacd57bf8be1b79f40f39f86127c6

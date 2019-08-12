@@ -43,8 +43,11 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory().withClient("filip-client").secret("filip-secret")
-                .authorizedGrantTypes("password").scopes("read", "write");
+        clients.inMemory()
+                .withClient("filip-client")
+                .secret("filip-secret")
+                .authorizedGrantTypes("password")
+                .scopes("read", "write");
 
     }
     @Override
