@@ -25,6 +25,7 @@ public class MavenDemoRestApplication {
 		//loadData();
 		//startApp();
 
+
 		SpringApplication.run(MavenDemoRestApplication.class, args);
 	}
 

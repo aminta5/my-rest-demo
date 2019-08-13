@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "post")
+@Table(name = "posts")
 public class Post extends BaseEntity{
 
     //title required max 120chars

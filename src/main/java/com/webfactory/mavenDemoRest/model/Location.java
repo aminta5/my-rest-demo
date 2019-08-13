@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "location")
+@Table(name = "locations")
 public class Location extends BaseEntity{
 
     //city max 120 chars
