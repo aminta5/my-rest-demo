@@ -12,12 +12,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 import javax.sql.DataSource;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableWebSecurity
 public class ManagerConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private DataSource dataSource;
+    /*@Autowired
+    private DataSource dataSource;*/
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
