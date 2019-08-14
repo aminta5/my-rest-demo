@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserDaoService {
     List<User> findAllUsers();
     User findUserById(Long id);
-    List<User> findUserByNickname(String nickname);
+    User findUserByNickname(String nickname);
     Location findUserLocation(User user);
     User saveUser(RequestBodyUser requestBodyUser);
     User updateUser(RequestBodyUser requestBodyUser, Long userId);

@@ -41,10 +41,9 @@ public class UserDaoImpl implements UserDaoService{
     }
 
     @Override
-    public List<User> findUserByNickname(String nickname){
-        List<User> users = new ArrayList<>();
-        findAllUsers().stream().filter(u -> u.getNickname().equalsIgnoreCase(nickname)).forEach(users :: add);
-        return users;
+    public User findUserByNickname(String nickname){
+        Optional<User> user = findAllUsers().stream().filter(u -> u.getNickname().equalsIgnoreCase(nickname)).findFirst();
+        return user.orElseThrow(() -> new RuntimeException("User not found"));
     }
 
 

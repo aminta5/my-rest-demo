@@ -29,7 +29,7 @@ public class SearchController {
 
     //Search Users by nickname
     @GetMapping(path="/users/find/{nickname}")
-    public List<User> findUsersByNickname(@PathVariable String nickname){
+    public User findUsersByNickname(@PathVariable String nickname){
         return userDaoService.findUserByNickname(nickname);
     }
 
