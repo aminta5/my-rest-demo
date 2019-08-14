@@ -18,9 +18,6 @@ import javax.sql.DataSource;
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     //private static final String RESOURCE_ID = "resource_id";
 
-    @Autowired
-    private DataSource dataSource;
-
     //@Primary
     @Bean
     public RemoteTokenServices tokenService() {

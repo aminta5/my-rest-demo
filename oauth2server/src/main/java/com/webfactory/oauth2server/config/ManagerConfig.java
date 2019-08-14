@@ -18,8 +18,8 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class ManagerConfig extends WebSecurityConfigurerAdapter {
 
-    /*@Autowired
-    private DataSource dataSource;*/
+    @Autowired
+    private DataSource dataSource;
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
@@ -32,14 +32,14 @@ public class ManagerConfig extends WebSecurityConfigurerAdapter {
     }*/
 
 
-    /*@Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("filip-user").password("filip-pass").roles("USER");
-    }*/
-
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication();
+        auth.inMemoryAuthentication().withUser("filip-user").password("filip-pass").roles("USER");
     }
+
+    /*@Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication();
+    }*/
     
 }
