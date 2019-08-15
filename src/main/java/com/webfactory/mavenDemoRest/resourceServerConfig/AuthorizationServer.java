@@ -7,9 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -19,6 +16,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
 import javax.sql.DataSource;
 
@@ -26,21 +24,25 @@ import javax.sql.DataSource;
 @EnableAuthorizationServer
 @EnableAutoConfiguration
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
-    /*@Autowired
-    private ManagerConfig managerConfig;*/
-    private AuthenticationManager authenticationManager;
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new InMemoryTokenStore();
+    }
+
+    private final AuthenticationManager authenticationManager;
+
+   /* @Autowired
+    private  DataSource dataSource;
 
     @Autowired
-    private DataSource dataSource;
+    private  TokenStore tokenStore;*/
 
-    /*@Autowired
-    private TokenStore tokenStore;*/
-
-    @Autowired
-    private UserApprovalHandler userApprovalHandler;
+   /* @Autowired
+    private  UserApprovalHandler userApprovalHandler;*/
 
     @Autowired
-    private MyUserDetailsService myUserDetailsService;
+    private  MyUserDetailsService myUserDetailsService;
 
 
 
@@ -52,21 +54,22 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     public AuthorizationServer(@Qualifier(BeanIds.AUTHENTICATION_MANAGER) AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
+
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.userApprovalHandler(userApprovalHandler).authenticationManager(authenticationManager).userDetailsService(myUserDetailsService);
+        endpoints/*.userApprovalHandler(userApprovalHandler)*/.authenticationManager(authenticationManager).userDetailsService(myUserDetailsService);
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(dataSource);
-        /*clients.inMemory()
+        //clients.jdbc(dataSource);
+        clients.inMemory()
                 .withClient("filip-client")
                 .secret("filip-secret")
                 .authorizedGrantTypes("password")
-                .scopes("read", "write");*/
+                .scopes("read", "write");
 
     }
     @Override

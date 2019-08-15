@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 
 import javax.sql.DataSource;
@@ -23,16 +24,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
-    @Autowired
-    private ClientDetailsService clientDetailsService;
+    //@Autowired
+    //private ClientDetailsService clientDetailsService;
 
     @Autowired
     private MyUserDetailsService myUserDetailsService;
 
-    /*@Autowired
+    @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication().dataSource(dataSource);
-    }*/
+    }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
@@ -46,11 +47,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/oauth/token").permitAll()
+                .antMatchers("/users/create").permitAll()
+                .anyRequest().authenticated();
+
+
+
+        /*http.authorizeRequests()
+
                 .antMatchers("users/create").permitAll()
                 .antMatchers("/oauth/token").permitAll()
                 .anyRequest().authenticated();
-        http.csrf().disable();
+        http.csrf().disable();*/
 
 
 
