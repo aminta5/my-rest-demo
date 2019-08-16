@@ -1,4 +1,4 @@
-package com.webfactory.mavenDemoRest.resourceServerConfig;
+package com.webfactory.mavenDemoRest.security;
 
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;

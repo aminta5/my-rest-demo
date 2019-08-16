@@ -1,4 +1,4 @@
-package com.webfactory.mavenDemoRest.resourceServerConfig;
+package com.webfactory.mavenDemoRest.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,21 +25,21 @@ import javax.sql.DataSource;
 @EnableAutoConfiguration
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
-    @Bean
+    /*@Bean
     public TokenStore tokenStore() {
         return new InMemoryTokenStore();
-    }
+    }*/
 
     private final AuthenticationManager authenticationManager;
 
-   /* @Autowired
-    private  DataSource dataSource;
+    @Autowired
+    private DataSource dataSource;
 
     @Autowired
-    private  TokenStore tokenStore;*/
+    private  TokenStore tokenStore;
 
-   /* @Autowired
-    private  UserApprovalHandler userApprovalHandler;*/
+    @Autowired
+    private UserApprovalHandler userApprovalHandler;
 
     @Autowired
     private  MyUserDetailsService myUserDetailsService;
