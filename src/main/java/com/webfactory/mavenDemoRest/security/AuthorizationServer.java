@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
 
@@ -36,7 +37,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     private DataSource dataSource;
 
     @Autowired
-    private  TokenStore tokenStore;
+    private TokenStore tokenStore;
 
     @Autowired
     private UserApprovalHandler userApprovalHandler;
@@ -46,11 +47,10 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
 
 
-    @Bean
+    /*@Bean
     public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
         return NoOpPasswordEncoder.getInstance();
-    }
+    }*/
 
     public AuthorizationServer(@Qualifier(BeanIds.AUTHENTICATION_MANAGER) AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -59,17 +59,19 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints/*.userApprovalHandler(userApprovalHandler)*/.authenticationManager(authenticationManager).userDetailsService(myUserDetailsService);
+        endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler).authenticationManager(authenticationManager).userDetailsService(myUserDetailsService);
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        //clients.jdbc(dataSource);
-        clients.inMemory()
+        clients.jdbc(dataSource);
+
+
+        /*clients.inMemory()
                 .withClient("filip-client")
                 .secret("filip-secret")
                 .authorizedGrantTypes("password")
-                .scopes("read", "write");
+                .scopes("read", "write");*/
 
     }
     @Override

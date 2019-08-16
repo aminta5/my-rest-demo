@@ -21,6 +21,11 @@ dependencies {
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.6'
 
     compile 'org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE'
+    // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
+    compile group: 'org.hibernate.orm', name: 'hibernate-core', version: '6.0.0.Alpha2'
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.4.Final'
+
     compile 'org.springframework.security.oauth:spring-security-oauth2:2.3.6.RELEASE'
     runtime 'org.springframework.boot:spring-boot-devtools:2.1.6.RELEASE'
     //runtime 'com.h2database:h2:1.4.199'

@@ -20,7 +20,7 @@ public class Post extends BaseEntity{
     private String description;
 
     @JsonIgnore
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)/*(cascade=CascadeType.ALL)*/
     @JoinColumn(name = "user_id")
     private User user;
 

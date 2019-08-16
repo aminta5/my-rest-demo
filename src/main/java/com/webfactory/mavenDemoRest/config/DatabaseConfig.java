@@ -31,12 +31,11 @@ public class DatabaseConfig {
         dataSource.setPassword(environment.getProperty("database.connection.password"));
         return dataSource;
     }
-
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(dataSource());
-        emf.setPackagesToScan("com.webfactory.mavenDemoRest.model");
+        emf.setPackagesToScan("com.webfactory.mavenDemoRest");
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         emf.setJpaVendorAdapter(vendorAdapter);
