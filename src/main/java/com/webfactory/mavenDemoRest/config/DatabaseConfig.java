@@ -35,19 +35,18 @@ public class DatabaseConfig {
         dataSource.setPassword(environment.getProperty("spring.datasource.password"));
         return dataSource;
     }
-    @Bean
+    /*@Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(dataSource());
-        emf.setPackagesToScan("com.webfactory.mavenDemoRest.model");
+        emf.setPackagesToScan("com.webfactory.mavenDemoRest.model.RegClientDetails");
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         emf.setJpaVendorAdapter(vendorAdapter);
         emf.setJpaProperties(additionalProperties());
 
         return emf;
-    }
-
+    }*/
 //    @Bean
 //    public PlatformTransactionManager transactionManager() {
 //        JpaTransactionManager transactionManager = new JpaTransactionManager();
@@ -56,7 +55,7 @@ public class DatabaseConfig {
 //        return transactionManager;
 //    }
 
-    Properties additionalProperties() {
+   private Properties additionalProperties() {
         return new Properties() {
             {  // Hibernate Specific:
                 setProperty("hibernate.hbm2ddl.auto", environment.getProperty("spring.jpa.hibernate.ddl-auto"));

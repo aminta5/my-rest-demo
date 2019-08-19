@@ -1,9 +1,11 @@
 package com.webfactory.mavenDemoRest.bootstrapData;
 
 import com.webfactory.mavenDemoRest.constants.UserType;
+import com.webfactory.mavenDemoRest.model.RegClientDetails;
 import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
+import com.webfactory.mavenDemoRest.repositories.ClientDetailsRepository;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -16,16 +18,24 @@ import java.util.List;
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final UserRepository userRepository;
+    private final ClientDetailsRepository clientDetailsRepository;
 
-    public DataLoader(UserRepository userRepository) {
+    public DataLoader(UserRepository userRepository, ClientDetailsRepository clientDetailsRepository) {
         this.userRepository = userRepository;
+        this.clientDetailsRepository = clientDetailsRepository;
     }
+
+    private RegClientDetails regClientDetails = new RegClientDetails("filip-client", "filip-secret", "read,write", "password");
+
+
 
     @Override
 
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         userRepository.saveAll(getUsers());
+        clientDetailsRepository.save(regClientDetails);
     }
+
 
     private List<User> getUsers() {
         List<User> users = new ArrayList<>();
@@ -93,4 +103,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
         return users;
     }
+
+
 }

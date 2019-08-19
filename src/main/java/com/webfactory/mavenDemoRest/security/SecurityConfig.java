@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
@@ -102,6 +103,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /*@Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("filip-user").password("filip-pass").roles("USER");
+    }*/
+
+    /*@Bean
+    public TokenStore tokenStore() {
+        return new InMemoryTokenStore();
     }*/
 
     @Override
