@@ -8,11 +8,11 @@ import javax.validation.constraints.NotNull;
 @Table(name="clientdetails")
 public class RegClientDetails {
     @Id
-    @Column(name = "clientId", nullable = false)
+    @Column(name = "clientid", nullable = false)
     @NotNull
     private String clientId;
 
-    @Column
+    @Column(name = "clientsecret")
     @NotNull
     private String clientSecret;
 

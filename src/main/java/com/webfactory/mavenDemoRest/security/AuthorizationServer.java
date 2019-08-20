@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -31,6 +33,16 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
         return new InMemoryTokenStore();
     }*/
 
+
+
+    @Bean
+    public JdbcTokenStore tokenStore() {
+        return new JdbcTokenStore(dataSource);
+    }
+
+
+
+
     private final AuthenticationManager authenticationManager;
 
     @Autowired
@@ -43,7 +55,10 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     private UserApprovalHandler userApprovalHandler;
 
     @Autowired
-    private  MyUserDetailsService myUserDetailsService;
+    private UserDetailsService myUserDetailsService;
+
+    /*@Autowired
+    private PasswordEncoder oauthClientPasswordEncoder;*/
 
 
 
@@ -75,11 +90,11 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     }
     @Override
-    public void configure(
-            AuthorizationServerSecurityConfigurer oauthServer)
-            throws Exception {
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()");
     }
+
+
 }

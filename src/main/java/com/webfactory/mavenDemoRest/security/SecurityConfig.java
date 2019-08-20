@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
@@ -34,11 +35,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private ClientDetailsService clientDetailsService;
 
     @Autowired
-    private MyUserDetailsService myUserDetailsService;
+    private UserDetailsService myUserDetailsService;
 
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource);
+        //auth.jdbcAuthentication().dataSource(dataSource);
+        auth.userDetailsService(myUserDetailsService);
     }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
@@ -94,10 +96,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return handler;
     }
 
-    @Bean
+    /*@Bean
     public JdbcTokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
-    }
+    }*/
 
 
     /*@Override
