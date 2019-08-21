@@ -3,9 +3,8 @@ package com.webfactory.mavenDemoRest.bootstrapData;
 import com.webfactory.mavenDemoRest.constants.UserType;
 import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.model.Post;
-import com.webfactory.mavenDemoRest.model.RegClientDetails;
+import com.webfactory.mavenDemoRest.model.OauthClientDetails;
 import com.webfactory.mavenDemoRest.model.User;
-import com.webfactory.mavenDemoRest.repositories.ClientDetailsRepository;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -25,7 +24,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         //this.clientDetailsRepository = clientDetailsRepository;
     }
 
-    private RegClientDetails regClientDetails = new RegClientDetails("filip-client", "filip-secret", "read,write", "password");
+    private OauthClientDetails oauthClientDetails = new OauthClientDetails("filip-client", "filip-secret", "read,write", "password");
 
 
 
@@ -33,7 +32,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         userRepository.saveAll(getUsers());
-        //clientDetailsRepository.save(regClientDetails);
+        //clientDetailsRepository.save(oauthClientDetails);
     }
 
 

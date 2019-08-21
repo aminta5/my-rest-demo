@@ -5,8 +5,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="clientdetails")
-public class RegClientDetails {
+@Table(name="oauth_client_details")
+public class OauthClientDetails {
     @Id
     @Column(name = "clientid", nullable = false)
     @NotNull
@@ -18,7 +18,7 @@ public class RegClientDetails {
 
     @Column
     @NotNull
-    private String grantType;
+    private String authorizedGrantType;
 
     @Column
     @NotNull
@@ -26,22 +26,22 @@ public class RegClientDetails {
 
 
     //constructor
-    public RegClientDetails() {
+    public OauthClientDetails() {
     }
 
-    public String getGrantType() {
-        return grantType;
+    public String getAuthorizedGrantType() {
+        return authorizedGrantType;
     }
 
-    public void setGrantType(String grantType) {
-        this.grantType = grantType;
+    public void setAuthorizedGrantType(String authorizedGrantType) {
+        this.authorizedGrantType = authorizedGrantType;
     }
 
-    public RegClientDetails(@NotNull String clientId, @NotNull String clientSecret, @NotNull String scope, @NotNull String grantType) {
+    public OauthClientDetails(@NotNull String clientId, @NotNull String clientSecret, @NotNull String scope, @NotNull String authorizedGrantType) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.scope = scope;
-        this.grantType = grantType;
+        this.authorizedGrantType = authorizedGrantType;
     }
 
     //getters and setters

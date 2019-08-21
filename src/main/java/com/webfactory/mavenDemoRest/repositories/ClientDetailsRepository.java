@@ -1,8 +1,7 @@
 package com.webfactory.mavenDemoRest.repositories;
 
-import com.webfactory.mavenDemoRest.model.RegClientDetails;
+import com.webfactory.mavenDemoRest.model.OauthClientDetails;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.security.oauth2.provider.ClientDetails;
 
-public interface ClientDetailsRepository extends CrudRepository<RegClientDetails, String> {
+public interface ClientDetailsRepository extends CrudRepository<OauthClientDetails, String> {
 }
