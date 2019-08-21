@@ -3,7 +3,7 @@ package com.webfactory.mavenDemoRest.bootstrapData;
 import com.webfactory.mavenDemoRest.constants.UserType;
 import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.model.Post;
-import com.webfactory.mavenDemoRest.model.OauthClientDetails;
+//import com.webfactory.mavenDemoRest.model.OauthClientDetails;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import org.springframework.context.ApplicationListener;
@@ -24,7 +24,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         //this.clientDetailsRepository = clientDetailsRepository;
     }
 
-    private OauthClientDetails oauthClientDetails = new OauthClientDetails("filip-client", "filip-secret", "read,write", "password");
+    //private OauthClientDetails oauthClientDetails = new OauthClientDetails("filip-client", "filip-secret", "read,write", "password");
 
 
 

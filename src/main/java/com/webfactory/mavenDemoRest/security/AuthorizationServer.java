@@ -83,8 +83,8 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        //clients.jdbc(dataSource).clients(clientDetailsService);
-        clients.withClientDetails(clientDetailsService);
+        clients.jdbc(dataSource).clients(clientDetailsService);
+        //clients.withClientDetails(clientDetailsService);
 
 
         /*clients.inMemory()
