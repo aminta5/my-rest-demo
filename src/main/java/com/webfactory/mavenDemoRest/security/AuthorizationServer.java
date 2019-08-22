@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -17,6 +18,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.approval.ApprovalStore;
+import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
 import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
@@ -28,21 +31,6 @@ import javax.sql.DataSource;
 @EnableAuthorizationServer
 @EnableAutoConfiguration
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
-
-    /*@Bean
-    public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
-    }*/
-
-
-
-    @Bean
-    public JdbcTokenStore tokenStore() {
-        return new JdbcTokenStore(dataSource);
-    }
-
-
-
 
     private final AuthenticationManager authenticationManager;
 
@@ -61,15 +49,39 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private ClientDetailsService clientDetailsService;
 
+
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new JdbcTokenStore(dataSource);
+    }
+
+    @Bean
+    public ApprovalStore approvalStore(){
+        return new JdbcApprovalStore(dataSource);
+    }
+
+    /*@Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(4);
+    }*/
+
+
+
+
+
+
+
+
     /*@Autowired
     private PasswordEncoder oauthClientPasswordEncoder;*/
 
 
 
-    /*@Bean
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
-    }*/
+    }
 
     public AuthorizationServer(@Qualifier(BeanIds.AUTHENTICATION_MANAGER) AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -78,13 +90,14 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler).authenticationManager(authenticationManager).userDetailsService(myUserDetailsService);
+        //endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler).authenticationManager(authenticationManager).userDetailsService(myUserDetailsService);
+        endpoints.authenticationManager(authenticationManager).userDetailsService(myUserDetailsService).approvalStore(approvalStore()).tokenStore(tokenStore());
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(dataSource).clients(clientDetailsService);
-        //clients.withClientDetails(clientDetailsService);
+//        clients.jdbc(dataSource);
+        clients.withClientDetails(clientDetailsService);
 
 
         /*clients.inMemory()
@@ -95,10 +108,8 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     }
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-        oauthServer
-                .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.passwordEncoder(passwordEncoder());
     }
 
 

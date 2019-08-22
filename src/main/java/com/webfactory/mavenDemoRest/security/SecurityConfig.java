@@ -117,17 +117,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(myUserDetailsService);
     }
 
-    @Bean
-    @Autowired
-    public ApprovalStore approvalStore(TokenStore tokenStore) throws Exception {
-        TokenApprovalStore store = new TokenApprovalStore();
-        store.setTokenStore(tokenStore);
-        return store;
-    }
+//    @Bean
+//    @Autowired
+//    public ApprovalStore approvalStore(TokenStore tokenStore) throws Exception {
+//        TokenApprovalStore store = new TokenApprovalStore();
+//        store.setTokenStore(tokenStore);
+//        return store;
+//    }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 
 }

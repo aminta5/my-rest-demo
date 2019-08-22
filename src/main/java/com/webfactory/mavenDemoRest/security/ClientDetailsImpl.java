@@ -8,15 +8,25 @@ import java.util.*;
 
 public class ClientDetailsImpl implements ClientDetails {
     private String clientId;
+    private String resourceId;
     private String clientSecret;
     private String scope;
     private String authorizedGrantTypes;
+    private String authorities;
+    private int accessTokenValidity;
+    private int refreshTokenValidity;
+
+
 
     public ClientDetailsImpl(OauthClientDetails oauthClientDetails) {
         this.clientId = oauthClientDetails.getClientId();
         this.clientSecret = oauthClientDetails.getClientSecret();
         this.scope = oauthClientDetails.getScope();
         this.authorizedGrantTypes = oauthClientDetails.getAuthorizedGrantTypes();
+        this.resourceId = oauthClientDetails.getResourceIds();
+        this.authorities = oauthClientDetails.getAuthorities();
+        this.accessTokenValidity = oauthClientDetails.getAccessTokenValidity();
+        this.refreshTokenValidity = oauthClientDetails.getRefreshTokenValidity();
     }
 
     @Override
@@ -26,7 +36,8 @@ public class ClientDetailsImpl implements ClientDetails {
 
     @Override
     public Set<String> getResourceIds() {
-        return null;
+        Set<String> resourceIds = new HashSet<>(Arrays.asList(this.resourceId.split(",")));
+        return resourceIds;
     }
 
     @Override
@@ -63,22 +74,22 @@ public class ClientDetailsImpl implements ClientDetails {
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
     public Integer getAccessTokenValiditySeconds() {
-        return null;
+        return accessTokenValidity;
     }
 
     @Override
     public Integer getRefreshTokenValiditySeconds() {
-        return null;
+        return refreshTokenValidity;
     }
 
     @Override
     public boolean isAutoApprove(String scope) {
-        return false;
+        return true;
     }
 
     @Override

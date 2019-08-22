@@ -51,12 +51,12 @@ drop table if exists users CASCADE;
 create table users (
     id SERIAL PRIMARY KEY NOT NULL,
     email VARCHAR(120),
-    firstName VARCHAR(40),
-    lastName VARCHAR(40),
-    nickName VARCHAR(20),
+    first_name VARCHAR(40),
+    last_name VARCHAR(40),
+    nickname VARCHAR(20),
     password VARCHAR(12),
-    userType VARCHAR(10),
-    locationId INTEGER
+    user_type VARCHAR(10),
+    location_id INTEGER
 );
 
 drop table if exists posts;
@@ -64,8 +64,8 @@ create table posts (
     id SERIAL PRIMARY KEY NOT NULL ,
     description VARCHAR(1000),
     title VARCHAR(120),
-    locationId INTEGER,
-    userId INTEGER
+    location_id INTEGER,
+    user_id INTEGER
 );
 
 drop table if exists locations;

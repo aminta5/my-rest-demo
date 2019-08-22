@@ -31,10 +31,10 @@ public class OauthClientDetails {
     private String authorities;
 
     @Column(name = "access_token_validity")
-    private String accessTokenValidity;
+    private int accessTokenValidity;
 
     @Column(name = "refresh_token_validity")
-    private String refreshTokenValidity;
+    private int refreshTokenValidity;
 
     //getters and setters
     public String getClientId() {
@@ -85,19 +85,19 @@ public class OauthClientDetails {
         this.authorities = authorities;
     }
 
-    public String getAccessTokenValidity() {
+    public int getAccessTokenValidity() {
         return accessTokenValidity;
     }
 
-    public void setAccessTokenValidity(String accessTokenValidity) {
+    public void setAccessTokenValidity(int accessTokenValidity) {
         this.accessTokenValidity = accessTokenValidity;
     }
 
-    public String getRefreshTokenValidity() {
+    public int getRefreshTokenValidity() {
         return refreshTokenValidity;
     }
 
-    public void setRefreshTokenValidity(String refreshTokenValidity) {
+    public void setRefreshTokenValidity(int refreshTokenValidity) {
         this.refreshTokenValidity = refreshTokenValidity;
     }
 }
