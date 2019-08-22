@@ -8,51 +8,49 @@ import javax.validation.constraints.NotNull;
 @Table(name="oauth_client_details")
 public class OauthClientDetails {
     @Id
-    @Column(name = "clientid", nullable = false)
+    @Column(name = "client_id", nullable = false)
     @NotNull
     private String clientId;
 
-    @Column(name = "clientsecret")
+    @Column(name ="resource_ids")
+    private String resourceIds;
+
+    @Column(name = "client_secret")
     @NotNull
     private String clientSecret;
 
     @Column
     @NotNull
-    private String authorizedGrantType;
-
-    @Column
-    @NotNull
     private String scope;
 
+    @Column(name = "authorized_grant_types")
+    @NotNull
+    private String authorizedGrantTypes;
 
-    //constructor
-    public OauthClientDetails() {
-    }
+    @Column(name = "authorities")
+    private String authorities;
 
-    public String getAuthorizedGrantType() {
-        return authorizedGrantType;
-    }
+    @Column(name = "access_token_validity")
+    private String accessTokenValidity;
 
-    public void setAuthorizedGrantType(String authorizedGrantType) {
-        this.authorizedGrantType = authorizedGrantType;
-    }
-
-    public OauthClientDetails(@NotNull String clientId, @NotNull String clientSecret, @NotNull String scope, @NotNull String authorizedGrantType) {
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.scope = scope;
-        this.authorizedGrantType = authorizedGrantType;
-    }
+    @Column(name = "refresh_token_validity")
+    private String refreshTokenValidity;
 
     //getters and setters
-
-
     public String getClientId() {
         return clientId;
     }
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    public String getResourceIds() {
+        return resourceIds;
+    }
+
+    public void setResourceIds(String resourceIds) {
+        this.resourceIds = resourceIds;
     }
 
     public String getClientSecret() {
@@ -69,5 +67,37 @@ public class OauthClientDetails {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    public String getAuthorizedGrantTypes() {
+        return authorizedGrantTypes;
+    }
+
+    public void setAuthorizedGrantTypes(String authorizedGrantTypes) {
+        this.authorizedGrantTypes = authorizedGrantTypes;
+    }
+
+    public String getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(String authorities) {
+        this.authorities = authorities;
+    }
+
+    public String getAccessTokenValidity() {
+        return accessTokenValidity;
+    }
+
+    public void setAccessTokenValidity(String accessTokenValidity) {
+        this.accessTokenValidity = accessTokenValidity;
+    }
+
+    public String getRefreshTokenValidity() {
+        return refreshTokenValidity;
+    }
+
+    public void setRefreshTokenValidity(String refreshTokenValidity) {
+        this.refreshTokenValidity = refreshTokenValidity;
     }
 }

@@ -16,7 +16,7 @@ public class ClientDetailsImpl implements ClientDetails {
         this.clientId = oauthClientDetails.getClientId();
         this.clientSecret = oauthClientDetails.getClientSecret();
         this.scope = oauthClientDetails.getScope();
-        this.authorizedGrantTypes = oauthClientDetails.getAuthorizedGrantType();
+        this.authorizedGrantTypes = oauthClientDetails.getAuthorizedGrantTypes();
     }
 
     @Override
