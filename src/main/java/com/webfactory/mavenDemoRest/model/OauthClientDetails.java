@@ -27,8 +27,8 @@ public class OauthClientDetails {
     @NotNull
     private String authorizedGrantTypes;
 
-    @Column(name = "authorities")
-    private String authorities;
+    //@Column(name = "authorities")
+    //private String authorities;
 
     @Column(name = "access_token_validity")
     private int accessTokenValidity;
@@ -77,13 +77,13 @@ public class OauthClientDetails {
         this.authorizedGrantTypes = authorizedGrantTypes;
     }
 
-    public String getAuthorities() {
+   /* public String getAuthorities() {
         return authorities;
-    }
+    }*/
 
-    public void setAuthorities(String authorities) {
+   /* public void setAuthorities(String authorities) {
         this.authorities = authorities;
-    }
+    }*/
 
     public int getAccessTokenValidity() {
         return accessTokenValidity;

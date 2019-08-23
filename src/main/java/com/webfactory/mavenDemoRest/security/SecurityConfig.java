@@ -31,8 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
-    @Autowired
-    private ClientDetailsService clientDetailsService;
+   /* @Autowired
+    private ClientDetailsService clientDetailsService;*/
 
     @Autowired
     private UserDetailsService myUserDetailsService;
@@ -56,9 +56,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                //.sessionManagement()
+               // .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+               // .and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/oauth/token").permitAll()
@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();*/
     }
 
-    @Bean
+    /*@Bean
     @Autowired
     public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore){
         TokenStoreUserApprovalHandler handler = new TokenStoreUserApprovalHandler();
@@ -94,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         handler.setRequestFactory(new DefaultOAuth2RequestFactory(clientDetailsService));
         handler.setClientDetailsService(clientDetailsService);
         return handler;
-    }
+    }*/
 
     /*@Bean
     public JdbcTokenStore tokenStore() {

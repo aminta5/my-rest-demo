@@ -12,7 +12,7 @@ public class ClientDetailsImpl implements ClientDetails {
     private String clientSecret;
     private String scope;
     private String authorizedGrantTypes;
-    private String authorities;
+    //private String authorities;
     private int accessTokenValidity;
     private int refreshTokenValidity;
 
@@ -24,7 +24,7 @@ public class ClientDetailsImpl implements ClientDetails {
         this.scope = oauthClientDetails.getScope();
         this.authorizedGrantTypes = oauthClientDetails.getAuthorizedGrantTypes();
         this.resourceId = oauthClientDetails.getResourceIds();
-        this.authorities = oauthClientDetails.getAuthorities();
+        //this.authorities = oauthClientDetails.getAuthorities();
         this.accessTokenValidity = oauthClientDetails.getAccessTokenValidity();
         this.refreshTokenValidity = oauthClientDetails.getRefreshTokenValidity();
     }
@@ -74,7 +74,7 @@ public class ClientDetailsImpl implements ClientDetails {
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        return null;
     }
 
     @Override
