@@ -13,19 +13,19 @@ import java.util.List;
 public class User extends BaseEntity{
 
     @Size(max = 40)
-    @Column
+    @Column(name = "first_name")
     private String firstName;
 
     @Size(max = 40)
-    @Column
+    @Column(name = "last_name")
     private String lastName;
 
     @NotNull
     @Size(max = 20)
-    @Column(unique = true)
+    @Column(unique = true, name = "nickname")
     private String nickname;
 
-    @Column
+    @Column(name = "email")
     @Email
     @NotNull
     @Size(max = 120)
@@ -33,7 +33,7 @@ public class User extends BaseEntity{
 
     @Pattern(regexp = "^[A-Za-z0-9]+$")
     @Size(min = 8, max = 12)
-    @Column
+    @Column(name = "password")
     private String password;
 
     @JsonIgnore

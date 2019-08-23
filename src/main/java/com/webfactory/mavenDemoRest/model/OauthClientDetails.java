@@ -19,7 +19,7 @@ public class OauthClientDetails {
     @NotNull
     private String clientSecret;
 
-    @Column
+    @Column(name = "scope")
     @NotNull
     private String scope;
 

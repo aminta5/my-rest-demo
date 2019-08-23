@@ -15,7 +15,7 @@ public class Location extends BaseEntity{
     //city max 120 chars
     @NotNull
     @Size(max = 120)
-    @Column
+    @Column(name = "city")
     private String city;
 
     //country max 120 chars

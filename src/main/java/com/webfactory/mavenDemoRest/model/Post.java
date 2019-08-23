@@ -11,7 +11,7 @@ public class Post extends BaseEntity{
 
     //title required max 120chars
     @Size(max = 120)
-    @Column
+    @Column(name = "title")
     private String title;
 
     //description 1000 chars max
