@@ -31,7 +31,8 @@ build/
 .vscode/
 
 #my patterns
-out/
+out
+
 
 
 
