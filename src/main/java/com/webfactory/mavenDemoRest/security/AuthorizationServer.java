@@ -96,15 +96,15 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(dataSource);
+        //clients.jdbc(dataSource);
         //clients.withClientDetails(clientDetailsService);
 
 
-        /*clients.inMemory()
+        clients.inMemory()
                 .withClient("filip-client")
                 .secret("filip-secret")
                 .authorizedGrantTypes("password")
-                .scopes("read", "write");*/
+                .scopes("read", "write");
 
     }
     @Override

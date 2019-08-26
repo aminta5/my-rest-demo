@@ -21,15 +21,15 @@ public class Location extends BaseEntity{
     //country max 120 chars
     @NotNull
     @Size(max = 120)
-    @Column
+    @Column(name = "country")
     private String country;
 
     @NotNull
-    @Column
+    @Column(name = "longitude")
     private Float longitude;
 
     @NotNull
-    @Column
+    @Column(name = "latitude")
     private Float latitude;
 
     @JsonIgnore
