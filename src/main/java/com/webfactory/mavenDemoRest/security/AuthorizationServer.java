@@ -49,6 +49,9 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private ClientDetailsService clientDetailsService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
 
     @Bean
@@ -78,10 +81,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
 
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
+
 
     public AuthorizationServer(@Qualifier(BeanIds.AUTHENTICATION_MANAGER) AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -97,19 +97,20 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //clients.jdbc(dataSource);
-        //clients.withClientDetails(clientDetailsService);
+        clients.withClientDetails(clientDetailsService);
 
 
-        clients.inMemory()
+        /*clients.inMemory()
                 .withClient("filip-client")
                 .secret("filip-secret")
                 .authorizedGrantTypes("password")
-                .scopes("read", "write");
+                .scopes("read", "write");*/
 
     }
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.passwordEncoder(passwordEncoder());
+        //security.passwordEncoder(passwordEncoder());
+        security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").passwordEncoder(passwordEncoder);
     }
 
 
