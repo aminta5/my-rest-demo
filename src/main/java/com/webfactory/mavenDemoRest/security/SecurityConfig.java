@@ -31,17 +31,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
    /* @Autowired
     private ClientDetailsService clientDetailsService;*/
 
     @Autowired
     private UserDetailsService myUserDetailsService;
 
-    @Autowired
+    /*@Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         //auth.jdbcAuthentication().dataSource(dataSource);
         auth.userDetailsService(myUserDetailsService);
-    }
+    }*/
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
@@ -114,7 +117,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(myUserDetailsService);
+        auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder);
     }
 
 //    @Bean

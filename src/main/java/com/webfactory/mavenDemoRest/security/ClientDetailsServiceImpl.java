@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("cds")
 public class ClientDetailsServiceImpl implements ClientDetailsService {
     private final ClientDetailsRepository clientDetailsRepository;
 
@@ -18,8 +18,6 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         OauthClientDetails oauthClientDetails = clientDetailsRepository.findById(clientId).orElseThrow(() -> new RuntimeException("Client not found"));
-        System.out.println(oauthClientDetails);
         return new ClientDetailsImpl(oauthClientDetails);
-
     }
 }
