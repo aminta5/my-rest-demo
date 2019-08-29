@@ -12,11 +12,8 @@ public class ClientDetailsImpl implements ClientDetails {
     private String clientSecret;
     private String scope;
     private String authorizedGrantTypes;
-    //private String authorities;
     private int accessTokenValidity;
     private int refreshTokenValidity;
-
-
 
     public ClientDetailsImpl(OauthClientDetails oauthClientDetails) {
         this.clientId = oauthClientDetails.getClientId();
@@ -24,7 +21,6 @@ public class ClientDetailsImpl implements ClientDetails {
         this.scope = oauthClientDetails.getScope();
         this.authorizedGrantTypes = oauthClientDetails.getAuthorizedGrantTypes();
         this.resourceId = oauthClientDetails.getResourceIds();
-        //this.authorities = oauthClientDetails.getAuthorities();
         this.accessTokenValidity = oauthClientDetails.getAccessTokenValidity();
         this.refreshTokenValidity = oauthClientDetails.getRefreshTokenValidity();
     }
@@ -36,8 +32,7 @@ public class ClientDetailsImpl implements ClientDetails {
 
     @Override
     public Set<String> getResourceIds() {
-        Set<String> resourceIds = new HashSet<>(Arrays.asList(this.resourceId.split(",")));
-        return resourceIds;
+        return new HashSet<>(Arrays.asList(this.resourceId.split(",")));
     }
 
     @Override
@@ -57,14 +52,12 @@ public class ClientDetailsImpl implements ClientDetails {
 
     @Override
     public Set<String> getScope() {
-        Set<String> scopes = new HashSet<>(Arrays.asList(this.scope.split(",")));
-        return scopes;
+        return new HashSet<>(Arrays.asList(this.scope.split(",")));
     }
 
     @Override
     public Set<String> getAuthorizedGrantTypes() {
-        Set<String> grantTypes = new HashSet<>(Arrays.asList(this.authorizedGrantTypes.split(",")));
-        return grantTypes;
+        return new HashSet<>(Arrays.asList(this.authorizedGrantTypes.split(",")));
     }
 
     @Override
@@ -74,7 +67,7 @@ public class ClientDetailsImpl implements ClientDetails {
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -94,6 +87,6 @@ public class ClientDetailsImpl implements ClientDetails {
 
     @Override
     public Map<String, Object> getAdditionalInformation() {
-        return null;
+        return new HashMap<>();
     }
 }

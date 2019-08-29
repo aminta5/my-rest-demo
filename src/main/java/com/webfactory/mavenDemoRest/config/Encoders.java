@@ -22,5 +22,4 @@ public class Encoders {
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-
 }
