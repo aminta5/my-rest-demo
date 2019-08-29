@@ -13,7 +13,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableAuthorizationServer
@@ -22,18 +24,20 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService myUserDetailsService;
     private final ClientDetailsService clientDetailsService;
+    private final DataSource dataSource;
 
     @Bean
     public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
+        return new JdbcTokenStore(dataSource);
     }
 
     public AuthorizationServer(@Qualifier(BeanIds.AUTHENTICATION_MANAGER) AuthenticationManager authenticationManager,
                                UserDetailsService myUserDetailsService,
-                               @Qualifier("cds") ClientDetailsService clientDetailsService) {
+                               @Qualifier("cds") ClientDetailsService clientDetailsService, DataSource dataSource) {
         this.authenticationManager = authenticationManager;
         this.myUserDetailsService = myUserDetailsService;
         this.clientDetailsService = clientDetailsService;
+        this.dataSource = dataSource;
     }
 
     @Override
