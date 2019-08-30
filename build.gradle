@@ -24,19 +24,12 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
-
-
-    // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
-    //compile group: 'org.hibernate.orm', name: 'hibernate-core', version: '6.0.0.Alpha2'
-    
-    
-    // https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager
-    //compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.4.Final'
-    
     
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager
     compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.2.Final'
 
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt
+    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.10.RELEASE'
 
     compile 'org.springframework.security.oauth:spring-security-oauth2:2.3.6.RELEASE'
     runtime 'org.springframework.boot:spring-boot-devtools:2.1.6.RELEASE'
