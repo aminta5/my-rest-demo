@@ -65,8 +65,8 @@ public class PostDaoImpl implements PostDaoService {
         User user = userOptional.orElseThrow(() -> new RuntimeException("User not found"));
         Post newPost = requestBodyPostToPost.convert(requestBodyPost);
         newPost.setUser(user);
-        Post savedPost = postRepository.save(newPost);
-        return savedPost;
+        return postRepository.save(newPost);
+
     }
 
     @Override
@@ -114,5 +114,15 @@ public class PostDaoImpl implements PostDaoService {
     @Override
     public void deletePost(Post post){
         postRepository.delete(post);
+    }
+
+    @Override
+    public List<Post> findPostsByUserId(Long id) {
+        List<Post> allPosts = new ArrayList<>();
+        postRepository.findAll().forEach(allPosts :: add);
+        List<Post> userPosts = new ArrayList<>();
+        allPosts.stream().filter(p -> p.getUser().getId().equals(id)).forEach(userPosts :: add);
+
+        return userPosts;
     }
 }
