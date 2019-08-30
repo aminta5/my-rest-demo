@@ -9,25 +9,6 @@ import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHand
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-    //private static final String RESOURCE_ID = "resource_id";
-
-    //@Primary
-    /*@Bean
-    public RemoteTokenServices tokenService() {
-        RemoteTokenServices tokenService = new RemoteTokenServices();
-        tokenService.setCheckTokenEndpointUrl(
-                "http://localhost:8080/oauth/check_token");
-        tokenService.setClientId("filip-client");
-        tokenService.setClientSecret("filip-secret");
-        return tokenService;
-    }*/
-
-
-
-    /*@Override
-    public void configure(ResourceServerSecurityConfigurer resources) {
-        resources.resourceId(RESOURCE_ID).stateless(false);
-    }*/
 
     @Override
     public void configure(HttpSecurity http) throws Exception {

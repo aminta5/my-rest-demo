@@ -22,22 +22,14 @@ import javax.sql.DataSource;
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     private final AuthenticationManager authenticationManager;
-
-
-
-
-
     private final UserDetailsService myUserDetailsService;
     private final ClientDetailsService clientDetailsService;
     private final DataSource dataSource;
-
 
     @Bean
     public TokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
     }
-
-
 
     public AuthorizationServer(@Qualifier(BeanIds.AUTHENTICATION_MANAGER) AuthenticationManager authenticationManager,
                                UserDetailsService myUserDetailsService,
@@ -57,7 +49,6 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-
         clients.withClientDetails(clientDetailsService);
     }
 

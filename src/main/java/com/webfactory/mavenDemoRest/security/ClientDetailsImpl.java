@@ -3,6 +3,7 @@ package com.webfactory.mavenDemoRest.security;
 import com.webfactory.mavenDemoRest.model.OauthClientDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -32,7 +33,7 @@ public class ClientDetailsImpl implements ClientDetails {
 
     @Override
     public Set<String> getResourceIds() {
-        return new HashSet<>(Arrays.asList(this.resourceId.split(",")));
+        return /*new HashSet<>(Arrays.asList(this.resourceId.split("-")));*/null;
     }
 
     @Override
