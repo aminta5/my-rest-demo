@@ -14,5 +14,6 @@ public interface UserDaoService {
     User saveUser(RequestBodyUser requestBodyUser);
     User updateUser(RequestBodyUser requestBodyUser, Long userId);
     void deleteUser(User user);
+    void deleteUserById(Long id);
 
 }

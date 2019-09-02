@@ -1,18 +1,20 @@
 package com.webfactory.mavenDemoRest.controllers;
 
+import com.webfactory.mavenDemoRest.constants.UserType;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
 import com.webfactory.mavenDemoRest.model.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//@EnableResourceServer
 @RestController
 public class UserController {
 
@@ -26,29 +28,26 @@ public class UserController {
 
     //find all users
     @GetMapping(path = "/users")
-    public List<User> getUsers(){
-        return userDaoService.findAllUsers();
+    public List<User> getUsers(Authentication authentication){
+        User user = userDaoService.findUserByNickname(authentication.getName());
+        List<User> authUser = new ArrayList<>();
+        authUser.add(user);
+        if(user.getUserType() == UserType.ADMIN){
+            return userDaoService.findAllUsers();
+        }
+        return authUser;
     }
 
     //find specific user (by id)
     @GetMapping(path = "/users/{id}")
     public User getUser(@PathVariable String id){
-        long longId = Long.parseLong(id);
-        Optional<User> optionalUser = userDaoService.findAllUsers().stream().filter(u -> u.getId() == longId).findFirst();
-        return optionalUser.orElse(null);
+        return userDaoService.findUserById(Long.parseLong(id));
     }
 
     //delete user
     @DeleteMapping(path = "/users/{id}/delete")
     public List<User> deleteUser(@PathVariable String id){
-        Optional<User> optUser = userDaoService.findAllUsers().stream().filter(u -> u.getId() == Long.parseLong(id)).findFirst();
-        if(optUser.isPresent()){
-            User u = optUser.get();
-            userDaoService.deleteUser(u);
-        }
-        else{
-            throw new RuntimeException("User not found");
-        }
+        userDaoService.deleteUserById(Long.parseLong(id));
         return userDaoService.findAllUsers();
     }
 
@@ -66,10 +65,10 @@ public class UserController {
     }
 
     //update user
-    @PutMapping(path = "/users/update/{userId}")
-    public ResponseEntity<Object> updateUser(@PathVariable String userId, @RequestBody RequestBodyUser requestBodyUser){
-
-        User savedUser = userDaoService.updateUser(requestBodyUser, Long.parseLong(userId));
+    @PutMapping(path = "/users/update")
+    public ResponseEntity<Object> updateUser(@RequestBody RequestBodyUser requestBodyUser, Authentication authentication){
+        User user = userDaoService.findUserByNickname(authentication.getName());
+        User savedUser = userDaoService.updateUser(requestBodyUser, user.getId());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

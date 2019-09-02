@@ -1,5 +1,6 @@
 package com.webfactory.mavenDemoRest.security;
 
+import com.webfactory.mavenDemoRest.constants.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/oauth/token").permitAll()
                 .antMatchers("/users/create").permitAll()
+                .antMatchers("/users").hasRole(UserType.ADMIN.toString())
                 .anyRequest().authenticated();
+
     }
 
     @Override

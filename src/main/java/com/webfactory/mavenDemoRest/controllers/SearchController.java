@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
-//@EnableResourceServer
 @RestController
 public class SearchController {
     private final PostDaoService postDaoService;

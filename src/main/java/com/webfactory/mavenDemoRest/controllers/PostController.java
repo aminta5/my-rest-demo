@@ -15,7 +15,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-//@EnableResourceServer
 @RestController
 public class PostController {
 
@@ -30,7 +29,6 @@ public class PostController {
     //show posts from authenticated user
     @GetMapping(path = "/posts")
     public List<Post> getPosts(Authentication authentication){
-
         String username = authentication.getName();
         User user = userDaoService.findUserByNickname(username);
         return postDaoService.findPostsByUserId(user.getId());
@@ -39,8 +37,7 @@ public class PostController {
     //find specific post (by id)
     @GetMapping(path = "/posts/{id}")
     public Post findPostById(@PathVariable String id){
-        Optional<Post> optionalPost = postDaoService.findAllPosts().stream().filter(p -> p.getId() == Long.parseLong(id)).findFirst();
-        return optionalPost.orElse(null);
+        return postDaoService.findPostById(Long.parseLong(id));
     }
 
     //authenticated user delete his own posts
@@ -53,6 +50,11 @@ public class PostController {
             user.getPosts().remove(post);
             return user.getPosts();
         }
+        /*if(post.getUser().equals(user)){
+            postDaoService.deletePost(post);
+            user.getPosts().remove(post);
+            return user.getPosts();
+        }*/
         return user.getPosts();
     }
 
@@ -76,7 +78,7 @@ public class PostController {
     public ResponseEntity<Object> updatePost(@RequestBody RequestBodyPost requestBodyPost, @PathVariable String postId, Authentication authentication){
         User user = userDaoService.findUserByNickname(authentication.getName());
         Optional<Post> postToUpdate = user.getPosts().stream().filter(p -> p.getId().equals(Long.parseLong(postId))).findFirst();
-        Post savedPost = null;
+        Post savedPost = new Post();
         if(postToUpdate.isPresent()){
             savedPost = postDaoService.updatePost(requestBodyPost, Long.parseLong(postId));
         }

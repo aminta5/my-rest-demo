@@ -54,8 +54,7 @@ public class UserDaoImpl implements UserDaoService{
 
     @Override
     public User saveUser(RequestBodyUser requestBodyUser){
-        User savedUser = userRepository.save(requestBodyUserToUser.convert(requestBodyUser));
-        return savedUser;
+        return userRepository.save(requestBodyUserToUser.convert(requestBodyUser));
     }
 
 
@@ -104,13 +103,17 @@ public class UserDaoImpl implements UserDaoService{
 
         userToUpdate.setLocation(locationToUpdate);
 
-        User savedUser = userRepository.save(userToUpdate);
-        return savedUser;
+        return userRepository.save(userToUpdate);
     }
 
     @Override
     public void deleteUser(User user){
         userRepository.delete(user);
+    }
+
+    @Override
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
     }
 
 }

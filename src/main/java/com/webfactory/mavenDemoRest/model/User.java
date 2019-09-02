@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -124,4 +125,5 @@ public class User extends BaseEntity{
     public void setPosts(List<Post> post) {
         this.posts = post;
     }
+
 }
