@@ -43,15 +43,6 @@ public class PostController {
         return optionalPost.orElse(null);
     }
 
-    //delete post
-
-    /*@DeleteMapping(path = "/posts/{id}/delete")
-    public List<Post> deletePost(@PathVariable String id){
-        Post post = postDaoService.findPostById(Long.parseLong(id));
-        postDaoService.deletePost(post);
-        return postDaoService.findAllPosts();
-    }*/
-
     //authenticated user delete his own posts
     @DeleteMapping(path = "/posts/{id}/delete")
     public List<Post> deletePost(@PathVariable String id, Authentication authentication){
@@ -67,7 +58,9 @@ public class PostController {
 
     //create post
     @PostMapping(path="/posts/create")
-    public ResponseEntity<Object> createPost(@RequestBody RequestBodyPost requestBodyPost){
+    public ResponseEntity<Object> createPost(@RequestBody RequestBodyPost requestBodyPost, Authentication authentication){
+        User user = userDaoService.findUserByNickname(authentication.getName());
+        requestBodyPost.setUserId(user.getId());
         Post savedPost = postDaoService.savePost(requestBodyPost);
 
         URI location = ServletUriComponentsBuilder
