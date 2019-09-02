@@ -73,8 +73,13 @@ public class PostController {
 
     //update post
     @PutMapping(path = "/posts/update/{postId}")
-    public ResponseEntity<Object> updatePost(@RequestBody RequestBodyPost requestBodyPost, @PathVariable String postId){
-        Post savedPost = postDaoService.updatePost(requestBodyPost, Long.parseLong(postId));
+    public ResponseEntity<Object> updatePost(@RequestBody RequestBodyPost requestBodyPost, @PathVariable String postId, Authentication authentication){
+        User user = userDaoService.findUserByNickname(authentication.getName());
+        Optional<Post> postToUpdate = user.getPosts().stream().filter(p -> p.getId().equals(Long.parseLong(postId))).findFirst();
+        Post savedPost = null;
+        if(postToUpdate.isPresent()){
+            savedPost = postDaoService.updatePost(requestBodyPost, Long.parseLong(postId));
+        }
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
