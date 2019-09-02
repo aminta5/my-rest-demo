@@ -1,10 +1,12 @@
 package com.webfactory.mavenDemoRest.controllers;
 
 import com.webfactory.mavenDemoRest.daoServices.PostDaoService;
+import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.model.Post;
+import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyPost;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -17,17 +19,27 @@ import java.util.Optional;
 public class PostController {
 
     private final PostDaoService postDaoService;
+    private final UserDaoService userDaoService;
 
-    public PostController(PostDaoService postDaoService) {
+    public PostController(PostDaoService postDaoService, UserDaoService userDaoService) {
         this.postDaoService = postDaoService;
+        this.userDaoService = userDaoService;
     }
 
     //find all posts
-    @GetMapping(path = "/posts")
+    /*@GetMapping(path = "/posts")
     public List<Post> getPosts(){
 
 
         return postDaoService.findAllPosts();
+    }*/
+
+    @GetMapping(path = "/posts")
+    public List<Post> getPosts(Authentication authentication){
+
+        String username = authentication.getName();
+        User user = userDaoService.findUserByNickname(username);
+        return postDaoService.findPostsByUserId(user.getId());
     }
 
     //find specific post (by id)

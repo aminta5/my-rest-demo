@@ -14,6 +14,7 @@ public interface PostDaoService {
     Post savePost(RequestBodyPost requestBodyPost);
     Post updatePost(RequestBodyPost requestBodyPost, Long postId);
     void deletePost(Post post);
+    List<Post> findPostsByUserId(Long id);
 
 }
 
