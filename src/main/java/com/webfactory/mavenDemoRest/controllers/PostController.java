@@ -7,6 +7,7 @@ import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyPost;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,14 +27,7 @@ public class PostController {
         this.userDaoService = userDaoService;
     }
 
-    //find all posts
-    /*@GetMapping(path = "/posts")
-    public List<Post> getPosts(){
-
-
-        return postDaoService.findAllPosts();
-    }*/
-
+    //show posts from authenticated user
     @GetMapping(path = "/posts")
     public List<Post> getPosts(Authentication authentication){
 
@@ -50,11 +44,25 @@ public class PostController {
     }
 
     //delete post
-    @DeleteMapping(path = "/posts/{id}/delete")
+
+    /*@DeleteMapping(path = "/posts/{id}/delete")
     public List<Post> deletePost(@PathVariable String id){
         Post post = postDaoService.findPostById(Long.parseLong(id));
         postDaoService.deletePost(post);
         return postDaoService.findAllPosts();
+    }*/
+
+    //authenticated user delete his own posts
+    @DeleteMapping(path = "/posts/{id}/delete")
+    public List<Post> deletePost(@PathVariable String id, Authentication authentication){
+        User user = userDaoService.findUserByNickname(authentication.getName());
+        Post post = postDaoService.findPostById(Long.parseLong(id));
+        if(user.getPosts().contains(post)){
+            postDaoService.deletePost(post);
+            user.getPosts().remove(post);
+            return user.getPosts();
+        }
+        return user.getPosts();
     }
 
     //create post
