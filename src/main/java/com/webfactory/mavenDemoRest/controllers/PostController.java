@@ -47,7 +47,7 @@ public class PostController {
         Post post = postDaoService.findPostById(Long.parseLong(id));
         if(user.getPosts().contains(post)){
             postDaoService.deletePost(post);
-            user.getPosts().remove(post);
+            //user.getPosts().remove(post);
             return user.getPosts();
         }
         /*if(post.getUser().equals(user)){

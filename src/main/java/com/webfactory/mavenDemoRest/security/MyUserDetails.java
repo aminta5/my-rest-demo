@@ -62,7 +62,7 @@ public class MyUserDetails implements UserDetails {
     }
 
     //posts
-    public List<Post> getPosts() {
+    /*public List<Post> getPosts() {
         return posts;
-    }
+    }*/
 }

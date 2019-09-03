@@ -40,7 +40,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         List<User> users = new ArrayList<>();
 
         // first user
-        User user1 = new User("John", "Smith", "Jonny", "user@semanticsquate.com","password", UserType.ADMIN);
+        User user1 = new User("John", "Smith", "Jonny", "user@semanticsquate.com","password", UserType.ROLE_ADMIN);
         Post post1 = new Post("Weather");
         post1.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galle");
         Location pLoc1 = new Location("Belgrade", "Serbia", 28.3f, 45.6f);
@@ -53,7 +53,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 
         //second user
-        User user2 = new User("Mickey", "Mouse", "Miki", "miki@myemail.com","password", UserType.USER);
+        User user2 = new User("Mickey", "Mouse", "Miki", "miki@myemail.com","password", UserType.ROLE_USER);
         Post post2 = new Post("Disney");
         post2.setDescription("Cu mucius alienum qui. Vim ne doming contentiones, sea eu aeque noster pertinax. Ei atomorum expetendis eam.");
         Location pLoc2 = new Location("Zadar", "Croatia", 78.9f, 67.8f);
@@ -65,7 +65,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         users.add(user2);
 
         //third user
-        User user3 = new User("Petko", "Petkoski", "Pepi", "pepi@globalmail.com","password", UserType.USER);
+        User user3 = new User("Petko", "Petkoski", "Pepi", "pepi@globalmail.com","password", UserType.ROLE_USER);
         Post post3 = new Post("Vacation");
         post3.setDescription("Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old");
         Location pLoc3 = new Location("Madrid", "Spain", 99.0f, 34.5f);
@@ -77,7 +77,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         users.add(user3);
 
         //fourth user
-        User user4 = new User("Sheldon", "Cooper", "Shelly", "atom@yellow.com","password", UserType.USER);
+        User user4 = new User("Sheldon", "Cooper", "Shelly", "atom@yellow.com","password", UserType.ROLE_USER);
         Post post4 = new Post("Camping");
         post4.setDescription("It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout");
         Location pLoc4 = new Location("Goa", "India", 66.3f, 88.4f);
@@ -89,7 +89,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         users.add(user4);
 
         //fifth user
-        User user5 = new User("Denise", "Menice", "Budd", "buddy@space.com","password", UserType.USER);
+        User user5 = new User("Denise", "Menice", "Budd", "buddy@space.com","password", UserType.ROLE_USER);
         Post post5 = new Post("Vitamin Sea");
         post5.setDescription("Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi");
         Location pLoc5 = new Location("Moscow", "Russia", 99.1f, 41.8f);

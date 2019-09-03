@@ -26,28 +26,23 @@ public class UserController {
 
     }
 
-    //find all users
-    /*@GetMapping(path = "/users")
-    public List<User> getUsers(Authentication authentication){
-        User user = userDaoService.findUserByNickname(authentication.getName());
-        List<User> authUser = new ArrayList<>();
-        authUser.add(user);
-        if(user.getUserType() == UserType.ADMIN){
-            return userDaoService.findAllUsers();
-        }
-        return authUser;
-    }*/
-
+    //find all users only for admins
     @GetMapping(path = "/users")
     public List<User> getUsers(){
         return userDaoService.findAllUsers();
     }
 
-
     //find specific user (by id)
     @GetMapping(path = "/users/{id}")
-    public User getUser(@PathVariable String id){
-        return userDaoService.findUserById(Long.parseLong(id));
+    public User getUser(@PathVariable String id, Authentication authentication){
+        User user = userDaoService.findUserByNickname(authentication.getName());
+        if(user.getUserType().equals(UserType.ROLE_ADMIN)){
+            return userDaoService.findUserById(Long.parseLong(id));
+        }
+        else if(user.getId() != Long.parseLong(id)){
+            throw new RuntimeException("Not authorized");
+        }
+        return user;
     }
 
     //delete user
