@@ -27,7 +27,7 @@ public class UserController {
     }
 
     //find all users
-    @GetMapping(path = "/users")
+    /*@GetMapping(path = "/users")
     public List<User> getUsers(Authentication authentication){
         User user = userDaoService.findUserByNickname(authentication.getName());
         List<User> authUser = new ArrayList<>();
@@ -36,7 +36,13 @@ public class UserController {
             return userDaoService.findAllUsers();
         }
         return authUser;
+    }*/
+
+    @GetMapping(path = "/users")
+    public List<User> getUsers(){
+        return userDaoService.findAllUsers();
     }
+
 
     //find specific user (by id)
     @GetMapping(path = "/users/{id}")
