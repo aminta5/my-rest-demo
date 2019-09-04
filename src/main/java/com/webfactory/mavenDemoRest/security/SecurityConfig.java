@@ -1,6 +1,5 @@
 package com.webfactory.mavenDemoRest.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,11 +14,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserDetailsService myUserDetailsService;
+    private final UserDetailsService myUserDetailsService;
+
+    public SecurityConfig(PasswordEncoder passwordEncoder, UserDetailsService myUserDetailsService) {
+        this.passwordEncoder = passwordEncoder;
+        this.myUserDetailsService = myUserDetailsService;
+    }
+
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
