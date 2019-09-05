@@ -9,6 +9,7 @@ import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.PostRepository;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class PostDaoImpl implements PostDaoService {
 
     private final PostRepository postRepository;

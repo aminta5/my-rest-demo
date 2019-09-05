@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -116,13 +117,23 @@ public class User extends BaseEntity{
     public void setLocation(Location location) {
         this.location = location;
     }
-
     public List<Post> getPosts() {
         return posts;
     }
-
     public void setPosts(List<Post> post) {
         this.posts = post;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
+    }
 }

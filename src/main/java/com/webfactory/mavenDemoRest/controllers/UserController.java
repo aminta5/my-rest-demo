@@ -2,6 +2,7 @@ package com.webfactory.mavenDemoRest.controllers;
 
 import com.webfactory.mavenDemoRest.constants.UserType;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
+import com.webfactory.mavenDemoRest.helpers.Helper;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
 import com.webfactory.mavenDemoRest.model.User;
 import org.springframework.http.ResponseEntity;
@@ -28,34 +29,33 @@ public class UserController {
 
     //find all users only for admins
     @GetMapping(path = "/users")
-    public List<User> getUsers(){
+    public List<User> getAllUsers() {
         return userDaoService.findAllUsers();
     }
 
     //find specific user (by id)
-    @GetMapping(path = "/users/{id}")
-    public User getUser(@PathVariable String id, Authentication authentication){
+    @GetMapping(path = "/users/{userId}")
+    public User getUser(@PathVariable String userId, Authentication authentication) {
         User user = userDaoService.findUserByNickname(authentication.getName());
-        if(user.getUserType().equals(UserType.ROLE_ADMIN)){
-            return userDaoService.findUserById(Long.parseLong(id));
-        }
-        else if(user.getId() != Long.parseLong(id)){
+        if (Helper.isAdmin(user)) {
+            return userDaoService.findUserById(Long.parseLong(userId));
+        } else if (!Helper.isSameUser(user, Long.parseLong(userId))) {
             throw new RuntimeException("Not authorized");
         }
         return user;
     }
 
     //delete user
-    @DeleteMapping(path = "/users/{id}/delete")
-    public List<User> deleteUser(@PathVariable String id){
-        userDaoService.deleteUserById(Long.parseLong(id));
+    @DeleteMapping(path = "/users/{userId}")
+    public List<User> deleteUser(@PathVariable String userId) {
+        userDaoService.deleteUserById(Long.parseLong(userId));
         return userDaoService.findAllUsers();
     }
 
 
     //create user
     @PostMapping(path = "/users/create")
-    public ResponseEntity<Object> createUser(@RequestBody RequestBodyUser requestBodyUser){
+    public ResponseEntity<Object> createUser(@RequestBody RequestBodyUser requestBodyUser) {
         User savedUser = userDaoService.saveUser(requestBodyUser);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -66,10 +66,13 @@ public class UserController {
     }
 
     //update user
-    @PutMapping(path = "/users/update")
-    public ResponseEntity<Object> updateUser(@RequestBody RequestBodyUser requestBodyUser, Authentication authentication){
+    @PutMapping(path = "/users/{userId/update")
+    public ResponseEntity<Object> updateUser(@RequestBody RequestBodyUser requestBodyUser, @PathVariable String userId, Authentication authentication) {
         User user = userDaoService.findUserByNickname(authentication.getName());
-        User savedUser = userDaoService.updateUser(requestBodyUser, user.getId());
+        User savedUser = new User();
+        if (Helper.isAdmin(user) || Helper.isSameUser(user, Long.parseLong(userId))) {
+            savedUser = userDaoService.updateUser(requestBodyUser, user.getId());
+        }
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

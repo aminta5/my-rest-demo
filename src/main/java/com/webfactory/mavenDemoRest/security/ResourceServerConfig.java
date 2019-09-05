@@ -1,6 +1,7 @@
 package com.webfactory.mavenDemoRest.security;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -10,6 +11,7 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 
 @Configuration
 @EnableResourceServer
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     private final DefaultTokenServices tokenServices;
@@ -32,7 +34,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/users/create").permitAll()
                 .antMatchers("/oauth/token").permitAll()
                 .antMatchers("/users").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/users/{id}/delete").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/posts").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/users/{id}").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/**").authenticated()
                 .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
     }
