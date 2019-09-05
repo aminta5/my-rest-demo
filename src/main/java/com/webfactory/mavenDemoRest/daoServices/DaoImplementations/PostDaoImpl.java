@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class PostDaoImpl implements PostDaoService {
 
     private final PostRepository postRepository;
@@ -109,13 +108,17 @@ public class PostDaoImpl implements PostDaoService {
 
         postToUpdate.setLocation(locationToUpdate);
 
-        Post savedPost = postRepository.save(postToUpdate);
-        return savedPost;
+        return postRepository.save(postToUpdate);
     }
 
     @Override
     public void deletePost(Post post){
         postRepository.delete(post);
+    }
+
+    @Override
+    public void deletePostById(Long id) {
+        postRepository.deleteById(id);
     }
 
     @Override
