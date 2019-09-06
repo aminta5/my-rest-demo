@@ -1,7 +1,6 @@
 package com.webfactory.mavenDemoRest.requestBodies;
 
 import com.webfactory.mavenDemoRest.constants.UserType;
-
 import java.util.ArrayList;
 import java.util.List;
 

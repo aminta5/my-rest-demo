@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "posts")
-public class Post extends BaseEntity{
+public class Post extends BaseEntity {
 
     //title required max 120chars
     @Size(max = 120)
@@ -24,22 +24,17 @@ public class Post extends BaseEntity{
     @JoinColumn(name = "user_id")
     private User user;
 
-    //@JsonIgnore
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Location location;
 
     //constructors
-
-
     public Post() {
     }
 
     public Post(String title) {
         this.title = title;
-        this.description = description;
     }
 
-    //@Builder
     public Post(String title, String description, User user, Location location) {
         this.title = title;
         this.description = description;

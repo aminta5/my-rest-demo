@@ -18,9 +18,9 @@ public class LocationDaoImpl implements LocationDaoService {
     }
 
     @Override
-    public List<Location> findAllLocations(){
+    public List<Location> findAllLocations() {
         List<Location> locations = new ArrayList<>();
-        locationRepository.findAll().forEach(locations :: add);
+        locationRepository.findAll().forEach(locations::add);
         return locations;
     }
 

@@ -17,24 +17,14 @@ import java.util.List;
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final UserRepository userRepository;
-    //private final ClientDetailsRepository clientDetailsRepository;
-
     public DataLoader(UserRepository userRepository/*, ClientDetailsRepository clientDetailsRepository*/) {
         this.userRepository = userRepository;
-        //this.clientDetailsRepository = clientDetailsRepository;
     }
-
-    //private OauthClientDetails oauthClientDetails = new OauthClientDetails("filip-client", "filip-secret", "read,write", "password");
-
-
 
     @Override
-
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         userRepository.saveAll(getUsers());
-        //clientDetailsRepository.save(oauthClientDetails);
     }
-
 
     private List<User> getUsers() {
         List<User> users = new ArrayList<>();
@@ -50,7 +40,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         user1.setLocation(uLoc1);
         user1.getPosts().add(post1);
         users.add(user1);
-
 
         //second user
         User user2 = new User("Mickey", "Mouse", "Miki", "miki@myemail.com","password", UserType.ROLE_USER);

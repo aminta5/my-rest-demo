@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
 import javax.sql.DataSource;
 
 @Configuration
@@ -24,9 +25,7 @@ import javax.sql.DataSource;
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     private final AuthenticationManager authenticationManager;
-    private final UserDetailsService myUserDetailsService;
     private final ClientDetailsService clientDetailsService;
-    private final DataSource dataSource;
 
     @Bean
     public TokenStore tokenStore() {
@@ -50,12 +49,9 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     }
 
     public AuthorizationServer(@Qualifier(BeanIds.AUTHENTICATION_MANAGER) AuthenticationManager authenticationManager,
-                               UserDetailsService myUserDetailsService,
-                               @Qualifier("cds") ClientDetailsService clientDetailsService, DataSource dataSource) {
+                               @Qualifier("cds") ClientDetailsService clientDetailsService) {
         this.authenticationManager = authenticationManager;
-        this.myUserDetailsService = myUserDetailsService;
         this.clientDetailsService = clientDetailsService;
-        this.dataSource = dataSource;
     }
 
     @Override
@@ -71,7 +67,6 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     }
 
     @Override
-
     public void configure(AuthorizationServerSecurityConfigurer security) {
         security.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()");

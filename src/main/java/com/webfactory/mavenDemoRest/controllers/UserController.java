@@ -1,8 +1,6 @@
 package com.webfactory.mavenDemoRest.controllers;
 
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
-import com.webfactory.mavenDemoRest.helpers.Helper;
-import com.webfactory.mavenDemoRest.managers.AccessManager;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
 import com.webfactory.mavenDemoRest.model.User;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +34,7 @@ public class UserController {
     //find specific user (by id)
     @GetMapping(path = "/users/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication, #userId)")
-    public User getUser(@P("userId")@PathVariable Long userId, Authentication authentication) {
+    public User getUser(@P("userId") @PathVariable Long userId, Authentication authentication) {
         return userDaoService.findUserById(userId);
     }
 

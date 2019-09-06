@@ -5,14 +5,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="oauth_client_details")
+@Table(name = "oauth_client_details")
 public class OauthClientDetails {
     @Id
     @Column(name = "client_id", nullable = false)
     @NotNull
     private String clientId;
 
-    @Column(name ="resource_ids")
+    @Column(name = "resource_ids")
     private String resourceIds;
 
     @Column(name = "client_secret")
@@ -76,14 +76,6 @@ public class OauthClientDetails {
     public void setAuthorizedGrantTypes(String authorizedGrantTypes) {
         this.authorizedGrantTypes = authorizedGrantTypes;
     }
-
-   /* public String getAuthorities() {
-        return authorities;
-    }*/
-
-   /* public void setAuthorities(String authorities) {
-        this.authorities = authorities;
-    }*/
 
     public int getAccessTokenValidity() {
         return accessTokenValidity;

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "locations")
-public class Location extends BaseEntity{
+public class Location extends BaseEntity {
 
     //city max 120 chars
     @NotNull
@@ -67,24 +67,31 @@ public class Location extends BaseEntity{
     public String getCity() {
         return city;
     }
+
     public void setCity(String city) {
         this.city = city;
     }
+
     public String getCountry() {
         return country;
     }
+
     public void setCountry(String country) {
         this.country = country;
     }
+
     public Float getLongitude() {
-            return longitude;
+        return longitude;
     }
+
     public void setLongitude(Float longitude) {
         this.longitude = longitude;
     }
+
     public Float getLatitude() {
         return latitude;
     }
+
     public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }

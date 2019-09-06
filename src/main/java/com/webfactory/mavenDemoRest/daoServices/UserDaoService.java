@@ -8,12 +8,15 @@ import java.util.List;
 
 public interface UserDaoService {
     List<User> findAllUsers();
+
     User findUserById(Long id);
+
     User findUserByNickname(String nickname);
-    Location findUserLocation(User user);
+
     User saveUser(RequestBodyUser requestBodyUser);
+
     User updateUser(RequestBodyUser requestBodyUser, Long userId);
-    void deleteUser(User user);
+
     void deleteUserById(Long id);
 
 }

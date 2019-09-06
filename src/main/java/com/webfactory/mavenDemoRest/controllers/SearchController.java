@@ -27,27 +27,28 @@ public class SearchController {
     }
 
     //Search Users by nickname
-    @GetMapping(path="/users/find/{nickname}")
-    public User findUsersByNickname(@PathVariable String nickname){
+    @GetMapping(path = "/users/find/{nickname}")
+    public User findUsersByNickname(@PathVariable String nickname) {
         return userDaoService.findUserByNickname(nickname);
     }
 
     //Search Users by Location
-    @GetMapping(path="/users/location/{city}")
-    public List<User> findUsersByLocation(@PathVariable String city){
+    @GetMapping(path = "/users/location/{city}")
+    public List<User> findUsersByLocation(@PathVariable String city) {
         Optional<Location> optinalLocation = locationDaoService.findAllLocations().stream().filter(l -> l.getCity().equalsIgnoreCase(city)).findFirst();
         Location location = optinalLocation.orElseThrow(() -> new RuntimeException("Location for users not found"));
         return location.getUsers();
     }
+
     //Search Posts by title
-    @GetMapping(path="/posts/find/{title}")
-    public List<Post> findPostsByTitle(@PathVariable String title){
+    @GetMapping(path = "/posts/find/{title}")
+    public List<Post> findPostsByTitle(@PathVariable String title) {
         return postDaoService.findPostByTitle(title);
     }
 
     //Search Posts by Location
     @GetMapping(path = "/posts/location/{city}")
-    public List<Post> findPostsByLocation(@PathVariable String city){
+    public List<Post> findPostsByLocation(@PathVariable String city) {
         Optional<Location> optinalLocation = locationDaoService.findAllLocations().stream().filter(l -> l.getCity().equalsIgnoreCase(city)).findFirst();
         Location location = optinalLocation.orElseThrow(() -> new RuntimeException("Location for posts not found"));
         return location.getPosts();

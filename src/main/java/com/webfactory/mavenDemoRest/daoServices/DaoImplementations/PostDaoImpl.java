@@ -24,9 +24,11 @@ public class PostDaoImpl implements PostDaoService {
     private final RequestBodyLocationToLocation requestBodyLocationToLocation;
     private final RequestBodyPostToPost requestBodyPostToPost;
 
-    //constructor injection
-
-    public PostDaoImpl(PostRepository postRepository, UserRepository userRepository, RequestBodyLocationToLocation requestBodyLocationToLocation, RequestBodyPostToPost requestBodyPostToPost) {
+    //constructor
+    public PostDaoImpl(PostRepository postRepository,
+                       UserRepository userRepository,
+                       RequestBodyLocationToLocation requestBodyLocationToLocation,
+                       RequestBodyPostToPost requestBodyPostToPost) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.requestBodyLocationToLocation = requestBodyLocationToLocation;
@@ -34,34 +36,28 @@ public class PostDaoImpl implements PostDaoService {
     }
 
     @Override
-    public List<Post> findAllPosts(){
+    public List<Post> findAllPosts() {
         List<Post> posts = new ArrayList<>();
-        postRepository.findAll().forEach(posts :: add);
+        postRepository.findAll().forEach(posts::add);
         System.out.println(posts);
         return posts;
     }
 
     @Override
-    public Post findPostById(Long id){
-       return postRepository.findById(id).orElse(null);
+    public Post findPostById(Long id) {
+        return postRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Location findPostLocation(Post post){
-        return post.getLocation();
-    }
-
-
-    @Override
-    public List<Post> findPostByTitle(String title){
+    public List<Post> findPostByTitle(String title) {
         List<Post> posts = new ArrayList<>();
-        findAllPosts().stream().filter(p -> p.getTitle().equalsIgnoreCase(title)).forEach(posts :: add);
+        findAllPosts().stream().filter(p -> p.getTitle().equalsIgnoreCase(title)).forEach(posts::add);
         return posts;
 
     }
 
     @Override
-    public Post savePost(RequestBodyPost requestBodyPost){
+    public Post savePost(RequestBodyPost requestBodyPost) {
         Optional<User> userOptional = userRepository.findById(requestBodyPost.getUserId());
         User user = userOptional.orElseThrow(() -> new RuntimeException("User not found"));
         Post newPost = requestBodyPostToPost.convert(requestBodyPost);
@@ -71,49 +67,43 @@ public class PostDaoImpl implements PostDaoService {
     }
 
     @Override
-    public Post updatePost(RequestBodyPost requestBodyPost, Long postId){
+    public Post updatePost(RequestBodyPost requestBodyPost, Long postId) {
         Optional<Post> postToUpdateOptional = postRepository.findById(postId);
         Post postToUpdate = postToUpdateOptional.orElseThrow(() -> new RuntimeException("Post Not found"));
 
         //update post
-        if(requestBodyPost.getTitle() != null){
+        if (requestBodyPost.getTitle() != null) {
             postToUpdate.setTitle(requestBodyPost.getTitle());
         }
-        if(requestBodyPost.getDescription() != null){
+        if (requestBodyPost.getDescription() != null) {
             postToUpdate.setDescription(requestBodyPost.getDescription());
         }
 
         //update of the location
         Location locationToUpdate = postToUpdate.getLocation();
-        if(locationToUpdate == null){
+        if (locationToUpdate == null) {
             locationToUpdate = new Location();
         }
         Location newLocation = requestBodyLocationToLocation.convert(requestBodyPost.getLocation());
 
-        if(newLocation != null){
-            if(newLocation.getCity() != null){
+        if (newLocation != null) {
+            if (newLocation.getCity() != null) {
                 locationToUpdate.setCity(newLocation.getCity());
             }
-            if(newLocation.getCountry() != null){
+            if (newLocation.getCountry() != null) {
                 locationToUpdate.setCountry(newLocation.getCountry());
             }
-            if(newLocation.getLongitude() != null && newLocation.getLongitude() != 0.0){
+            if (newLocation.getLongitude() != null && newLocation.getLongitude() != 0.0) {
                 locationToUpdate.setLongitude(newLocation.getLongitude());
             }
-            if(newLocation.getLatitude() != null && newLocation.getLatitude() != 0.0){
+            if (newLocation.getLatitude() != null && newLocation.getLatitude() != 0.0) {
                 locationToUpdate.setLatitude(newLocation.getLatitude());
             }
         }
 
-
         postToUpdate.setLocation(locationToUpdate);
 
         return postRepository.save(postToUpdate);
-    }
-
-    @Override
-    public void deletePost(Post post){
-        postRepository.delete(post);
     }
 
     @Override
@@ -124,9 +114,9 @@ public class PostDaoImpl implements PostDaoService {
     @Override
     public List<Post> findPostsByUserId(Long id) {
         List<Post> allPosts = new ArrayList<>();
-        postRepository.findAll().forEach(allPosts :: add);
+        postRepository.findAll().forEach(allPosts::add);
         List<Post> userPosts = new ArrayList<>();
-        allPosts.stream().filter(p -> p.getUser().getId().equals(id)).forEach(userPosts :: add);
+        allPosts.stream().filter(p -> p.getUser().getId().equals(id)).forEach(userPosts::add);
 
         return userPosts;
     }

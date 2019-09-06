@@ -12,8 +12,7 @@ public class RequestBodyUserToUser implements Converter<RequestBodyUser, User> {
     private RequestBodyPostToPost requestBodyPostToPost;
     private RequestBodyLocationToLocation requestBodyLocationToLocation;
 
-    //setters for injection
-
+    //setters injection
     @Autowired
     public void setRequestBodyPostToPost(RequestBodyPostToPost requestBodyPostToPost) {
         this.requestBodyPostToPost = requestBodyPostToPost;
@@ -26,7 +25,7 @@ public class RequestBodyUserToUser implements Converter<RequestBodyUser, User> {
 
     @Override
     public User convert(RequestBodyUser source) {
-        if(source == null){
+        if (source == null) {
             return null;
         }
 
@@ -37,7 +36,7 @@ public class RequestBodyUserToUser implements Converter<RequestBodyUser, User> {
         user.setNickname(source.getNickname());
         user.setEmail(source.getEmail());
         user.setPassword(source.getPassword());
-        if(source.getPost() != null && source.getPost().size() > 0){
+        if (source.getPost() != null && source.getPost().size() > 0) {
             source.getPost().forEach(postCommand -> user.getPosts().add(requestBodyPostToPost.convert(postCommand)));
         }
         user.setLocation(requestBodyLocationToLocation.convert(source.getLocation()));

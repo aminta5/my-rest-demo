@@ -11,9 +11,7 @@ import org.springframework.stereotype.Component;
 public class RequestBodyPostToPost implements Converter<RequestBodyPost, Post> {
     private RequestBodyLocationToLocation requestBodyLocationToLocation;
 
-
-    //setter  for injection
-
+    //setter injection
     @Autowired
     public void setRequestBodyLocationToLocation(RequestBodyLocationToLocation requestBodyLocationToLocation) {
         this.requestBodyLocationToLocation = requestBodyLocationToLocation;
@@ -21,7 +19,7 @@ public class RequestBodyPostToPost implements Converter<RequestBodyPost, Post> {
 
     @Override
     public Post convert(RequestBodyPost source) {
-        if(source == null){
+        if (source == null) {
             return null;
         }
 
@@ -30,7 +28,7 @@ public class RequestBodyPostToPost implements Converter<RequestBodyPost, Post> {
         post.setTitle(source.getTitle());
         post.setDescription(source.getDescription());
 
-        if(source.getUserId() != null){
+        if (source.getUserId() != null) {
             User user = new User();
             user.setId(source.getUserId());
             post.setUser(user);

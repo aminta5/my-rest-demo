@@ -1,6 +1,5 @@
 package com.webfactory.mavenDemoRest.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -11,8 +10,11 @@ import javax.sql.DataSource;
 @Configuration
 @PropertySource({"classpath:application.properties"})
 public class DatabaseConfig {
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
+
+    public DatabaseConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public DataSource dataSource() {

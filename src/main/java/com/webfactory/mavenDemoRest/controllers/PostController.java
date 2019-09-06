@@ -2,8 +2,6 @@ package com.webfactory.mavenDemoRest.controllers;
 
 import com.webfactory.mavenDemoRest.daoServices.PostDaoService;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
-import com.webfactory.mavenDemoRest.helpers.Helper;
-import com.webfactory.mavenDemoRest.managers.AccessManager;
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyPost;
@@ -37,29 +35,22 @@ public class PostController {
     //show posts from authenticated user
     @GetMapping(path = "/users/{userId}/posts")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication, #userId)")
-    public List<Post> getUsersPosts(@P("userId")@PathVariable Long userId, Authentication authentication) {
+    public List<Post> getUsersPosts(@P("userId") @PathVariable Long userId, Authentication authentication) {
         return postDaoService.findPostsByUserId(userId);
     }
 
     //find specific post (by id)
     @GetMapping(path = "/posts/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
-    public Post findPostById(@P("postId")@PathVariable Long postId, Authentication authentication) {
+    public Post findPostById(@P("postId") @PathVariable Long postId, Authentication authentication) {
         return postDaoService.findPostById(postId);
     }
 
-    //authenticated user delete his own posts
+    //delete post(authenticated user or admin)
     @DeleteMapping(path = "/posts/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
-    public List<Post> deletePost(@P("postId")@PathVariable Long postId, Authentication authentication) {
-        User user = userDaoService.findUserByNickname(authentication.getName());
+    public void deletePost(@P("postId") @PathVariable Long postId, Authentication authentication) {
         postDaoService.deletePostById(postId);
-        if (Helper.isAdmin(user)){
-            return postDaoService.findAllPosts();
-        }
-        return postDaoService.findPostsByUserId(user.getId());
-
-
     }
 
     //create post
@@ -80,8 +71,8 @@ public class PostController {
     //update post
     @PutMapping(path = "/posts/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
-    public ResponseEntity<Object> updatePost(@RequestBody RequestBodyPost requestBodyPost, @P("postId")@PathVariable Long postId, @P("authentication")Authentication authentication) {
-       Post savedPost = postDaoService.updatePost(requestBodyPost, postId);
+    public ResponseEntity<Object> updatePost(@RequestBody RequestBodyPost requestBodyPost, @P("postId") @PathVariable Long postId, @P("authentication") Authentication authentication) {
+        Post savedPost = postDaoService.updatePost(requestBodyPost, postId);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -90,6 +81,4 @@ public class PostController {
 
         return ResponseEntity.created(location).build();
     }
-
-
 }

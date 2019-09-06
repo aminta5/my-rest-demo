@@ -18,7 +18,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService myUserDetailsService;
 
-
     public SecurityConfig(PasswordEncoder passwordEncoder, UserDetailsService myUserDetailsService) {
         this.passwordEncoder = passwordEncoder;
         this.myUserDetailsService = myUserDetailsService;

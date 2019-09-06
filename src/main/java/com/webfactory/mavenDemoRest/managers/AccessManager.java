@@ -21,11 +21,11 @@ public class AccessManager {
         this.postDaoService = postDaoService;
     }
 
-    public boolean authorizedUser(Authentication authentication, Long userId){
+    public boolean authorizedUser(Authentication authentication, Long userId) {
         return userService.findUserByNickname(authentication.getName()).getId().equals(userId);
     }
 
-    public  boolean userCanBeUpdated (Authentication authentication, Long id) {
+    public boolean userCanBeUpdated(Authentication authentication, Long id) {
         return userService.findUserByNickname(authentication.getName()).getId().equals(id);
     }
 
