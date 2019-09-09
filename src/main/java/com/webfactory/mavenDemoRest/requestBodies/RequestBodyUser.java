@@ -15,24 +15,8 @@ public class RequestBodyUser {
     private RequestBodyLocation location;
     private UserType userType;
 
-    //constructors
-    public RequestBodyUser() {
-    }
-
-    public RequestBodyUser(Long id, String firstName, String lastName, String nickname, String email, String password, List<RequestBodyPost> posts, RequestBodyLocation location, UserType userType) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.nickname = nickname;
-        this.email = email;
-        this.password = password;
-        this.posts = posts;
-        this.location = location;
-        this.userType = userType;
-    }
 
     //getters and setters
-
     public Long getId() {
         return id;
     }

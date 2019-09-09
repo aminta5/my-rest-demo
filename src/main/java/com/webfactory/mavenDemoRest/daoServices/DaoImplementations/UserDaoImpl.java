@@ -1,6 +1,7 @@
 package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
 
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
+import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
 import com.webfactory.mavenDemoRest.converters.RequestBodyLocationToLocation;
 import com.webfactory.mavenDemoRest.converters.RequestBodyUserToUser;
@@ -8,6 +9,7 @@ import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,14 +37,12 @@ public class UserDaoImpl implements UserDaoService {
 
     @Override
     public User findUserById(Long id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        return userOptional.orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user found for this id"));
     }
 
     @Override
     public User findUserByNickname(String nickname) {
-        Optional<User> user = findAllUsers().stream().filter(u -> u.getNickname().equalsIgnoreCase(nickname)).findFirst();
-        return user.orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findByNickname(nickname.substring(0,1).toUpperCase() + nickname.substring(1).toLowerCase()).orElseThrow(() -> new UserNotFoundException("No such username"));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class UserDaoImpl implements UserDaoService {
     @Override
     public User updateUser(RequestBodyUser requestBodyUser, Long userId) {
         Optional<User> userToUpdateOptional = userRepository.findById(userId);
-        User userToUpdate = userToUpdateOptional.orElseThrow(() -> new RuntimeException("User is Not found"));
+        User userToUpdate = userToUpdateOptional.orElseThrow(() -> new UserNotFoundException("User is Not found"));
         Location locationToUpdate = userToUpdate.getLocation();
         if (locationToUpdate == null) {
             locationToUpdate = new Location();

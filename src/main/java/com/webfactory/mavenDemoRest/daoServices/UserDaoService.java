@@ -1,7 +1,6 @@
 package com.webfactory.mavenDemoRest.daoServices;
 
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
-import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.model.User;
 
 import java.util.List;

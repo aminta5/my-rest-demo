@@ -3,8 +3,6 @@ package com.webfactory.mavenDemoRest.security;
 import com.webfactory.mavenDemoRest.model.OauthClientDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
-import org.springframework.stereotype.Component;
-
 import java.util.*;
 
 public class ClientDetailsImpl implements ClientDetails {

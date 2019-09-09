@@ -8,20 +8,7 @@ public class RequestBodyPost {
     private Long userId;
     private RequestBodyLocation location;
 
-    //constructors
-    public RequestBodyPost() {
-    }
-
-    public RequestBodyPost(Long id, String title, String description, Long userId, RequestBodyLocation location) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.userId = userId;
-        this.location = location;
-    }
-
     //getters and setetrs
-
     public Long getId() {
         return id;
     }

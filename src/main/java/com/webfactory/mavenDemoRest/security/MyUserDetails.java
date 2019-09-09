@@ -14,7 +14,7 @@ public class MyUserDetails implements UserDetails {
     private String username;
     private UserType userType;
 
-    public MyUserDetails(User user) {
+        MyUserDetails(User user) {
         this.username = user.getNickname();
         this.password = user.getPassword();
         this.userType = user.getUserType();

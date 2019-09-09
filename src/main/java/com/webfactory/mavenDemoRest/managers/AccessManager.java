@@ -1,10 +1,7 @@
 package com.webfactory.mavenDemoRest.managers;
 
-import com.webfactory.mavenDemoRest.constants.UserType;
 import com.webfactory.mavenDemoRest.daoServices.PostDaoService;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
-import com.webfactory.mavenDemoRest.model.Post;
-import com.webfactory.mavenDemoRest.model.User;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;

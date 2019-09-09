@@ -27,9 +27,6 @@ public class OauthClientDetails {
     @NotNull
     private String authorizedGrantTypes;
 
-    //@Column(name = "authorities")
-    //private String authorities;
-
     @Column(name = "access_token_validity")
     private int accessTokenValidity;
 

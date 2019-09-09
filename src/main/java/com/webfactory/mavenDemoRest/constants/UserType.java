@@ -6,7 +6,7 @@ public enum UserType {
 
     private String name;
 
-    private UserType(String name) {
+    UserType(String name) {
         this.name = name;
     }
 }

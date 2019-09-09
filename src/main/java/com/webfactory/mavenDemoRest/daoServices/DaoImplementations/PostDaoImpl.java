@@ -1,6 +1,8 @@
 package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
 
 import com.webfactory.mavenDemoRest.daoServices.PostDaoService;
+import com.webfactory.mavenDemoRest.exceptions.PostNotFoundException;
+import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyPost;
 import com.webfactory.mavenDemoRest.converters.RequestBodyLocationToLocation;
 import com.webfactory.mavenDemoRest.converters.RequestBodyPostToPost;
@@ -9,7 +11,6 @@ import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.PostRepository;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,23 +46,21 @@ public class PostDaoImpl implements PostDaoService {
 
     @Override
     public Post findPostById(Long id) {
-        return postRepository.findById(id).orElse(null);
+        return postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("Post Not Found For This Id"));
     }
 
     @Override
     public List<Post> findPostByTitle(String title) {
-        List<Post> posts = new ArrayList<>();
-        findAllPosts().stream().filter(p -> p.getTitle().equalsIgnoreCase(title)).forEach(posts::add);
-        return posts;
-
+        return postRepository.findByTitle(title).orElseThrow(() -> new PostNotFoundException("No such title found"));
     }
 
     @Override
     public Post savePost(RequestBodyPost requestBodyPost) {
-        Optional<User> userOptional = userRepository.findById(requestBodyPost.getUserId());
-        User user = userOptional.orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(requestBodyPost.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
         Post newPost = requestBodyPostToPost.convert(requestBodyPost);
-        newPost.setUser(user);
+        if(newPost != null){
+            newPost.setUser(user);
+        }
         return postRepository.save(newPost);
 
     }
@@ -69,7 +68,7 @@ public class PostDaoImpl implements PostDaoService {
     @Override
     public Post updatePost(RequestBodyPost requestBodyPost, Long postId) {
         Optional<Post> postToUpdateOptional = postRepository.findById(postId);
-        Post postToUpdate = postToUpdateOptional.orElseThrow(() -> new RuntimeException("Post Not found"));
+        Post postToUpdate = postToUpdateOptional.orElseThrow(() -> new PostNotFoundException("Post Not found"));
 
         //update post
         if (requestBodyPost.getTitle() != null) {
@@ -93,10 +92,10 @@ public class PostDaoImpl implements PostDaoService {
             if (newLocation.getCountry() != null) {
                 locationToUpdate.setCountry(newLocation.getCountry());
             }
-            if (newLocation.getLongitude() != null && newLocation.getLongitude() != 0.0) {
+            if (newLocation.getLongitude() != null) {
                 locationToUpdate.setLongitude(newLocation.getLongitude());
             }
-            if (newLocation.getLatitude() != null && newLocation.getLatitude() != 0.0) {
+            if (newLocation.getLatitude() != null) {
                 locationToUpdate.setLatitude(newLocation.getLatitude());
             }
         }
@@ -112,12 +111,8 @@ public class PostDaoImpl implements PostDaoService {
     }
 
     @Override
-    public List<Post> findPostsByUserId(Long id) {
-        List<Post> allPosts = new ArrayList<>();
-        postRepository.findAll().forEach(allPosts::add);
-        List<Post> userPosts = new ArrayList<>();
-        allPosts.stream().filter(p -> p.getUser().getId().equals(id)).forEach(userPosts::add);
-
-        return userPosts;
+    public List<Post> findPostsByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User Not Found"));
+        return user.getPosts();
     }
 }

@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
 import java.util.List;
 
@@ -36,13 +35,13 @@ public class PostController {
     @GetMapping(path = "/users/{userId}/posts")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication, #userId)")
     public List<Post> getUsersPosts(@P("userId") @PathVariable Long userId, Authentication authentication) {
-        return postDaoService.findPostsByUserId(userId);
+            return postDaoService.findPostsByUserId(userId);
     }
 
     //find specific post (by id)
     @GetMapping(path = "/posts/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
-    public Post findPostById(@P("postId") @PathVariable Long postId, Authentication authentication) {
+    public Post findPostById(@P("postId") @PathVariable Long postId/*, Authentication authentication*/) {
         return postDaoService.findPostById(postId);
     }
 
@@ -71,7 +70,7 @@ public class PostController {
     //update post
     @PutMapping(path = "/posts/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
-    public ResponseEntity<Object> updatePost(@RequestBody RequestBodyPost requestBodyPost, @P("postId") @PathVariable Long postId, @P("authentication") Authentication authentication) {
+    public ResponseEntity<Object> updatePost(@RequestBody RequestBodyPost requestBodyPost, @P("postId") @PathVariable Long postId/*, @P("authentication") Authentication authentication*/) {
         Post savedPost = postDaoService.updatePost(requestBodyPost, postId);
 
         URI location = ServletUriComponentsBuilder

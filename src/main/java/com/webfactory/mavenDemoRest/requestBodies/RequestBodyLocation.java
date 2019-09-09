@@ -12,22 +12,8 @@ public class RequestBodyLocation {
     private List<RequestBodyUser> users = new ArrayList<>();
     private List<RequestBodyPost> posts = new ArrayList<>();
 
-    //constructors
-    public RequestBodyLocation() {
-    }
-
-    public RequestBodyLocation(Long id, String city, String country, float longitude, float latitude, List<RequestBodyUser> users, List<RequestBodyPost> posts) {
-        this.id = id;
-        this.city = city;
-        this.country = country;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.users = users;
-        this.posts = posts;
-    }
 
     //getters and setters
-
     public Long getId() {
         return id;
     }

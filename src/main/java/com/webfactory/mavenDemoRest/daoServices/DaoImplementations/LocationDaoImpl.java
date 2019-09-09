@@ -1,12 +1,10 @@
 package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
 
 import com.webfactory.mavenDemoRest.daoServices.LocationDaoService;
+import com.webfactory.mavenDemoRest.exceptions.LocationNotFoundException;
 import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.repositories.LocationRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class LocationDaoImpl implements LocationDaoService {
@@ -18,10 +16,8 @@ public class LocationDaoImpl implements LocationDaoService {
     }
 
     @Override
-    public List<Location> findAllLocations() {
-        List<Location> locations = new ArrayList<>();
-        locationRepository.findAll().forEach(locations::add);
-        return locations;
+    public Location findLocationByCity(String city) {
+        return locationRepository.findByCity(city.substring(0, 1).toUpperCase() + city.substring(1).toLowerCase()).orElseThrow(() -> new LocationNotFoundException("City not found"));
     }
 
 }
