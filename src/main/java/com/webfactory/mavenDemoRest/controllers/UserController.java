@@ -33,8 +33,8 @@ public class UserController {
     //find specific user (by id)
     @GetMapping(path = "/users/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication, #userId)")
-    public User getUser(@P("userId") @PathVariable Long userId/*, Authentication authentication*/){
-            return userDaoService.findUserById(userId);
+    public User getUser(@P("userId") @PathVariable Long userId){
+        return userDaoService.findUserById(userId);
     }
 
     //delete user
@@ -61,7 +61,7 @@ public class UserController {
     //update user
     @PutMapping(path = "/users/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.userCanBeUpdated(authentication, #userId)")
-    public ResponseEntity<Object> updateUser(@RequestBody RequestBodyUser requestBodyUser, @P("userId") @PathVariable Long userId/*, Authentication authentication*/) {
+    public ResponseEntity<Object> updateUser(@RequestBody RequestBodyUser requestBodyUser, @P("userId") @PathVariable Long userId) {
         User savedUser = userDaoService.updateUser(requestBodyUser, userId);
 
         URI location = ServletUriComponentsBuilder
@@ -69,6 +69,6 @@ public class UserController {
                 .path("/{id}")
                 .buildAndExpand(savedUser.getId()).toUri();
 
-        return ResponseEntity.created(location).contentType(MediaType.APPLICATION_JSON).build();
+        return ResponseEntity.created(location).build();
     }
 }
