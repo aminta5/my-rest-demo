@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends CrudRepository<Post, Long> {
-    Optional<List<Post>> findByTitle(String title);
+    Optional<List<Post>> findByTitleContainingIgnoreCase(String title);
 }

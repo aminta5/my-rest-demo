@@ -17,7 +17,7 @@ public class LocationDaoImpl implements LocationDaoService {
 
     @Override
     public Location findLocationByCity(String city) {
-        return locationRepository.findByCity(city.substring(0, 1).toUpperCase() + city.substring(1).toLowerCase()).orElseThrow(() -> new LocationNotFoundException("City not found"));
+        return locationRepository.findByCityContainingIgnoreCase(city).orElseThrow(() -> new LocationNotFoundException("City not found"));
     }
 
 }

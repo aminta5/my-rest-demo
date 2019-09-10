@@ -51,7 +51,7 @@ public class PostDaoImpl implements PostDaoService {
 
     @Override
     public List<Post> findPostByTitle(String title) {
-        return postRepository.findByTitle(title).orElseThrow(() -> new PostNotFoundException("No such title found"));
+        return postRepository.findByTitleContainingIgnoreCase(title).orElseThrow(() -> new PostNotFoundException("No such title found"));
     }
 
     @Override

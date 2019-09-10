@@ -42,7 +42,7 @@ public class UserDaoImpl implements UserDaoService {
 
     @Override
     public User findUserByNickname(String nickname) {
-        return userRepository.findByNickname(nickname.substring(0,1).toUpperCase() + nickname.substring(1).toLowerCase()).orElseThrow(() -> new UserNotFoundException("No such username"));
+        return userRepository.findByNicknameContainingIgnoreCase(nickname).orElseThrow(() -> new UserNotFoundException("No such username"));
     }
 
     @Override
@@ -66,9 +66,6 @@ public class UserDaoImpl implements UserDaoService {
         }
         if (requestBodyUser.getLastName() != null) {
             userToUpdate.setLastName(requestBodyUser.getLastName());
-        }
-        if (requestBodyUser.getNickname() != null) {
-            userToUpdate.setNickname(requestBodyUser.getNickname());
         }
         if (requestBodyUser.getEmail() != null) {
             userToUpdate.setEmail(requestBodyUser.getEmail());
