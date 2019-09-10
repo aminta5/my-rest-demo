@@ -37,12 +37,12 @@ public class UserDaoImpl implements UserDaoService {
 
     @Override
     public User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id.toString(), ""));
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id.toString()));
     }
 
     @Override
     public User findUserByNickname(String nickname) {
-        return userRepository.findByNicknameContainingIgnoreCase(nickname).orElseThrow(() -> new UserNotFoundException("", nickname));
+        return userRepository.findByNicknameContainingIgnoreCase(nickname).orElseThrow(() -> new UserNotFoundException(nickname));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class UserDaoImpl implements UserDaoService {
     @Override
     public User updateUser(RequestBodyUser requestBodyUser, Long userId) {
         Optional<User> userToUpdateOptional = userRepository.findById(userId);
-        User userToUpdate = userToUpdateOptional.orElseThrow(() -> new UserNotFoundException(userId.toString(), ""));
+        User userToUpdate = userToUpdateOptional.orElseThrow(() -> new UserNotFoundException(userId.toString()));
         Location locationToUpdate = userToUpdate.getLocation();
         if (locationToUpdate == null) {
             locationToUpdate = new Location();
