@@ -46,17 +46,17 @@ public class PostDaoImpl implements PostDaoService {
 
     @Override
     public Post findPostById(Long id) {
-        return postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id.toString()));
+        return postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id.toString(), ""));
     }
 
     @Override
     public List<Post> findPostByTitle(String title) {
-        return postRepository.findByTitleContainingIgnoreCase(title).orElseThrow(() -> new PostNotFoundException(title));
+        return postRepository.findByTitleContainingIgnoreCase(title).orElseThrow(() -> new PostNotFoundException("", title));
     }
 
     @Override
     public Post savePost(RequestBodyPost requestBodyPost) {
-        User user = userRepository.findById(requestBodyPost.getUserId()).orElseThrow(() -> new UserNotFoundException(requestBodyPost.getUserId().toString()));
+        User user = userRepository.findById(requestBodyPost.getUserId()).orElseThrow(() -> new UserNotFoundException(requestBodyPost.getUserId().toString(), ""));
         Post newPost = requestBodyPostToPost.convert(requestBodyPost);
         if(newPost != null){
             newPost.setUser(user);
@@ -68,7 +68,7 @@ public class PostDaoImpl implements PostDaoService {
     @Override
     public Post updatePost(RequestBodyPost requestBodyPost, Long postId) {
         Optional<Post> postToUpdateOptional = postRepository.findById(postId);
-        Post postToUpdate = postToUpdateOptional.orElseThrow(() -> new PostNotFoundException(postId.toString()));
+        Post postToUpdate = postToUpdateOptional.orElseThrow(() -> new PostNotFoundException(postId.toString(), ""));
 
         //update post
         if (requestBodyPost.getTitle() != null) {
@@ -112,7 +112,7 @@ public class PostDaoImpl implements PostDaoService {
 
     @Override
     public List<Post> findPostsByUserId(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId.toString()));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId.toString(), ""));
         return user.getPosts();
     }
 }
