@@ -58,7 +58,7 @@ public class PostDaoImpl implements PostDaoService {
     public Post savePost(RequestBodyPost requestBodyPost) {
         User user = userRepository.findById(requestBodyPost.getUserId()).orElseThrow(() -> new UserNotFoundException(requestBodyPost.getUserId().toString()));
         Post newPost = requestBodyPostToPost.convert(requestBodyPost);
-        if(newPost != null){
+        if (newPost != null) {
             newPost.setUser(user);
         }
         return postRepository.save(newPost);

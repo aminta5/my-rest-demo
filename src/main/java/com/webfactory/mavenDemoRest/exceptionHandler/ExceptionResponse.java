@@ -2,14 +2,14 @@ package com.webfactory.mavenDemoRest.exceptionHandler;
 
 
 public class ExceptionResponse {
-    //private String status;
+    private int status;
     private String message;
     private String details;
     private String httpCodeMessage;
 
-    ExceptionResponse(String message, String details, String httpCodeMessage) {
+    ExceptionResponse(int status, String message, String details, String httpCodeMessage) {
         super();
-        //this.status = status;
+        this.status = status;
         this.message = message;
         this.details = details;
         this.httpCodeMessage = httpCodeMessage;
@@ -39,11 +39,11 @@ public class ExceptionResponse {
         this.httpCodeMessage = httpCodeMessage;
     }
 
-    /*public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
-    }*/
+    }
 }

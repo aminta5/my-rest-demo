@@ -9,6 +9,7 @@ import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.net.URI;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class UserController {
     //find specific user (by id)
     @GetMapping(path = "/users/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication, #userId)")
-    public User getUser(@P("userId") @PathVariable Long userId){
+    public User getUser(@P("userId") @PathVariable Long userId) {
         return userDaoService.findUserById(userId);
     }
 
