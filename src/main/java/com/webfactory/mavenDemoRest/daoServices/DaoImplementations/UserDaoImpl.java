@@ -1,18 +1,26 @@
 package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
 
+import com.webfactory.mavenDemoRest.constants.UserType;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
+import com.webfactory.mavenDemoRest.exceptions.TokenNotFoundException;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
+import com.webfactory.mavenDemoRest.model.VerificationToken;
+import com.webfactory.mavenDemoRest.repositories.VerificationTokenRepository;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
 import com.webfactory.mavenDemoRest.converters.RequestBodyLocationToLocation;
 import com.webfactory.mavenDemoRest.converters.RequestBodyUserToUser;
 import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDaoImpl implements UserDaoService {
@@ -20,11 +28,13 @@ public class UserDaoImpl implements UserDaoService {
     private final UserRepository userRepository;
     private final RequestBodyLocationToLocation requestBodyLocationToLocation;
     private final RequestBodyUserToUser requestBodyUserToUser;
+    private final VerificationTokenRepository tokenRepository;
 
-    public UserDaoImpl(UserRepository userRepository, RequestBodyLocationToLocation requestBodyLocationToLocation, RequestBodyUserToUser requestBodyUserToUser) {
+    public UserDaoImpl(UserRepository userRepository, RequestBodyLocationToLocation requestBodyLocationToLocation, RequestBodyUserToUser requestBodyUserToUser, VerificationTokenRepository tokenRepository) {
         this.userRepository = userRepository;
         this.requestBodyLocationToLocation = requestBodyLocationToLocation;
         this.requestBodyUserToUser = requestBodyUserToUser;
+        this.tokenRepository = tokenRepository;
     }
 
     @Override
@@ -96,8 +106,43 @@ public class UserDaoImpl implements UserDaoService {
     }
 
     @Override
+    public User findByUsernameAndPassword(String nickname, String password) {
+        return userRepository.findByNicknameContainingIgnoreCaseAndPassword(nickname, password).orElseThrow(() -> new UserNotFoundException(nickname));
+    }
+
+    @Override
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
 
+
+    @Override
+    @Transactional
+    public void enableRegisteredUser(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByNicknameContainingIgnoreCase(username).orElseThrow(() -> new UserNotFoundException(username));
+        if (user == null) {
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        try {
+            if (!user.isEnabled()) {
+                throw new UsernameNotFoundException("Please enable your account.");
+            }
+        } catch (UsernameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return new org.springframework.security.core.userdetails.User(user.getNickname(), user.getPassword(),
+                user.isEnabled(), true, true, true, mapRolesToAuthorities(user.getUserType()));
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(UserType role) {
+        Collection<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority(role.toString()));
+        return authorities;
+    }
 }

@@ -14,7 +14,7 @@ public class ClientDetailsImpl implements ClientDetails {
     private int accessTokenValidity;
     private int refreshTokenValidity;
 
-    public ClientDetailsImpl(OauthClientDetails oauthClientDetails) {
+        ClientDetailsImpl(OauthClientDetails oauthClientDetails) {
         this.clientId = oauthClientDetails.getClientId();
         this.clientSecret = oauthClientDetails.getClientSecret();
         this.scope = oauthClientDetails.getScope();
@@ -31,7 +31,7 @@ public class ClientDetailsImpl implements ClientDetails {
 
     @Override
     public Set<String> getResourceIds() {
-        return /*new HashSet<>(Arrays.asList(this.resourceId.split("-")));*/null;
+        return null;
     }
 
     @Override

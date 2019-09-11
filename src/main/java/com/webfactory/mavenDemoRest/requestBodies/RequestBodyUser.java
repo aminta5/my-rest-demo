@@ -1,16 +1,51 @@
 package com.webfactory.mavenDemoRest.requestBodies;
 
 import com.webfactory.mavenDemoRest.constants.UserType;
+import com.webfactory.mavenDemoRest.validation.FieldMatch;
+import com.webfactory.mavenDemoRest.validation.ValidEmail;
+import org.springframework.validation.BindingResult;
+
+import javax.persistence.Column;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@FieldMatch.List({
+        @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match") })
 public class RequestBodyUser {
+
     private Long id;
+
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
     private String firstName;
+
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
     private String lastName;
+
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
     private String nickname;
+
+    @ValidEmail
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
     private String email;
+
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
     private String password;
+
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
+    private String matchingPassword;
+
+    @NotNull(message = "is required")
+    private boolean enabled;
+
     private List<RequestBodyPost> posts = new ArrayList<>();
     private RequestBodyLocation location;
     private UserType userType;
@@ -87,5 +122,21 @@ public class RequestBodyUser {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getMatchingPassword() {
+        return matchingPassword;
+    }
+
+    public void setMatchingPassword(String matchingPassword) {
+        this.matchingPassword = matchingPassword;
     }
 }

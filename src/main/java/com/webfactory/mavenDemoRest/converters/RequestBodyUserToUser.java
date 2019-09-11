@@ -36,6 +36,7 @@ public class RequestBodyUserToUser implements Converter<RequestBodyUser, User> {
         user.setNickname(source.getNickname());
         user.setEmail(source.getEmail());
         user.setPassword(source.getPassword());
+        user.setEnabled(source.isEnabled());
         if (source.getPost() != null && source.getPost().size() > 0) {
             source.getPost().forEach(postCommand -> user.getPosts().add(requestBodyPostToPost.convert(postCommand)));
         }

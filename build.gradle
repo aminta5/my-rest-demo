@@ -36,6 +36,13 @@ dependencies {
     //runtime 'com.h2database:h2:1.4.199'
     testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE'
     compileOnly 'org.projectlombok:lombok:1.18.4'
+
+    // https://mvnrepository.com/artifact/org.springframework/spring-context-support
+    compile group: 'org.springframework', name: 'spring-context-support', version: '5.1.9.RELEASE'
+
+    // https://mvnrepository.com/artifact/javax.mail/javax.mail-api
+    compile group: 'javax.mail', name: 'javax.mail-api', version: '1.6.2'
+
 }
 
 group = 'com.example'
