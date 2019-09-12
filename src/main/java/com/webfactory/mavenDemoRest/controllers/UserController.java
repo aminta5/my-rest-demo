@@ -8,6 +8,7 @@ import com.webfactory.mavenDemoRest.exceptions.InvalidTokenException;
 import com.webfactory.mavenDemoRest.exceptions.NotValidUserException;
 import com.webfactory.mavenDemoRest.exceptions.UserAlreadyExistsException;
 import com.webfactory.mavenDemoRest.model.VerificationToken;
+import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
 import com.webfactory.mavenDemoRest.model.User;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,6 +26,7 @@ import java.net.URI;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @RestController
@@ -34,16 +36,18 @@ public class UserController {
     private final ApplicationEventPublisher eventPublisher;
     private final VerificationTokenDaoService tokenDaoService;
     private final MessageSource messages;
+    private final UserRepository userRepository;
 
     private Logger logger = Logger.getLogger(getClass().getName());
 
 
-    public UserController(UserDaoService userDaoService, ApplicationEventPublisher eventPublisher, VerificationTokenDaoService tokenDaoService, @Qualifier("messageSource") MessageSource messages) {
+    public UserController(UserDaoService userDaoService, ApplicationEventPublisher eventPublisher, VerificationTokenDaoService tokenDaoService, @Qualifier("messageSource") MessageSource messages, UserRepository userRepository) {
         this.userDaoService = userDaoService;
 
         this.eventPublisher = eventPublisher;
         this.tokenDaoService = tokenDaoService;
         this.messages = messages;
+        this.userRepository = userRepository;
     }
 
     //find all users only for admins
@@ -73,19 +77,18 @@ public class UserController {
     @PostMapping(path = "/users/new")
     public ResponseEntity<Object> createUser(@RequestBody RequestBodyUser requestBodyUser, BindingResult bindingResult, WebRequest request) {
         String nickname = requestBodyUser.getNickname();
-        User registeredUser = userDaoService.findUserByNickname(nickname);
-
+        Optional<User> registeredUser = userRepository.findByNicknameContainingIgnoreCase(nickname);
         if(bindingResult.hasErrors()){
             throw new NotValidUserException();
         }
-
-        if(registeredUser != null){
+        if(registeredUser.isPresent()){
             throw new UserAlreadyExistsException();
         }
         User savedUser = userDaoService.saveUser(requestBodyUser);
 
         try {
-            String appUrl = request.getContextPath();
+            //String appUrl = request.getContextPath();
+            String appUrl = "/users/new";
             eventPublisher.publishEvent(new OnRegistrationSuccessEvent(savedUser, request.getLocale(), appUrl));
         }catch(Exception e) {
             e.printStackTrace();
@@ -93,7 +96,7 @@ public class UserController {
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{id}")
+                .path("{id}")
                 .buildAndExpand(savedUser.getId()).toUri();
 
         return ResponseEntity.created(location).build();

@@ -38,7 +38,7 @@ public class DatabaseConfig {
         javaMailSender.setHost("smtp.gmail.com");
         javaMailSender.setPort(587);
         javaMailSender.setProtocol("smtp");
-        javaMailSender.setUsername("filip.nedelkovski@webfactory.mk");
+        javaMailSender.setUsername("angela.webdevtesting@gmail.com");
         javaMailSender.setPassword("WebDevTesting@321");
         Properties mailProperties = new Properties();
         mailProperties.put("mail.smtp.auth", "true");

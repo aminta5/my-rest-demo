@@ -28,13 +28,11 @@ public class UserDaoImpl implements UserDaoService {
     private final UserRepository userRepository;
     private final RequestBodyLocationToLocation requestBodyLocationToLocation;
     private final RequestBodyUserToUser requestBodyUserToUser;
-    private final VerificationTokenRepository tokenRepository;
 
-    public UserDaoImpl(UserRepository userRepository, RequestBodyLocationToLocation requestBodyLocationToLocation, RequestBodyUserToUser requestBodyUserToUser, VerificationTokenRepository tokenRepository) {
+    public UserDaoImpl(UserRepository userRepository, RequestBodyLocationToLocation requestBodyLocationToLocation, RequestBodyUserToUser requestBodyUserToUser) {
         this.userRepository = userRepository;
         this.requestBodyLocationToLocation = requestBodyLocationToLocation;
         this.requestBodyUserToUser = requestBodyUserToUser;
-        this.tokenRepository = tokenRepository;
     }
 
     @Override
