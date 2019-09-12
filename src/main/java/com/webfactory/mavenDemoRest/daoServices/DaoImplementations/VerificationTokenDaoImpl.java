@@ -17,7 +17,7 @@ public class VerificationTokenDaoImpl implements VerificationTokenDaoService {
 
     @Override
     public VerificationToken findVerificationTokenByTokenString(String token) {
-        return tokenRepository.findByToken(token).orElseThrow(TokenNotFoundException :: new);
+        return tokenRepository.findByToken(token).orElseThrow(TokenNotFoundException::new);
     }
 
     @Override
@@ -38,6 +38,6 @@ public class VerificationTokenDaoImpl implements VerificationTokenDaoService {
 
     @Override
     public VerificationToken getVerificationToken(String verificationToken) {
-        return tokenRepository.findByToken(verificationToken).orElseThrow(TokenNotFoundException :: new);
+        return tokenRepository.findByToken(verificationToken).orElseThrow(TokenNotFoundException::new);
     }
 }

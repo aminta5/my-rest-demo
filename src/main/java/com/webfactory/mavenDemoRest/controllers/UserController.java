@@ -36,18 +36,13 @@ public class UserController {
     private final ApplicationEventPublisher eventPublisher;
     private final VerificationTokenDaoService tokenDaoService;
     private final MessageSource messages;
-    private final UserRepository userRepository;
 
-    private Logger logger = Logger.getLogger(getClass().getName());
-
-
-    public UserController(UserDaoService userDaoService, ApplicationEventPublisher eventPublisher, VerificationTokenDaoService tokenDaoService, @Qualifier("messageSource") MessageSource messages, UserRepository userRepository) {
+    public UserController(UserDaoService userDaoService, ApplicationEventPublisher eventPublisher, VerificationTokenDaoService tokenDaoService, @Qualifier("messageSource") MessageSource messages) {
         this.userDaoService = userDaoService;
 
         this.eventPublisher = eventPublisher;
         this.tokenDaoService = tokenDaoService;
         this.messages = messages;
-        this.userRepository = userRepository;
     }
 
     //find all users only for admins
@@ -76,12 +71,12 @@ public class UserController {
     //create user
     @PostMapping(path = "/users/new")
     public ResponseEntity<Object> createUser(@RequestBody RequestBodyUser requestBodyUser, BindingResult bindingResult, WebRequest request) {
-        String nickname = requestBodyUser.getNickname();
-        Optional<User> registeredUser = userRepository.findByNicknameContainingIgnoreCase(nickname);
+        String email = requestBodyUser.getEmail();
+        User registeredUser = userDaoService.findUserByEmail(email);
         if(bindingResult.hasErrors()){
             throw new NotValidUserException();
         }
-        if(registeredUser.isPresent()){
+        if(registeredUser != null){
             throw new UserAlreadyExistsException();
         }
         User savedUser = userDaoService.saveUser(requestBodyUser);
@@ -96,15 +91,17 @@ public class UserController {
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("{id}")
+                //.path("{id}")
                 .buildAndExpand(savedUser.getId()).toUri();
+
+
 
         return ResponseEntity.created(location).build();
     }
 
     //confirm user
     @GetMapping("/users/new/confirm")
-    public String confirmRegistration(WebRequest request ,@RequestParam("token") String token) {
+    public String confirmRegistration(WebRequest request, @RequestParam("token") String token) {
         Locale locale =request.getLocale();
         VerificationToken verificationToken = tokenDaoService.getVerificationToken(token);
         if(verificationToken == null) {

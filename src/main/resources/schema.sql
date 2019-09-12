@@ -77,4 +77,13 @@ create table locations (
     longitude REAL
 );
 
+drop table if exists verification_token;
+create table verification_token (
+    id SERIAL PRIMARY KEY not null,
+    created_date DATE,
+    expiry_date DATE,
+    token VARCHAR(120),
+    user_id INTEGER
+);
+
 

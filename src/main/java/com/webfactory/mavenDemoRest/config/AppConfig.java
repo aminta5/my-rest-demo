@@ -15,10 +15,10 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource({"classpath:application.properties"})
-public class DatabaseConfig {
+public class AppConfig {
     private final Environment environment;
 
-    public DatabaseConfig(Environment environment) {
+    public AppConfig(Environment environment) {
         this.environment = environment;
     }
 
@@ -38,7 +38,7 @@ public class DatabaseConfig {
         javaMailSender.setHost("smtp.gmail.com");
         javaMailSender.setPort(587);
         javaMailSender.setProtocol("smtp");
-        javaMailSender.setUsername("angela.webdevtesting@gmail.com");
+        javaMailSender.setUsername("test.webdevtesting@gmail.com");
         javaMailSender.setPassword("WebDevTesting@321");
         Properties mailProperties = new Properties();
         mailProperties.put("mail.smtp.auth", "true");
@@ -46,6 +46,7 @@ public class DatabaseConfig {
         mailProperties.put("mail.smtp.debug", "true");
         javaMailSender.setJavaMailProperties(mailProperties);
         return javaMailSender;
+
     }
 
     @Bean(name = "messageSource")

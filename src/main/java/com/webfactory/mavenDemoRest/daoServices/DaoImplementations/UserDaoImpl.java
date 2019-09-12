@@ -121,6 +121,11 @@ public class UserDaoImpl implements UserDaoService {
     }
 
     @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByNicknameContainingIgnoreCase(username).orElseThrow(() -> new UserNotFoundException(username));
         if (user == null) {

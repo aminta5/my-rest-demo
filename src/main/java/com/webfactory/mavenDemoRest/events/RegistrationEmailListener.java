@@ -3,15 +3,18 @@ package com.webfactory.mavenDemoRest.events;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.daoServices.VerificationTokenDaoService;
 import com.webfactory.mavenDemoRest.model.User;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
+@Component
 public class RegistrationEmailListener implements ApplicationListener<OnRegistrationSuccessEvent> {
-    private final UserDaoService userService;
 
     private final MessageSource messages;
 
@@ -19,8 +22,10 @@ public class RegistrationEmailListener implements ApplicationListener<OnRegistra
 
     private final VerificationTokenDaoService tokenDaoService;
 
-    public RegistrationEmailListener(UserDaoService userService, MessageSource messages, MailSender mailSender, VerificationTokenDaoService tokenDaoService) {
-        this.userService = userService;
+
+    private Logger logger = Logger.getLogger(getClass().getName());
+
+    public RegistrationEmailListener(@Qualifier("messageSource") MessageSource messages, MailSender mailSender, VerificationTokenDaoService tokenDaoService) {
         this.messages = messages;
         this.mailSender = mailSender;
         this.tokenDaoService = tokenDaoService;
@@ -39,13 +44,14 @@ public class RegistrationEmailListener implements ApplicationListener<OnRegistra
         String recipient = user.getEmail();
         String subject = "Registration Confirmation";
         String url
-                = event.getAppUrl() + "/users/new/confirm?token=" + token;
+                = event.getAppUrl() + "/confirm?token=" + token;;
         String message = messages.getMessage("message.registrationSuccessConfirmationLink", null, event.getLocale());
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipient);
         email.setSubject(subject);
         email.setText(message + "http://localhost:8080" + url);
+        logger.info("Confirmation link: " + url);
         System.out.println(url);
         mailSender.send(email);
 

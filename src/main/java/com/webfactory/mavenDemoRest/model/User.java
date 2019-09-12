@@ -45,6 +45,7 @@ public class User extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Location location;
+
     @Enumerated(value = EnumType.STRING)
     private UserType userType;
 

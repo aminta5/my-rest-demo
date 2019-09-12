@@ -6,6 +6,7 @@ import com.webfactory.mavenDemoRest.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDaoService extends UserDetailsService {
     List<User> findAllUsers();
@@ -23,5 +24,7 @@ public interface UserDaoService extends UserDetailsService {
     void deleteUserById(Long id);
 
     public void enableRegisteredUser(User user);
+
+    User findUserByEmail(String email);
 
 }
