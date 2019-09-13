@@ -22,18 +22,12 @@ public class PostDaoImpl implements PostDaoService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final RequestBodyLocationToLocation requestBodyLocationToLocation;
-    private final RequestBodyPostToPost requestBodyPostToPost;
 
     //constructor
     public PostDaoImpl(PostRepository postRepository,
-                       UserRepository userRepository,
-                       RequestBodyLocationToLocation requestBodyLocationToLocation,
-                       RequestBodyPostToPost requestBodyPostToPost) {
+                       UserRepository userRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
-        this.requestBodyLocationToLocation = requestBodyLocationToLocation;
-        this.requestBodyPostToPost = requestBodyPostToPost;
     }
 
     @Override
@@ -55,9 +49,9 @@ public class PostDaoImpl implements PostDaoService {
     }
 
     @Override
-    public Post savePost(RequestBodyPost requestBodyPost) {
-        User user = userRepository.findById(requestBodyPost.getUserId()).orElseThrow(() -> new UserNotFoundException(requestBodyPost.getUserId().toString()));
-        Post newPost = requestBodyPostToPost.convert(requestBodyPost);
+    public Post savePost(Post newPost) {
+        User user = userRepository.findById(newPost.getUser().getId()).orElseThrow(() -> new UserNotFoundException(newPost.getUser().getId().toString()));
+        //Post newPost = requestBodyPostToPost.convert(requestBodyPost);
         if (newPost != null) {
             newPost.setUser(user);
         }
@@ -66,16 +60,16 @@ public class PostDaoImpl implements PostDaoService {
     }
 
     @Override
-    public Post updatePost(RequestBodyPost requestBodyPost, Long postId) {
+    public Post updatePost(Post postUpdateObject, Long postId) {
         Optional<Post> postToUpdateOptional = postRepository.findById(postId);
         Post postToUpdate = postToUpdateOptional.orElseThrow(() -> new PostNotFoundException(postId.toString()));
 
         //update post
-        if (requestBodyPost.getTitle() != null) {
-            postToUpdate.setTitle(requestBodyPost.getTitle());
+        if (postUpdateObject.getTitle() != null) {
+            postToUpdate.setTitle(postUpdateObject.getTitle());
         }
-        if (requestBodyPost.getDescription() != null) {
-            postToUpdate.setDescription(requestBodyPost.getDescription());
+        if (postUpdateObject.getDescription() != null) {
+            postToUpdate.setDescription(postUpdateObject.getDescription());
         }
 
         //update of the location
@@ -83,7 +77,8 @@ public class PostDaoImpl implements PostDaoService {
         if (locationToUpdate == null) {
             locationToUpdate = new Location();
         }
-        Location newLocation = requestBodyLocationToLocation.convert(requestBodyPost.getLocation());
+        //Location newLocation = requestBodyLocationToLocation.convert(requestBodyPost.getLocation());
+        Location newLocation = postUpdateObject.getLocation();
 
         if (newLocation != null) {
             if (newLocation.getCity() != null) {

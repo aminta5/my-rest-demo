@@ -1,21 +1,30 @@
 package com.webfactory.mavenDemoRest.requestBodies;
 
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class RequestBodyPost {
-    private Long id;
+    //private Long id;
+    @NotBlank
     private String title;
+
+    @NotBlank
     private String description;
+
+    @NotBlank
     private Long userId;
+
     private RequestBodyLocation location;
 
-    //getters and setetrs
-    public Long getId() {
+    //getters and setters
+    /*public Long getId() {
         return id;
-    }
+    }*/
 
-    public void setId(Long id) {
+    /*public void setId(Long id) {
         this.id = id;
-    }
+    }*/
 
     public String getTitle() {
         return title;

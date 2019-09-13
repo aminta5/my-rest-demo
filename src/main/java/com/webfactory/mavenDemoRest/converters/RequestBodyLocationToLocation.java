@@ -32,17 +32,17 @@ public class RequestBodyLocationToLocation implements Converter<RequestBodyLocat
             return null;
         }
         final Location location = new Location();
-        location.setId(source.getId());
+        //location.setId(source.getId());
         location.setCity(source.getCity());
         location.setCountry(source.getCountry());
         location.setLongitude(source.getLongitude());
         location.setLatitude(source.getLatitude());
-        if (source.getUsers() != null && source.getUsers().size() > 0) {
+        /*if (source.getUsers() != null && source.getUsers().size() > 0) {
             source.getUsers().forEach(userCommand -> location.getUsers().add(requestBodyUserToUser.convert(userCommand)));
         }
         if (source.getPosts() != null && source.getPosts().size() > 0) {
             source.getPosts().forEach(postCommand -> location.getPosts().add(requestBodyPostToPost.convert(postCommand)));
-        }
+        }*/
         return location;
     }
 }

@@ -24,7 +24,7 @@ public class RequestBodyPostToPost implements Converter<RequestBodyPost, Post> {
         }
 
         final Post post = new Post();
-        post.setId(source.getId());
+        //post.setId(source.getId());
         post.setTitle(source.getTitle());
         post.setDescription(source.getDescription());
 

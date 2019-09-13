@@ -30,16 +30,16 @@ public class RequestBodyUserToUser implements Converter<RequestBodyUser, User> {
         }
 
         final User user = new User();
-        user.setId(source.getId());
+        //user.setId(source.getId());
         user.setFirstName(source.getFirstName());
         user.setLastName(source.getLastName());
         user.setNickname(source.getNickname());
         user.setEmail(source.getEmail());
         user.setPassword(source.getPassword());
         user.setEnabled(source.isEnabled());
-        if (source.getPost() != null && source.getPost().size() > 0) {
+        /*if (source.getPost() != null && source.getPost().size() > 0) {
             source.getPost().forEach(postCommand -> user.getPosts().add(requestBodyPostToPost.convert(postCommand)));
-        }
+        }*/
         user.setLocation(requestBodyLocationToLocation.convert(source.getLocation()));
         user.setUserType(source.getUserType());
 

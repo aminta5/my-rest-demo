@@ -13,9 +13,9 @@ public interface PostDaoService {
 
     List<Post> findPostByTitle(String title);
 
-    Post savePost(RequestBodyPost requestBodyPost);
+    Post savePost(Post newPost);
 
-    Post updatePost(RequestBodyPost requestBodyPost, Long postId);
+    Post updatePost(Post postUpdateObject, Long postId);
 
     void deletePostById(Long id);
 

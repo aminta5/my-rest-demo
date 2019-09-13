@@ -25,7 +25,7 @@ public class User extends BaseEntity {
     @Column(unique = true, name = "nickname")
     private String nickname;
 
-    @Column(name = "email")
+    @Column(unique = true, name = "email")
     @Email
     @NotNull
     @Size(max = 120)

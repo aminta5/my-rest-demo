@@ -10,6 +10,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
+import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -43,14 +44,15 @@ public class RegistrationEmailListener implements ApplicationListener<OnRegistra
 
         String recipient = user.getEmail();
         String subject = "Registration Confirmation";
-        String url
-                = event.getAppUrl() + "/confirm?token=" + token;;
-        String message = messages.getMessage("message.registrationSuccessConfirmationLink", null, event.getLocale());
+        /*String url
+                = event.getAppUrl() + "/confirm?token=" + token;*/
+        String url = "http://localhost:8080/users/new/confirm?token=" + token;
+        String message = messages.getMessage("message.registrationSuccessConfirmationLink", null, Locale.getDefault());
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipient);
         email.setSubject(subject);
-        email.setText(message + "http://localhost:8080" + url);
+        email.setText(message + url);
         logger.info("Confirmation link: " + url);
         System.out.println(url);
         mailSender.send(email);

@@ -3,6 +3,7 @@ package com.webfactory.mavenDemoRest.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -10,11 +11,13 @@ import javax.validation.constraints.Size;
 public class Post extends BaseEntity {
 
     //title required max 120chars
+    @NotNull
     @Size(max = 120)
     @Column(name = "title")
     private String title;
 
     //description 1000 chars max
+    @NotNull
     @Size(max = 1000)
     @Column
     private String description;
