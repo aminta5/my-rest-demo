@@ -2,6 +2,7 @@ package com.webfactory.mavenDemoRest.model;
 
 import com.webfactory.mavenDemoRest.constants.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.webfactory.mavenDemoRest.validation.ValidEmail;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -12,11 +13,11 @@ import java.util.List;
 @Table(name = "users")
 public class User extends BaseEntity {
 
-    @Size(max = 40)
+    @Size(min = 1, max = 40)
     @Column(name = "first_name")
     private String firstName;
 
-    @Size(max = 40)
+    @Size(min = 1, max = 40)
     @Column(name = "last_name")
     private String lastName;
 
@@ -26,12 +27,11 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Column(unique = true, name = "email")
-    @Email
-    @NotNull
+    @ValidEmail(message = "valid email is required")
     @Size(max = 120)
     private String email;
 
-    @Pattern(regexp = "^[A-Za-z0-9]+$")
+    @Pattern(regexp = "^[A-Za-z0-9]+$", message = "no unique characters")
     @Size(min = 8, max = 12)
     @Column(name = "password")
     private String password;

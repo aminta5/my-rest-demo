@@ -10,6 +10,7 @@ import com.webfactory.mavenDemoRest.model.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class SearchController {
     //Search Users by Location
     @GetMapping(path = "/users/location/{city}")
     public List<User> findUsersByLocation(@PathVariable String city) {
-        if(!locationDaoService.findLocationByCity(city).getUsers().isEmpty()){
+        if (!locationDaoService.findLocationByCity(city).getUsers().isEmpty()) {
             return locationDaoService.findLocationByCity(city).getUsers();
         }
         throw new UserNotFoundException(city);
@@ -48,10 +49,9 @@ public class SearchController {
     //Search Posts by Location
     @GetMapping(path = "/posts/location/{city}")
     public List<Post> findPostsByLocation(@PathVariable String city) {
-        if(!locationDaoService.findLocationByCity(city).getPosts().isEmpty()){
+        if (!locationDaoService.findLocationByCity(city).getPosts().isEmpty()) {
             return locationDaoService.findLocationByCity(city).getPosts();
         }
         throw new PostNotFoundException(city);
-
     }
 }

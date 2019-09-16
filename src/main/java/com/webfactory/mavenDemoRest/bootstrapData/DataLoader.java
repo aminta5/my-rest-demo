@@ -3,7 +3,6 @@ package com.webfactory.mavenDemoRest.bootstrapData;
 import com.webfactory.mavenDemoRest.constants.UserType;
 import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.model.Post;
-//import com.webfactory.mavenDemoRest.model.OauthClientDetails;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import org.springframework.context.ApplicationListener;
@@ -17,7 +16,8 @@ import java.util.List;
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final UserRepository userRepository;
-    public DataLoader(UserRepository userRepository/*, ClientDetailsRepository clientDetailsRepository*/) {
+
+    public DataLoader(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -91,6 +91,4 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
         return users;
     }
-
-
 }

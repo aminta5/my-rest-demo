@@ -6,14 +6,13 @@ import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyPost;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -58,34 +57,18 @@ public class PostController {
 
     //create post
     @PostMapping(path = "/posts/new")
-    public ResponseEntity<Object> createPost(@RequestBody RequestBodyPost requestBodyPost, Authentication authentication) {
+    public ResponseEntity<Post> createPost(@RequestBody RequestBodyPost requestBodyPost, Authentication authentication) {
         User user = userDaoService.findUserByNickname(authentication.getName());
         requestBodyPost.setUserId(user.getId());
-        postDaoService.savePost(requestBodyPostToPost.convert(requestBodyPost));
+        Post savedPost = postDaoService.savePost(requestBodyPostToPost.convert(requestBodyPost));
 
-        /*URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(savedPost.getId()).toUri();
-
-        return ResponseEntity.created(location).build();*/
-
-        return ResponseEntity.accepted().build();
+        return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
     }
 
     //update post
     @PutMapping(path = "/posts/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
-    public ResponseEntity<Object> updatePost(@RequestBody RequestBodyPost requestBodyPost, @P("postId") @PathVariable Long postId) {
-        postDaoService.updatePost(requestBodyPostToPost.convert(requestBodyPost), postId);
-
-        /*URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(savedPost.getId()).toUri();
-
-        return ResponseEntity.created(location).build();*/
-
-        return ResponseEntity.accepted().build();
+    public Post updatePost(@RequestBody RequestBodyPost requestBodyPost, @P("postId") @PathVariable Long postId) {
+        return postDaoService.updatePost(requestBodyPostToPost.convert(requestBodyPost), postId);
     }
 }

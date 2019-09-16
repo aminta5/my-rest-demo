@@ -33,7 +33,7 @@ public class RequestBodyUserToUser implements Converter<RequestBodyUser, User> {
         //user.setId(source.getId());
         user.setFirstName(source.getFirstName());
         user.setLastName(source.getLastName());
-        user.setNickname(source.getNickname());
+        //user.setNickname(source.getNickname());
         user.setEmail(source.getEmail());
         user.setPassword(source.getPassword());
         user.setEnabled(source.isEnabled());

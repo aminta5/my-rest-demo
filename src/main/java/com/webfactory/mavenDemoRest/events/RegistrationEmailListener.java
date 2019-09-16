@@ -1,6 +1,5 @@
 package com.webfactory.mavenDemoRest.events;
 
-import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.daoServices.VerificationTokenDaoService;
 import com.webfactory.mavenDemoRest.model.User;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,22 +39,18 @@ public class RegistrationEmailListener implements ApplicationListener<OnRegistra
     private void confirmRegistration(OnRegistrationSuccessEvent event) {
         User user = event.getUser();
         String token = UUID.randomUUID().toString();
-        tokenDaoService.createVerificationToken(user,token);
+        tokenDaoService.createVerificationToken(user, token);
 
         String recipient = user.getEmail();
         String subject = "Registration Confirmation";
-        /*String url
-                = event.getAppUrl() + "/confirm?token=" + token;*/
-        String url = "http://localhost:8080/users/new/confirm?token=" + token;
+        String url = "'http://localhost:8080/users/new/confirm?token=" + token + "\'";
         String message = messages.getMessage("message.registrationSuccessConfirmationLink", null, Locale.getDefault());
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipient);
         email.setSubject(subject);
         email.setText(message + url);
-        logger.info("Confirmation link: " + url);
-        System.out.println(url);
+        logger.info("Confirmation link:" + url);
         mailSender.send(email);
-
     }
 }

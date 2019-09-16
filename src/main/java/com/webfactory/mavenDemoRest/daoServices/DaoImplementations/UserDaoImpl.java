@@ -20,11 +20,9 @@ import java.util.*;
 public class UserDaoImpl implements UserDaoService {
 
     private final UserRepository userRepository;
-    //private final UserDetailsService userDetailsService;
 
-    public UserDaoImpl(UserRepository userRepository/*, UserDetailsService userDetailsService*/) {
+    public UserDaoImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        //this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -95,49 +93,14 @@ public class UserDaoImpl implements UserDaoService {
         return userRepository.save(userToUpdate);
     }
 
-    /*@Override
-    public User findByUsernameAndPassword(String nickname, String password) {
-        return userRepository.findByNicknameContainingIgnoreCaseAndPassword(nickname, password).orElseThrow(() -> new UserNotFoundException(nickname));
-    }*/
-
     @Override
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
-
-
-    /*@Override
-    @Transactional
-    public void enableRegisteredUser(User user) {
-        userRepository.save(user);
-    }*/
 
     @Override
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
 
-   /* @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByNicknameContainingIgnoreCase(username).orElseThrow(() -> new UserNotFoundException(username));
-        if (user == null) {
-            throw new UsernameNotFoundException("Invalid username or password.");
-        }
-        try {
-            if (!user.isEnabled()) {
-                throw new UsernameNotFoundException("Please enable your account.");
-            }
-        } catch (UsernameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return new org.springframework.security.core.userdetails.User(user.getNickname(), user.getPassword(),
-                user.isEnabled(), true, true, true, mapRolesToAuthorities(user.getUserType()));
-    }
-
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(UserType role) {
-        Collection<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(role.toString()));
-        return authorities;
-    }*/
 }

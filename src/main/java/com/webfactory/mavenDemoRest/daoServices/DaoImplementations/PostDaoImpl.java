@@ -51,12 +51,8 @@ public class PostDaoImpl implements PostDaoService {
     @Override
     public Post savePost(Post newPost) {
         User user = userRepository.findById(newPost.getUser().getId()).orElseThrow(() -> new UserNotFoundException(newPost.getUser().getId().toString()));
-        //Post newPost = requestBodyPostToPost.convert(requestBodyPost);
-        if (newPost != null) {
-            newPost.setUser(user);
-        }
+        newPost.setUser(user);
         return postRepository.save(newPost);
-
     }
 
     @Override
@@ -77,7 +73,6 @@ public class PostDaoImpl implements PostDaoService {
         if (locationToUpdate == null) {
             locationToUpdate = new Location();
         }
-        //Location newLocation = requestBodyLocationToLocation.convert(requestBodyPost.getLocation());
         Location newLocation = postUpdateObject.getLocation();
 
         if (newLocation != null) {

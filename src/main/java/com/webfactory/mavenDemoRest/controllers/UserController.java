@@ -6,7 +6,6 @@ import com.webfactory.mavenDemoRest.events.OnRegistrationSuccessEvent;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.exceptions.ExpiredTokenException;
 import com.webfactory.mavenDemoRest.exceptions.InvalidTokenException;
-import com.webfactory.mavenDemoRest.exceptions.UserAlreadyExistsException;
 import com.webfactory.mavenDemoRest.model.VerificationToken;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
 import com.webfactory.mavenDemoRest.model.User;
@@ -18,12 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -70,55 +67,27 @@ public class UserController {
 
     //create user
     @PostMapping(path = "/users/new")
-    public ResponseEntity<User> createUser(@RequestBody RequestBodyUser requestBodyUser/*, BindingResult bindingResult,, WebRequest request*/) {
-        String email = requestBodyUser.getEmail();
-        User registeredUser = userDaoService.findUserByEmail(email);
-        /*if(bindingResult.hasErrors()){
-            throw new NotValidUserException();
-        }*/
-        if(registeredUser != null){
-            throw new UserAlreadyExistsException();
-        }
+    public ResponseEntity<User> createUser(@RequestBody RequestBodyUser requestBodyUser) {
         User savedUser = userDaoService.saveUser(requestBodyUserToUser.convert(requestBodyUser));
-
-        eventPublisher.publishEvent(new OnRegistrationSuccessEvent(savedUser/*, request.getLocale(), appUrl)*/));
-
-        /*try {
-            String appUrl = request.getContextPath();
-            String appUrl = "/users/new";
-            eventPublisher.publishEvent(new OnRegistrationSuccessEvent(savedUser*//*, request.getLocale(), appUrl)*//*));
-        }catch(Exception e) {
-            e.printStackTrace();
-        }*/
-
-        /*URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("{id}")
-                .buildAndExpand(savedUser.getId()).toUri();*/
-
-
-
-        //return ResponseEntity.created(location).build();
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        eventPublisher.publishEvent(new OnRegistrationSuccessEvent(savedUser));
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     //confirm user
     @GetMapping("/users/new/confirm")
-    public String confirmRegistration(WebRequest request, @RequestParam("token") String token) {
-        //Locale locale =request.getLocale();
+    public String confirmRegistration(@RequestParam("token") String token) {
         VerificationToken verificationToken = tokenDaoService.getVerificationToken(token);
-        if(verificationToken == null) {
+        if (verificationToken == null) {
             String message = messages.getMessage("auth.message.invalidToken", null, Locale.getDefault());
             throw new InvalidTokenException(message);
         }
         User user = verificationToken.getUser();
-        if((verificationToken.getExpiryDate().isBefore(LocalDateTime.now()))) {
+        if ((verificationToken.getExpiryDate().isBefore(LocalDateTime.now()))) {
             String message = messages.getMessage("auth.message.expired", null, Locale.getDefault());
             throw new ExpiredTokenException(message);
         }
 
         user.setEnabled(true);
-        //userDaoService.enableRegisteredUser(user);
         userDaoService.saveUser(user);
         return null;
     }
@@ -126,15 +95,7 @@ public class UserController {
     //update user
     @PutMapping(path = "/users/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.userCanBeUpdated(authentication, #userId)")
-    public ResponseEntity<Object> updateUser(@RequestBody RequestBodyUser requestBodyUser, @P("userId") @PathVariable Long userId) {
-        User savedUser = userDaoService.updateUser(requestBodyUserToUser.convert(requestBodyUser), userId);
-
-        /*URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(savedUser.getId()).toUri();*/
-
-        //return ResponseEntity.created(location).build();
-        return ResponseEntity.accepted().build();
+    public User updateUser(@RequestBody RequestBodyUser requestBodyUser, @P("userId") @PathVariable Long userId) {
+        return userDaoService.updateUser(requestBodyUserToUser.convert(requestBodyUser), userId);
     }
 }

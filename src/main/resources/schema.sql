@@ -50,10 +50,10 @@ create table oauth_approvals (
 drop table if exists users CASCADE;
 create table users (
     id SERIAL PRIMARY KEY NOT NULL,
-    email VARCHAR(120),
+    email VARCHAR(120) UNIQUE,
     first_name VARCHAR(40),
     last_name VARCHAR(40),
-    nickname VARCHAR(20),
+    nickname VARCHAR(20) UNIQUE,
     password VARCHAR(12),
     user_type VARCHAR(10),
     location_id INTEGER

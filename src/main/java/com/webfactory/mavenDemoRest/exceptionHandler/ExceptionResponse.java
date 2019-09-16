@@ -1,18 +1,13 @@
 package com.webfactory.mavenDemoRest.exceptionHandler;
 
-
 public class ExceptionResponse {
-    private int status;
     private String message;
-    private String details;
-    private String httpCodeMessage;
+    private String description;
 
-    ExceptionResponse(int status, String message, String details, String httpCodeMessage) {
+    ExceptionResponse(String message, String description) {
         super();
-        this.status = status;
         this.message = message;
-        this.details = details;
-        this.httpCodeMessage = httpCodeMessage;
+        this.description = description;
     }
 
     public String getMessage() {
@@ -23,27 +18,12 @@ public class ExceptionResponse {
         this.message = message;
     }
 
-    public String getDetails() {
-        return details;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDetails(String detailes) {
-        this.details = detailes;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getHttpCodeMessage() {
-        return httpCodeMessage;
-    }
-
-    public void setHttpCodeMessage(String httpCodeMessage) {
-        this.httpCodeMessage = httpCodeMessage;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
 }

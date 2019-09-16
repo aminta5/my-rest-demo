@@ -16,12 +16,12 @@ public interface UserDaoService/* extends UserDetailsService*/ {
 
     User updateUser(User user, Long userId);
 
-    /*User findByUsernameAndPassword(String username, String password);*/
-
     void deleteUserById(Long id);
 
-    /*void enableRegisteredUser(User user);*/
-
     User findUserByEmail(String email);
+
+    //boolean validateByEmail(String email);
+
+    //boolean validateByNickname(String nickname);
 
 }
