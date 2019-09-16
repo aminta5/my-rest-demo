@@ -1,24 +1,15 @@
 package com.webfactory.mavenDemoRest.requestBodies;
 
 import com.webfactory.mavenDemoRest.constants.UserType;
-import com.webfactory.mavenDemoRest.validation.FieldMatch;
 import com.webfactory.mavenDemoRest.validation.ValidEmail;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import javax.persistence.Column;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
-@Validated
-@FieldMatch.List({
-        @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match")})
+/*@FieldMatch.List({
+        @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match")})*/
 public class RequestBodyUser {
 
     private Long id;
@@ -29,9 +20,9 @@ public class RequestBodyUser {
     @Size(min = 1, max = 40)
     private String lastName;
 
-    /*@NotNull
-    @Size(max = 20)
-    private String nickname;*/
+    @NotNull
+    @Size(min = 1, max = 20)
+    private String nickname;
 
     @ValidEmail
     @NotNull
@@ -39,13 +30,14 @@ public class RequestBodyUser {
     private String email;
 
     @NotNull
+    @Pattern(regexp = "^[A-Za-z0-9]+$", message = "no unique characters allowed")
     @Size(min = 8, max = 12)
     private String password;
 
-    @NotNull(message = "is required")
+    /*@NotNull(message = "is required")
     @Size(min = 1, message = "is required")
     private String matchingPassword;
-
+*/
     @NotNull
     private boolean enabled;
 
@@ -79,13 +71,13 @@ public class RequestBodyUser {
         this.lastName = lastName;
     }
 
-    /*public String getNickname() {
+    public String getNickname() {
         return nickname;
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }*/
+    }
 
     public String getEmail() {
         return email;
@@ -135,11 +127,11 @@ public class RequestBodyUser {
         this.enabled = enabled;
     }
 
-    public String getMatchingPassword() {
+    /*public String getMatchingPassword() {
         return matchingPassword;
     }
 
     public void setMatchingPassword(String matchingPassword) {
         this.matchingPassword = matchingPassword;
-    }
+    }*/
 }

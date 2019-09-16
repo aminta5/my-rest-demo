@@ -21,17 +21,17 @@ public class User extends BaseEntity {
     @Column(name = "last_name")
     private String lastName;
 
+    @Size(min = 1, max = 20)
     @NotNull
-    @Size(max = 20)
     @Column(unique = true, name = "nickname")
     private String nickname;
 
     @Column(unique = true, name = "email")
-    @ValidEmail(message = "valid email is required")
+    @ValidEmail
     @Size(max = 120)
     private String email;
 
-    @Pattern(regexp = "^[A-Za-z0-9]+$", message = "no unique characters")
+    @Pattern(regexp = "^[A-Za-z0-9]+$", message = "no unique characters allowed")
     @Size(min = 8, max = 12)
     @Column(name = "password")
     private String password;

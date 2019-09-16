@@ -1,27 +1,22 @@
 package com.webfactory.mavenDemoRest.exceptionHandler;
 
 import com.webfactory.mavenDemoRest.exceptions.*;
-import com.webfactory.mavenDemoRest.model.User;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import javax.mail.AuthenticationFailedException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class CustomizedResponseEntityExceptionHandler  {
     @ExceptionHandler(UserNotFoundException.class)
     public final ResponseEntity<ExceptionResponse> handleNotFoundException(UserNotFoundException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),
@@ -78,8 +73,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(AuthenticationFailedException.class)
-    public final ResponseEntity<ExceptionResponse> handleException(AuthenticationFailedException ex, WebRequest request) {
+    @ExceptionHandler(Exception.class)
+    public final ResponseEntity<ExceptionResponse> handleRandomException(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
@@ -90,7 +85,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
         Set<String> messages = new HashSet<>(constraintViolations.size());
         messages.addAll(constraintViolations.stream()
-                .map(constraintViolation -> String.format("%s  %s", constraintViolation.getPropertyPath(), constraintViolation.getMessage()))
+                .map(constraintViolation -> String.format("%s: %s", constraintViolation.getPropertyPath(), constraintViolation.getMessage()))
                 .collect(Collectors.toSet()));
 
         return new ResponseEntity<>(messages, HttpStatus.BAD_REQUEST);
@@ -101,5 +96,17 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     public final ResponseEntity<String[]> handleNotUniqueException(DataIntegrityViolationException ex) {
         Throwable exception = ex.getCause();
         return new ResponseEntity<>(new String[]{exception.getCause().getMessage()}, HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 }

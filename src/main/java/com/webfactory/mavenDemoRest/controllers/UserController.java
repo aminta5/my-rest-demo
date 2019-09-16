@@ -13,11 +13,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
@@ -67,7 +70,7 @@ public class UserController {
 
     //create user
     @PostMapping(path = "/users/new")
-    public ResponseEntity<User> createUser(@RequestBody RequestBodyUser requestBodyUser) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody RequestBodyUser requestBodyUser) {
         User savedUser = userDaoService.saveUser(requestBodyUserToUser.convert(requestBodyUser));
         eventPublisher.publishEvent(new OnRegistrationSuccessEvent(savedUser));
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
@@ -93,9 +96,11 @@ public class UserController {
     }
 
     //update user
+    @Transactional
     @PutMapping(path = "/users/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.userCanBeUpdated(authentication, #userId)")
-    public User updateUser(@RequestBody RequestBodyUser requestBodyUser, @P("userId") @PathVariable Long userId) {
-        return userDaoService.updateUser(requestBodyUserToUser.convert(requestBodyUser), userId);
+    public ResponseEntity<User> updateUser(@Valid @RequestBody RequestBodyUser requestBodyUser, @P("userId") @PathVariable Long userId) {
+        User savedUser = userDaoService.updateUser(requestBodyUserToUser.convert(requestBodyUser), userId);
+        return new ResponseEntity<>(savedUser, HttpStatus.ACCEPTED);
     }
 }
