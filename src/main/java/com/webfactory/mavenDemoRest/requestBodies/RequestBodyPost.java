@@ -1,18 +1,19 @@
 package com.webfactory.mavenDemoRest.requestBodies;
 
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class RequestBodyPost {
     //private Long id;
-    @NotBlank
+    @NotNull
+    @Size(max = 120)
     private String title;
 
-    @NotBlank
+    @NotNull
+    @Size(max = 1000)
     private String description;
 
-    @NotBlank
     private Long userId;
 
     private RequestBodyLocation location;
