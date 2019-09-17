@@ -1,31 +1,25 @@
 package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
 
-import com.webfactory.mavenDemoRest.constants.UserType;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.Location;
+import com.webfactory.mavenDemoRest.model.PasswordResetToken;
 import com.webfactory.mavenDemoRest.model.User;
+import com.webfactory.mavenDemoRest.repositories.PasswordResetTokenRepository;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.util.*;
 
 @Service
 public class UserDaoImpl implements UserDaoService {
 
     private final UserRepository userRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
-    public UserDaoImpl(UserRepository userRepository) {
+    public UserDaoImpl(UserRepository userRepository, PasswordResetTokenRepository passwordResetTokenRepository) {
         this.userRepository = userRepository;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
     }
 
     @Override
@@ -48,7 +42,7 @@ public class UserDaoImpl implements UserDaoService {
 
     @Override
     public User saveUser(User user) {
-        return userRepository.saveAndFlush(user);
+        return userRepository.save(user);
     }
 
     @Override
@@ -104,6 +98,12 @@ public class UserDaoImpl implements UserDaoService {
     @Override
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public void createPasswordResetTokenForUser(User user, String token) {
+        final PasswordResetToken myToken = new PasswordResetToken(token, user);
+        passwordResetTokenRepository.save(myToken);
     }
 
 }

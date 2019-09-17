@@ -1,11 +1,10 @@
 package com.webfactory.mavenDemoRest.daoServices;
 
 import com.webfactory.mavenDemoRest.model.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserDaoService/* extends UserDetailsService*/ {
+public interface UserDaoService {
     List<User> findAllUsers();
 
     User findUserById(Long id);
@@ -20,8 +19,5 @@ public interface UserDaoService/* extends UserDetailsService*/ {
 
     User findUserByEmail(String email);
 
-    //boolean validateByEmail(String email);
-
-    //boolean validateByNickname(String nickname);
-
+    void createPasswordResetTokenForUser(User user, String token);
 }

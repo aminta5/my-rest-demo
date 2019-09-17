@@ -10,13 +10,12 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "verification_token")
-public class VerificationToken {
-    //private static final int EXPIRATION = 60 * 24;
+public class VerificationToken extends BaseEntity{
     private static final Duration EXPIRATION = Duration.ofMinutes(60 * 24);
 
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;*/
 
     @Column(name="token")
     private String token;
@@ -32,33 +31,18 @@ public class VerificationToken {
     private LocalDateTime expiryDate;
 
     public VerificationToken() {
-        super();
     }
 
     public VerificationToken(final String token) {
-        //super();
-
         this.token = token;
         this.expiryDate = calculateExpiryDate();
     }
 
     public VerificationToken(final String token, final User user) {
-        //super();
-        //Calendar calendar = Calendar.getInstance();
-
         this.token = token;
         this.user = user;
-        //this.createdDate = new Date(calendar.getTime().getTime());
         this.createdDate = LocalDateTime.now();
         this.expiryDate = calculateExpiryDate();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getToken() {
@@ -92,15 +76,6 @@ public class VerificationToken {
     public void setExpiryDate(LocalDateTime expiryDate) {
         this.expiryDate = expiryDate;
     }
-
-    /*private Date calculateExpiryDate(int expiryTimeInMinutes) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
-        // calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
-        // calendar.setTimeInMillis(new Date().getTime());
-        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
-        return new Date(calendar.getTime().getTime());
-    }*/
 
     private LocalDateTime calculateExpiryDate(){
         return this.createdDate.plus(EXPIRATION);

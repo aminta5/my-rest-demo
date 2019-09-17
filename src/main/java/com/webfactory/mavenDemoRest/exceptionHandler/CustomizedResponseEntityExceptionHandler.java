@@ -1,5 +1,6 @@
 package com.webfactory.mavenDemoRest.exceptionHandler;
 
+
 import com.webfactory.mavenDemoRest.exceptions.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 @RestControllerAdvice
 public class CustomizedResponseEntityExceptionHandler  {
@@ -110,3 +112,4 @@ public class CustomizedResponseEntityExceptionHandler  {
         return errors;
     }
 }
+
