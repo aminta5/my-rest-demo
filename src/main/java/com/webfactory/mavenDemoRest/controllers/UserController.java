@@ -126,7 +126,7 @@ public class UserController {
             email.setTo(user.getEmail());
             email.setSubject("Password change");
             email.setText(message + url);
-            logger.info("Confirmation link:" + url);
+            logger.info("Password reset link:" + url);
             mailSender.send(email);
         }
         return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, Locale.getDefault()));
