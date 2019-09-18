@@ -30,6 +30,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 anonymous().and()
                 .authorizeRequests()
                 .antMatchers("/users/new/**").permitAll()
+                .antMatchers("/users/password/**").permitAll()
                 .antMatchers("/oauth/token").permitAll()
                 .antMatchers("/**").authenticated()
                 .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
