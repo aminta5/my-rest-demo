@@ -18,6 +18,4 @@ public interface UserDaoService {
     void deleteUserById(Long id);
 
     User findUserByEmail(String email);
-
-    void createPasswordResetTokenForUser(User user, String token);
 }

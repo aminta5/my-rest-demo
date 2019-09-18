@@ -1,33 +1,25 @@
 package com.webfactory.mavenDemoRest.model;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "verification_token")
-public class VerificationToken extends BaseEntity{
+public class VerificationToken extends BaseEntity {
     private static final Duration EXPIRATION = Duration.ofMinutes(60 * 24);
 
-    /*@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;*/
-
-    @Column(name="token")
+    @Column(name = "token")
     private String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name="created_date")
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @Column(name="expiry_date")
+    @Column(name = "expiry_date")
     private LocalDateTime expiryDate;
 
     public VerificationToken() {
@@ -77,7 +69,7 @@ public class VerificationToken extends BaseEntity{
         this.expiryDate = expiryDate;
     }
 
-    private LocalDateTime calculateExpiryDate(){
+    private LocalDateTime calculateExpiryDate() {
         return this.createdDate.plus(EXPIRATION);
     }
 

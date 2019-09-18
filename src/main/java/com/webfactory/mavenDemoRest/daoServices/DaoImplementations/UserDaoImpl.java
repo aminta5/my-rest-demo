@@ -3,9 +3,7 @@ package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.Location;
-import com.webfactory.mavenDemoRest.model.PasswordResetToken;
 import com.webfactory.mavenDemoRest.model.User;
-import com.webfactory.mavenDemoRest.repositories.PasswordResetTokenRepository;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +13,9 @@ import java.util.*;
 public class UserDaoImpl implements UserDaoService {
 
     private final UserRepository userRepository;
-    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
-    public UserDaoImpl(UserRepository userRepository, PasswordResetTokenRepository passwordResetTokenRepository) {
+    public UserDaoImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordResetTokenRepository = passwordResetTokenRepository;
     }
 
     @Override
@@ -98,12 +94,6 @@ public class UserDaoImpl implements UserDaoService {
     @Override
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
-    }
-
-    @Override
-    public void createPasswordResetTokenForUser(User user, String token) {
-        final PasswordResetToken myToken = new PasswordResetToken(token, user);
-        passwordResetTokenRepository.save(myToken);
     }
 
 }

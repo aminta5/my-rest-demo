@@ -6,29 +6,22 @@ import com.webfactory.mavenDemoRest.events.OnRegistrationSuccessEvent;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.exceptions.ExpiredTokenException;
 import com.webfactory.mavenDemoRest.exceptions.InvalidTokenException;
+import com.webfactory.mavenDemoRest.model.PasswordChange;
 import com.webfactory.mavenDemoRest.model.VerificationToken;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
 import com.webfactory.mavenDemoRest.model.User;
-import com.webfactory.mavenDemoRest.util.GenericResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
-import java.util.logging.Logger;
 
 @RestController
 public class UserController {
@@ -38,19 +31,17 @@ public class UserController {
     private final VerificationTokenDaoService tokenDaoService;
     private final MessageSource messages;
     private final RequestBodyUserToUser requestBodyUserToUser;
-    private final MailSender mailSender;
 
-
-    private Logger logger = Logger.getLogger(getClass().getName());
-
-    public UserController(UserDaoService userDaoService, ApplicationEventPublisher eventPublisher, VerificationTokenDaoService tokenDaoService, @Qualifier("messageSource") MessageSource messages, RequestBodyUserToUser requestBodyUserToUser, MailSender mailSender) {
+    public UserController(UserDaoService userDaoService,
+                          ApplicationEventPublisher eventPublisher,
+                          VerificationTokenDaoService tokenDaoService,
+                          @Qualifier("messageSource") MessageSource messages,
+                          RequestBodyUserToUser requestBodyUserToUser) {
         this.userDaoService = userDaoService;
-
         this.eventPublisher = eventPublisher;
         this.tokenDaoService = tokenDaoService;
         this.messages = messages;
         this.requestBodyUserToUser = requestBodyUserToUser;
-        this.mailSender = mailSender;
     }
 
     //find all users only for admins
@@ -74,7 +65,6 @@ public class UserController {
         userDaoService.deleteUserById(userId);
         return userDaoService.findAllUsers();
     }
-
 
     //create user
     @PostMapping(path = "/users/new")
@@ -104,7 +94,6 @@ public class UserController {
     }
 
     //update user
-    //@Transactional
     @PutMapping(path = "/users/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.userCanBeUpdated(authentication, #userId)")
     public ResponseEntity<User> updateUser(@Valid @RequestBody RequestBodyUser requestBodyUser, @P("userId") @PathVariable Long userId) {
@@ -113,22 +102,15 @@ public class UserController {
     }
 
     // Reset password
-    @RequestMapping(value = "/users/reset/password", method = RequestMethod.POST)
-    @ResponseBody
-    public GenericResponse resetPassword(@RequestBody RequestBodyUser requestBodyUser) {
-        final User user = userDaoService.findUserByEmail(requestBodyUser.getEmail());
-        SimpleMailMessage email = new SimpleMailMessage();
-        String message = messages.getMessage("message.passwordChange", null, Locale.getDefault());
+    @RequestMapping(value = "/users/{userId}/reset/password", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.userCanBeUpdated(authentication, #userId)")
+    public boolean resetPassword(@Valid @RequestBody PasswordChange passwordChange, @PathVariable Long userId) {
+        User user = userDaoService.findUserByEmail(passwordChange.getEmail());
         if (user != null) {
-            final String token = UUID.randomUUID().toString();
-            userDaoService.createPasswordResetTokenForUser(user, token);
-            String url = "'http://localhost:8080/users/password/change?id=" + user.getId() + "&token" + token +"\'";
-            email.setTo(user.getEmail());
-            email.setSubject("Password change");
-            email.setText(message + url);
-            logger.info("Password reset link:" + url);
-            mailSender.send(email);
+            user.setPassword(passwordChange.getPassword());
+            userDaoService.saveUser(user);
+            return true;
         }
-        return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, Locale.getDefault()));
+        return false;
     }
 }

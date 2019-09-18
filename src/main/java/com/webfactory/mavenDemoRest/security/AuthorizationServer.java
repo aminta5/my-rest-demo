@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
@@ -36,6 +37,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
         return converter;
     }
 
+
     @Bean
     @Primary
     public DefaultTokenServices tokenServices() {
@@ -45,8 +47,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
         return defaultTokenServices;
     }
 
-    public AuthorizationServer(@Qualifier(BeanIds.AUTHENTICATION_MANAGER) AuthenticationManager authenticationManager,
-                               @Qualifier("cds") ClientDetailsService clientDetailsService) {
+    public AuthorizationServer(@Qualifier(BeanIds.AUTHENTICATION_MANAGER) AuthenticationManager authenticationManager, @Qualifier("cds") ClientDetailsService clientDetailsService) {
         this.authenticationManager = authenticationManager;
         this.clientDetailsService = clientDetailsService;
     }

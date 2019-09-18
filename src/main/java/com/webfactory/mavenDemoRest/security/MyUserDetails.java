@@ -9,12 +9,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class MyUserDetails implements UserDetails {
+class MyUserDetails implements UserDetails {
     private String password;
     private String username;
     private UserType userType;
 
-        MyUserDetails(User user) {
+    MyUserDetails(User user) {
         this.username = user.getNickname();
         this.password = user.getPassword();
         this.userType = user.getUserType();

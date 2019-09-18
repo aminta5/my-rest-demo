@@ -64,7 +64,9 @@ create table users
     nickname    VARCHAR(20) UNIQUE,
     password    VARCHAR(12),
     user_type   VARCHAR(10),
-    location_id INTEGER
+    location_id INTEGER,
+    enabled     BOOLEAN,
+    password_creation_date DATE
 );
 
 drop table if exists posts;

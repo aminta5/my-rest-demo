@@ -12,5 +12,5 @@ public interface VerificationTokenDaoService {
 
     void createVerificationToken(User user, String token);
 
-    public VerificationToken getVerificationToken(String verificationToken);
+    VerificationToken getVerificationToken(String verificationToken);
 }
