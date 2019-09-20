@@ -106,7 +106,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.userCanBeUpdated(authentication, #userId)")
     public boolean resetPassword(@Valid @RequestBody PasswordChange passwordChange, @PathVariable Long userId) {
         User user = userDaoService.findUserByEmail(passwordChange.getEmail());
-        if (user != null) {
+        if (user != null && user.getId().equals(userId)) {
             user.setPassword(passwordChange.getPassword());
             userDaoService.saveUser(user);
             return true;
