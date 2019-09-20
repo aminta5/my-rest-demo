@@ -3,13 +3,18 @@ package com.webfactory.mavenDemoRest.model;
 import com.webfactory.mavenDemoRest.constants.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.webfactory.mavenDemoRest.validation.ValidEmail;
+import lombok.*;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Data
 @Table(name = "users")
 public class User extends BaseEntity {
 
@@ -50,8 +55,8 @@ public class User extends BaseEntity {
     private UserType userType;
 
     //constructors
-    public User() {
-    }
+    /*public User() {
+    }*/
 
     public User(String firstName, String lastName, String nickname, String email, String password, UserType userType) {
         this.firstName = firstName;
@@ -62,7 +67,9 @@ public class User extends BaseEntity {
         this.userType = userType;
     }
 
-    public User(String firstName, String lastName, String nickname, String email, String password, List<Post> posts, Location location, UserType userType) {
+    @Builder
+    public User(Long id, String firstName, String lastName, String nickname, String email, String password, List<Post> posts, Location location, UserType userType) {
+        super(id);
         this.firstName = firstName;
         this.lastName = lastName;
         this.nickname = nickname;
@@ -72,78 +79,4 @@ public class User extends BaseEntity {
         this.location = location;
         this.userType = userType;
     }
-
-    //getters and setters
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<Post> post) {
-        this.posts = post;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
 }
