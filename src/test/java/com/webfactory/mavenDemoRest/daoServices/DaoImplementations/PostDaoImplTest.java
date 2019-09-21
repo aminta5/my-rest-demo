@@ -1,5 +1,6 @@
 package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
 
+import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.PostRepository;
@@ -76,7 +77,7 @@ public class PostDaoImplTest {
         when(userRepository.findById(anyLong())).thenReturn(userOptional);
 
         Post post = Post.builder().build();
-        User foundUser = userRepository.findById(anyLong()).get();
+        User foundUser = userRepository.findById(anyLong()).orElseThrow(() -> new UserNotFoundException(anyString()));
         post.setUser(foundUser);
         when(postRepository.save(any())).thenReturn(post);
         Post savedPost = postService.savePost(post);
