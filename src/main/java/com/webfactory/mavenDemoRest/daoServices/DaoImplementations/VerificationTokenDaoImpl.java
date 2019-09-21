@@ -16,24 +16,19 @@ public class VerificationTokenDaoImpl implements VerificationTokenDaoService {
     }
 
     @Override
-    public VerificationToken findVerificationTokenByTokenString(String token) {
-        return tokenRepository.findByToken(token).orElseThrow(TokenNotFoundException::new);
-    }
-
-    @Override
     public VerificationToken findTokenByUser(User user) {
         return tokenRepository.findByUser(user).orElseThrow(TokenNotFoundException::new);
     }
 
     @Override
-    public void saveToken(VerificationToken token) {
-        tokenRepository.save(token);
+    public VerificationToken saveToken(VerificationToken token) {
+        return tokenRepository.save(token);
     }
 
     @Override
-    public void createVerificationToken(User user, String token) {
+    public VerificationToken createVerificationToken(User user, String token) {
         VerificationToken newUserToken = new VerificationToken(token, user);
-        tokenRepository.save(newUserToken);
+        return tokenRepository.save(newUserToken);
     }
 
     @Override

@@ -4,13 +4,11 @@ import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.model.VerificationToken;
 
 public interface VerificationTokenDaoService {
-    VerificationToken findVerificationTokenByTokenString(String token);
-
     VerificationToken findTokenByUser(User user);
 
-    void saveToken(VerificationToken token);
+    VerificationToken saveToken(VerificationToken token);
 
-    void createVerificationToken(User user, String token);
+    VerificationToken createVerificationToken(User user, String token);
 
     VerificationToken getVerificationToken(String verificationToken);
 }
