@@ -65,10 +65,10 @@ public class UserDaoImplTest {
     @Test
     public void saveUser() {
         User user = User.builder().build();
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        User savedUser = userService.saveUser(any(User.class));
+        when(userRepository.save(any())).thenReturn(user);
+        User savedUser = userService.saveUser(any());
         assertNotNull("User is not saved", savedUser);
-        verify(userRepository, times(1)).save(any(User.class));
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.webfactory.mavenDemoRest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -38,7 +39,9 @@ public class Post extends BaseEntity {
         this.title = title;
     }
 
-    public Post(String title, String description, User user, Location location) {
+    @Builder
+    public Post(Long id, String title, String description, User user, Location location) {
+        super(id);
         this.title = title;
         this.description = description;
         this.user = user;
