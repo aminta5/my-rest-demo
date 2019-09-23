@@ -6,6 +6,7 @@ import com.webfactory.mavenDemoRest.events.OnRegistrationSuccessEvent;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.exceptions.ExpiredTokenException;
 import com.webfactory.mavenDemoRest.exceptions.InvalidTokenException;
+import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.PasswordChange;
 import com.webfactory.mavenDemoRest.model.VerificationToken;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -103,7 +105,7 @@ public class UserController {
 
     // Reset password
     @RequestMapping(value = "/users/{userId}/reset/password", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.userCanBeUpdated(authentication, #userId)")
+    @PreAuthorize("@accessManager.userCanBeUpdated(authentication, #userId)")
     public boolean resetPassword(@Valid @RequestBody PasswordChange passwordChange, @PathVariable Long userId) {
         User user = userDaoService.findUserByEmail(passwordChange.getEmail());
         if (user != null && user.getId().equals(userId)) {

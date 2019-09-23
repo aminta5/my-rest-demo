@@ -1,5 +1,6 @@
 package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
 
+import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import org.junit.Before;
@@ -29,7 +30,7 @@ public class UserDaoImplTest {
     }
 
     @Test
-    public void findAllUsersTest() {
+    public void findAllUsers() {
         User user1 = new User();
         User user2 = new User();
         List<User> userData = new ArrayList<>();
@@ -42,7 +43,7 @@ public class UserDaoImplTest {
     }
 
     @Test
-    public void findUserByIdTest() {
+    public void findUserById() {
         User user = User.builder().id(1L).build();
         Optional<User> userOptional = Optional.of(user);
         when(userRepository.findById(anyLong())).thenReturn(userOptional);
@@ -50,6 +51,13 @@ public class UserDaoImplTest {
         assertNotNull("User not found", foundUser);
         verify(userRepository, times(1)).findById(anyLong());
         verify(userRepository, never()).findAll();
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void throwExceptionIfUserNotFound() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        User foundUser = userService.findUserById(anyLong());
+        assertNull(foundUser);
     }
 
     @Test
@@ -62,6 +70,14 @@ public class UserDaoImplTest {
         verify(userRepository, times(1)).findByNicknameContainingIgnoreCase(anyString());
     }
 
+    @Test(expected = UserNotFoundException.class)
+    public void throwExceptionIfUserNotFoundByNickname() {
+        when(userRepository.findByNicknameContainingIgnoreCase(anyString())).thenReturn(Optional.empty());
+        User foundUser = userService.findUserByNickname(anyString());
+        assertNull(foundUser);
+    }
+
+
     @Test
     public void saveUser() {
         User user = User.builder().build();
@@ -73,9 +89,20 @@ public class UserDaoImplTest {
 
     @Test
     public void updateUser() {
-        User userToUpdate = User.builder().build();
+        User userToUpdate = User.builder().id(1L).build();
         Optional<User> userToUpdateOptional = Optional.of(userToUpdate);
+        User userUpdateData = User.builder().firstName("xavier").lastName("wolf").build();
         when(userRepository.findById(anyLong())).thenReturn(userToUpdateOptional);
+        User savedUpdatedUser = userService.updateUser(userUpdateData, userToUpdate.getId());
+        assertNotNull(savedUpdatedUser);
+        verify(userRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void userToUpdateNotFound() {
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+        User foundUser = userService.updateUser(any(), anyLong());
+        assertNull(userRepository.findById(anyLong()).get());
     }
 
     @Test

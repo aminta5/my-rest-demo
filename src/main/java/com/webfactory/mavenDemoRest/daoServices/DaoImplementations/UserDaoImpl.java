@@ -73,10 +73,10 @@ public class UserDaoImpl implements UserDaoService {
             if (newLocation.getCountry() != null) {
                 locationToUpdate.setCountry(newLocation.getCountry());
             }
-            if (newLocation.getLongitude() != null && newLocation.getLongitude() != 0.0) {
+            if (newLocation.getLongitude() != null) {
                 locationToUpdate.setLongitude(newLocation.getLongitude());
             }
-            if (newLocation.getLatitude() != null && newLocation.getLatitude() != 0.0) {
+            if (newLocation.getLatitude() != null) {
                 locationToUpdate.setLatitude(newLocation.getLatitude());
             }
         }
