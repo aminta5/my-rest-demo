@@ -3,9 +3,6 @@ package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
 import com.webfactory.mavenDemoRest.daoServices.PostDaoService;
 import com.webfactory.mavenDemoRest.exceptions.PostNotFoundException;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
-import com.webfactory.mavenDemoRest.requestBodies.RequestBodyPost;
-import com.webfactory.mavenDemoRest.converters.RequestBodyLocationToLocation;
-import com.webfactory.mavenDemoRest.converters.RequestBodyPostToPost;
 import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
@@ -50,8 +47,6 @@ public class PostDaoImpl implements PostDaoService {
 
     @Override
     public Post savePost(Post newPost) {
-        User user = userRepository.findById(newPost.getUser().getId()).orElseThrow(() -> new UserNotFoundException(newPost.getUser().getId().toString()));
-        newPost.setUser(user);
         return postRepository.save(newPost);
     }
 

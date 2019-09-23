@@ -39,21 +39,21 @@ public class PostController {
     //show posts from authenticated user
     @GetMapping(path = "/users/{userId}/posts")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication, #userId)")
-    public List<Post> getUsersPosts(@P("userId") @PathVariable Long userId) {
+    public List<Post> getUsersPosts(@PathVariable Long userId) {
         return postDaoService.findPostsByUserId(userId);
     }
 
     //find specific post (by id)
     @GetMapping(path = "/posts/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
-    public Post findPostById(@P("postId") @PathVariable Long postId) {
+    public Post findPostById(@PathVariable Long postId) {
         return postDaoService.findPostById(postId);
     }
 
     //delete post(authenticated user or admin)
     @DeleteMapping(path = "/posts/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
-    public void deletePost(@P("postId") @PathVariable Long postId) {
+    public void deletePost(@PathVariable Long postId) {
         postDaoService.deletePostById(postId);
     }
 

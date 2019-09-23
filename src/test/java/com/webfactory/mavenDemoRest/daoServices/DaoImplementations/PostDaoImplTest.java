@@ -73,12 +73,9 @@ public class PostDaoImplTest {
     @Test
     public void savePost() {
         User user = User.builder().id(1L).build();
-        Optional<User> userOptional = Optional.of(user);
-        when(userRepository.findById(anyLong())).thenReturn(userOptional);
 
         Post post = Post.builder().build();
-        User foundUser = userRepository.findById(anyLong()).orElseThrow(() -> new UserNotFoundException(anyString()));
-        post.setUser(foundUser);
+        post.setUser(user);
         when(postRepository.save(any())).thenReturn(post);
         Post savedPost = postService.savePost(post);
         assertNotNull("Post is Not saved", savedPost);
