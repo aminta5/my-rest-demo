@@ -93,16 +93,28 @@ public class UserDaoImplTest {
         Optional<User> userToUpdateOptional = Optional.of(userToUpdate);
         User userUpdateData = User.builder().firstName("xavier").lastName("wolf").build();
         when(userRepository.findById(anyLong())).thenReturn(userToUpdateOptional);
+        when(userRepository.save(any())).thenReturn(userUpdateData);
         User savedUpdatedUser = userService.updateUser(userUpdateData, userToUpdate.getId());
         assertNotNull(savedUpdatedUser);
         verify(userRepository, times(1)).save(any());
     }
 
-    @Test
+    @Test(expected = UserNotFoundException.class)
     public void userToUpdateNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
-        User foundUser = userService.updateUser(any(), anyLong());
-        assertNull(userRepository.findById(anyLong()).get());
+        User user = User.builder().build();
+        userService.updateUser(user, anyLong());
+    }
+
+    @Test
+    public void locationCreatedIfNull(){
+        User userToUpdate = User.builder().nickname("gogo").build();
+        Optional<User> userOptional = Optional.of(userToUpdate);
+        User userUpdateData = User.builder().build();
+        when(userRepository.save(any())).thenReturn(userToUpdate);
+        when(userRepository.findById(anyLong())).thenReturn(userOptional);
+        User updatedUser = userService.updateUser(userUpdateData, anyLong());
+        assertNotNull(updatedUser.getLocation());
     }
 
     @Test
