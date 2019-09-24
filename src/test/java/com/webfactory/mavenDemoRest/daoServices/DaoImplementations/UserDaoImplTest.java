@@ -55,9 +55,8 @@ public class UserDaoImplTest {
 
     @Test(expected = UserNotFoundException.class)
     public void throwExceptionIfUserNotFound() {
-        when(userRepository.findById(1L)).thenReturn(Optional.empty());
-        User foundUser = userService.findUserById(anyLong());
-        assertNull(foundUser);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+        userService.findUserById(anyLong());
     }
 
     @Test
@@ -73,8 +72,7 @@ public class UserDaoImplTest {
     @Test(expected = UserNotFoundException.class)
     public void throwExceptionIfUserNotFoundByNickname() {
         when(userRepository.findByNicknameContainingIgnoreCase(anyString())).thenReturn(Optional.empty());
-        User foundUser = userService.findUserByNickname(anyString());
-        assertNull(foundUser);
+        userService.findUserByNickname(anyString());
     }
 
 

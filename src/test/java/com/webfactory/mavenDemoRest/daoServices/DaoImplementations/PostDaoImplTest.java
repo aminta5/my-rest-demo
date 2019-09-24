@@ -1,5 +1,6 @@
 package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
 
+import com.webfactory.mavenDemoRest.exceptions.PostNotFoundException;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
@@ -9,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.access.method.P;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +60,12 @@ public class PostDaoImplTest {
         verify(postRepository, times(1)).findById(anyLong());
     }
 
+    @Test(expected = PostNotFoundException.class)
+    public void throwExceptionIfPostNotFound(){
+        when(postRepository.findById(anyLong())).thenReturn(Optional.empty());
+        postService.findPostById(anyLong());
+    }
+
     @Test
     public void findPostByTitle() {
         Post post = Post.builder().title("Vacation").build();
@@ -70,12 +78,18 @@ public class PostDaoImplTest {
         verify(postRepository, times(1)).findByTitleContainingIgnoreCase(anyString());
     }
 
+    @Test(expected = PostNotFoundException.class)
+    public void throwExceptionIfPostByTitleNotFound(){
+        when(postRepository.findByTitleContainingIgnoreCase(anyString())).thenReturn(Optional.empty());
+        postService.findPostByTitle(anyString());
+    }
+
     @Test
     public void savePost() {
-        User user = User.builder().id(1L).build();
+        //User user = User.builder().id(1L).build();
 
         Post post = Post.builder().build();
-        post.setUser(user);
+        //post.setUser(user);
         when(postRepository.save(any())).thenReturn(post);
         Post savedPost = postService.savePost(post);
         assertNotNull("Post is Not saved", savedPost);
@@ -84,6 +98,24 @@ public class PostDaoImplTest {
 
     @Test
     public void updatePost() {
+        Post postToUpdate = Post.builder().build();
+        Optional<Post> postOptional = Optional.of(postToUpdate);
+        Post postUpdateData = Post.builder().build();
+        when(postRepository.findById(anyLong())).thenReturn(postOptional);
+        when(postRepository.save(any())).thenReturn(postToUpdate);
+        Post savedUpdatedPost = postService.updatePost(postUpdateData, anyLong());
+        assertNotNull(savedUpdatedPost);
+    }
+
+    @Test
+    public void locationCreatedIfNull(){
+        Post postToUpdate = Post.builder().build();
+        Optional<Post> postOptional = Optional.of(postToUpdate);
+        Post postUpdateData = Post.builder().build();
+        when(postRepository.findById(anyLong())).thenReturn(postOptional);
+        when(postRepository.save(any())).thenReturn(postToUpdate);
+        postService.updatePost(postUpdateData, anyLong());
+        assertNotNull(postToUpdate.getLocation());
     }
 
     @Test
@@ -106,5 +138,11 @@ public class PostDaoImplTest {
         when(userRepository.findById(anyLong())).thenReturn(userOptional);
         List<Post> foundUserPosts = postService.findPostsByUserId(anyLong());
         assertEquals(foundUserPosts.size(), 2);
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void throwExceptionIfUserNotFound(){
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+        postService.findPostsByUserId(anyLong());
     }
 }

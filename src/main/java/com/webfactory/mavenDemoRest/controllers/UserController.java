@@ -6,7 +6,6 @@ import com.webfactory.mavenDemoRest.events.OnRegistrationSuccessEvent;
 import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.exceptions.ExpiredTokenException;
 import com.webfactory.mavenDemoRest.exceptions.InvalidTokenException;
-import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.PasswordChange;
 import com.webfactory.mavenDemoRest.model.VerificationToken;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
