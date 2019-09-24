@@ -7,11 +7,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.sql.DataSource;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 @Configuration
 @PropertySource({"classpath:application.properties"})
@@ -34,18 +37,19 @@ public class AppConfig {
 
     @Bean(name = "mailSender")
     public MailSender javaMailService() {
-        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost("smtp.gmail.com");
-        javaMailSender.setPort(587);
-        javaMailSender.setProtocol("smtp");
-        javaMailSender.setUsername("test.webdevtesting@gmail.com");
-        javaMailSender.setPassword("WebDevTesting@321");
-        Properties mailProperties = new Properties();
-        mailProperties.put("mail.smtp.auth", "true");
-        mailProperties.put("mail.smtp.starttls.enable", "true");
-        mailProperties.put("mail.smtp.debug", "true");
-        javaMailSender.setJavaMailProperties(mailProperties);
-        return javaMailSender;
+//        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+//        javaMailSender.setHost("smtp.gmail.com");
+//        javaMailSender.setPort(587);
+//        javaMailSender.setProtocol("smtp");
+//        javaMailSender.setUsername("test.webdevtesting@gmail.com");
+//        javaMailSender.setPassword("WebDevTesting@321");
+//        Properties mailProperties = new Properties();
+//        mailProperties.put("mail.smtp.auth", "true");
+//        mailProperties.put("mail.smtp.starttls.enable", "true");
+//        mailProperties.put("mail.smtp.debug", "true");
+//        javaMailSender.setJavaMailProperties(mailProperties);
+//        return javaMailSender;
+        return new DebugMailSender();
 
     }
 
@@ -59,5 +63,18 @@ public class AppConfig {
         return messageSource;
     }
 
+    public static class DebugMailSender implements MailSender {
 
+        private Logger logger = Logger.getLogger(getClass().getName());
+
+        @Override
+        public void send(SimpleMailMessage simpleMessage) throws MailException {
+            logger.info(String.format("Sending message: {}", simpleMessage.getText()));
+        }
+
+        @Override
+        public void send(SimpleMailMessage... simpleMessages) throws MailException {
+//            logger.info(String.format("Sending message: {}", simpleMessage.getText()));
+        }
+    }
 }

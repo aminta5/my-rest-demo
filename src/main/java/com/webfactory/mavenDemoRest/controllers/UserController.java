@@ -75,6 +75,14 @@ public class UserController {
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
+//    UserService {
+//        userDaoService;
+//
+//        createUser;
+//        updateUser;
+//        deleteUser;
+//    }
+
     //confirm user
     @GetMapping("/users/new/confirm")
     public String confirmRegistration(@RequestParam("token") String token) {
