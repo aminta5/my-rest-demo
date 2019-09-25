@@ -1,6 +1,6 @@
-package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
+package com.webfactory.mavenDemoRest.services.serviceImplementations;
 
-import com.webfactory.mavenDemoRest.daoServices.VerificationTokenDaoService;
+import com.webfactory.mavenDemoRest.services.VerificationTokenService;
 import com.webfactory.mavenDemoRest.exceptions.TokenNotFoundException;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.model.VerificationToken;
@@ -8,15 +8,15 @@ import com.webfactory.mavenDemoRest.repositories.VerificationTokenRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class VerificationTokenDaoImpl implements VerificationTokenDaoService {
+public class VerificationTokenServiceImpl implements VerificationTokenService {
     private final VerificationTokenRepository tokenRepository;
 
-    public VerificationTokenDaoImpl(VerificationTokenRepository tokenRepository) {
+    public VerificationTokenServiceImpl(VerificationTokenRepository tokenRepository) {
         this.tokenRepository = tokenRepository;
     }
 
     @Override
-    public VerificationToken findTokenByUser(User user) {
+    public VerificationToken getTokenByUser(User user) {
         return tokenRepository.findByUser(user).orElseThrow(TokenNotFoundException::new);
     }
 

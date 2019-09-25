@@ -1,8 +1,8 @@
 package com.webfactory.mavenDemoRest.controllers;
 
 import com.webfactory.mavenDemoRest.converters.RequestBodyPostToPost;
-import com.webfactory.mavenDemoRest.daoServices.PostDaoService;
-import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
+import com.webfactory.mavenDemoRest.services.PostService;
+import com.webfactory.mavenDemoRest.services.UserService;
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyPost;
@@ -14,55 +14,54 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.SQLOutput;
 import java.util.List;
 
 @RestController
 public class PostController {
 
-    private final PostDaoService postDaoService;
-    private final UserDaoService userDaoService;
+    private final PostService postService;
+    private final UserService userService;
     private final RequestBodyPostToPost requestBodyPostToPost;
 
-    public PostController(PostDaoService postDaoService, UserDaoService userDaoService, RequestBodyPostToPost requestBodyPostToPost) {
-        this.postDaoService = postDaoService;
-        this.userDaoService = userDaoService;
+    public PostController(PostService postService, UserService userService, RequestBodyPostToPost requestBodyPostToPost) {
+        this.postService = postService;
+        this.userService = userService;
         this.requestBodyPostToPost = requestBodyPostToPost;
     }
 
     @GetMapping(path = "/posts")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Post> getAllPosts() {
-        return postDaoService.findAllPosts();
+        return postService.getAllPosts();
     }
 
     //show posts from authenticated user
     @GetMapping(path = "/users/{userId}/posts")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication, #userId)")
     public List<Post> getUsersPosts(@PathVariable Long userId) {
-        return postDaoService.findPostsByUserId(userId);
+        return postService.getPostsByUserId(userId);
     }
 
     //find specific post (by id)
     @GetMapping(path = "/posts/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
     public Post findPostById(@PathVariable Long postId) {
-        return postDaoService.findPostById(postId);
+        return postService.getPostById(postId);
     }
 
     //delete post(authenticated user or admin)
     @DeleteMapping(path = "/posts/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
     public void deletePost(@PathVariable Long postId) {
-        postDaoService.deletePostById(postId);
+        postService.deletePostById(postId);
     }
 
     //create post
     @PostMapping(path = "/posts/new")
     public ResponseEntity<Post> createPost(@Valid @RequestBody RequestBodyPost requestBodyPost, Authentication authentication) {
-        User user = userDaoService.findUserByNickname(authentication.getName());
+        User user = userService.getUserByNickname(authentication.getName());
         requestBodyPost.setUserId(user.getId());
-        Post savedPost = postDaoService.savePost(requestBodyPostToPost.convert(requestBodyPost));
+        Post savedPost = postService.createPost(requestBodyPostToPost.convert(requestBodyPost));
 
         return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
     }
@@ -71,6 +70,6 @@ public class PostController {
     @PutMapping(path = "/posts/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
     public Post updatePost(@Valid @RequestBody RequestBodyPost requestBodyPost, @P("postId") @PathVariable Long postId) {
-        return postDaoService.updatePost(requestBodyPostToPost.convert(requestBodyPost), postId);
+        return postService.updatePost(requestBodyPostToPost.convert(requestBodyPost), postId);
     }
 }

@@ -1,4 +1,4 @@
-package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
+package com.webfactory.mavenDemoRest.services.serviceImplementations;
 
 import com.webfactory.mavenDemoRest.exceptions.PostNotFoundException;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.access.method.P;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +19,9 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-public class PostDaoImplTest {
+public class PostServiceImplTest {
 
-    private PostDaoImpl postService;
+    private PostServiceImpl postService;
 
     @Mock
     PostRepository postRepository;
@@ -33,7 +32,7 @@ public class PostDaoImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        postService = new PostDaoImpl(postRepository, userRepository);
+        postService = new PostServiceImpl(postRepository, userRepository);
     }
 
 
@@ -46,7 +45,7 @@ public class PostDaoImplTest {
         postData.add(post2);
 
         when(postRepository.findAll()).thenReturn(postData);
-        List<Post> posts = postService.findAllPosts();
+        List<Post> posts = postService.getAllPosts();
         assertEquals(posts.size(), 2);
     }
 
@@ -55,7 +54,7 @@ public class PostDaoImplTest {
         Post post = Post.builder().id(1L).build();
         Optional<Post> postOptional = Optional.of(post);
         when(postRepository.findById(anyLong())).thenReturn(postOptional);
-        Post foundPost = postService.findPostById(anyLong());
+        Post foundPost = postService.getPostById(anyLong());
         assertNotNull("Post by id Not found", foundPost);
         verify(postRepository, times(1)).findById(anyLong());
     }
@@ -63,7 +62,7 @@ public class PostDaoImplTest {
     @Test(expected = PostNotFoundException.class)
     public void throwExceptionIfPostNotFound(){
         when(postRepository.findById(anyLong())).thenReturn(Optional.empty());
-        postService.findPostById(anyLong());
+        postService.getPostById(anyLong());
     }
 
     @Test
@@ -73,7 +72,7 @@ public class PostDaoImplTest {
         postData.add(post);
         Optional<List<Post>> postDataOptional = Optional.of(postData);
         when(postRepository.findByTitleContainingIgnoreCase(anyString())).thenReturn(postDataOptional);
-        List<Post> posts = postService.findPostByTitle(anyString());
+        List<Post> posts = postService.getPostByTitle(anyString());
         assertEquals(posts.size(), 1);
         verify(postRepository, times(1)).findByTitleContainingIgnoreCase(anyString());
     }
@@ -81,7 +80,7 @@ public class PostDaoImplTest {
     @Test(expected = PostNotFoundException.class)
     public void throwExceptionIfPostByTitleNotFound(){
         when(postRepository.findByTitleContainingIgnoreCase(anyString())).thenReturn(Optional.empty());
-        postService.findPostByTitle(anyString());
+        postService.getPostByTitle(anyString());
     }
 
     @Test
@@ -91,7 +90,7 @@ public class PostDaoImplTest {
         Post post = Post.builder().build();
         //post.setUser(user);
         when(postRepository.save(any())).thenReturn(post);
-        Post savedPost = postService.savePost(post);
+        Post savedPost = postService.createPost(post);
         assertNotNull("Post is Not saved", savedPost);
         verify(postRepository, times(1)).save(any());
     }
@@ -136,13 +135,13 @@ public class PostDaoImplTest {
         user.setPosts(userPosts);
         Optional<User> userOptional = Optional.of(user);
         when(userRepository.findById(anyLong())).thenReturn(userOptional);
-        List<Post> foundUserPosts = postService.findPostsByUserId(anyLong());
+        List<Post> foundUserPosts = postService.getPostsByUserId(anyLong());
         assertEquals(foundUserPosts.size(), 2);
     }
 
     @Test(expected = UserNotFoundException.class)
     public void throwExceptionIfUserNotFound(){
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
-        postService.findPostsByUserId(anyLong());
+        postService.getPostsByUserId(anyLong());
     }
 }

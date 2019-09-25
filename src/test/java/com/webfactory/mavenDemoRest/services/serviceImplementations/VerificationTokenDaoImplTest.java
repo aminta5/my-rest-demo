@@ -1,4 +1,4 @@
-package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
+package com.webfactory.mavenDemoRest.services.serviceImplementations;
 
 import com.webfactory.mavenDemoRest.exceptions.TokenNotFoundException;
 import com.webfactory.mavenDemoRest.model.User;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
 public class VerificationTokenDaoImplTest {
-    private VerificationTokenDaoImpl verificationService;
+    private VerificationTokenServiceImpl verificationService;
 
     @Mock
     VerificationTokenRepository tokenRepository;
@@ -26,7 +26,7 @@ public class VerificationTokenDaoImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        verificationService = new VerificationTokenDaoImpl(tokenRepository);
+        verificationService = new VerificationTokenServiceImpl(tokenRepository);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class VerificationTokenDaoImplTest {
         VerificationToken token = new VerificationToken();
         Optional<VerificationToken> tokenOptional = Optional.of(token);
         when(tokenRepository.findByUser(any())).thenReturn(tokenOptional);
-        VerificationToken foundToken = verificationService.findTokenByUser(any());
+        VerificationToken foundToken = verificationService.getTokenByUser(any());
         assertNotNull(foundToken, "Token by User not found");
         verify(tokenRepository, times(1)).findByUser(any());
     }
@@ -42,7 +42,7 @@ public class VerificationTokenDaoImplTest {
     @Test(expected = TokenNotFoundException.class)
     public void throwTokenNotFoundException(){
         when(tokenRepository.findByUser(any())).thenReturn(Optional.empty());
-        verificationService.findTokenByUser(any());
+        verificationService.getTokenByUser(any());
 
     }
 

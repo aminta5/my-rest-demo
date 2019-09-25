@@ -1,4 +1,4 @@
-package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
+package com.webfactory.mavenDemoRest.services.serviceImplementations;
 
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.User;
@@ -16,9 +16,9 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-public class UserDaoImplTest {
+public class UserServiceImplTest {
 
-    private UserDaoImpl userService;
+    private UserServiceImpl userService;
 
     @Mock
     UserRepository userRepository;
@@ -26,7 +26,7 @@ public class UserDaoImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        userService = new UserDaoImpl(userRepository);
+        userService = new UserServiceImpl(userRepository);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class UserDaoImplTest {
         userData.add(user2);
 
         when(userRepository.findAll()).thenReturn(userData);
-        List<User> users = userService.findAllUsers();
+        List<User> users = userService.getAllUsers();
         assertEquals(users.size(), 2);
     }
 
@@ -47,7 +47,7 @@ public class UserDaoImplTest {
         User user = User.builder().id(1L).build();
         Optional<User> userOptional = Optional.of(user);
         when(userRepository.findById(anyLong())).thenReturn(userOptional);
-        User foundUser = userService.findUserById(1L);
+        User foundUser = userService.getUserById(1L);
         assertNotNull("User not found", foundUser);
         verify(userRepository, times(1)).findById(anyLong());
         verify(userRepository, never()).findAll();
@@ -56,7 +56,7 @@ public class UserDaoImplTest {
     @Test(expected = UserNotFoundException.class)
     public void throwExceptionIfUserNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
-        userService.findUserById(anyLong());
+        userService.getUserById(anyLong());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class UserDaoImplTest {
         User user = User.builder().nickname("miki").build();
         Optional<User> userOptional = Optional.of(user);
         when(userRepository.findByNicknameContainingIgnoreCase(anyString())).thenReturn(userOptional);
-        User foundUserByNickname = userService.findUserByNickname(anyString());
+        User foundUserByNickname = userService.getUserByNickname(anyString());
         assertNotNull("User by nickname not found", foundUserByNickname);
         verify(userRepository, times(1)).findByNicknameContainingIgnoreCase(anyString());
     }
@@ -72,7 +72,7 @@ public class UserDaoImplTest {
     @Test(expected = UserNotFoundException.class)
     public void throwExceptionIfUserNotFoundByNickname() {
         when(userRepository.findByNicknameContainingIgnoreCase(anyString())).thenReturn(Optional.empty());
-        userService.findUserByNickname(anyString());
+        userService.getUserByNickname(anyString());
     }
 
 
@@ -80,7 +80,7 @@ public class UserDaoImplTest {
     public void saveUser() {
         User user = User.builder().build();
         when(userRepository.save(any())).thenReturn(user);
-        User savedUser = userService.saveUser(any());
+        User savedUser = userService.createUser(any());
         assertNotNull("User is not saved", savedUser);
         verify(userRepository, times(1)).save(any());
     }
@@ -127,7 +127,7 @@ public class UserDaoImplTest {
         User user = User.builder().build();
         Optional<User> userOptional = Optional.of(user);
         when(userRepository.findByEmail(anyString())).thenReturn(userOptional);
-        User userByEmail = userService.findUserByEmail(anyString());
+        User userByEmail = userService.getUserByEmail(anyString());
         assertNotNull("User by e mail ot found", userByEmail);
         verify(userRepository, times(1)).findByEmail(anyString());
     }

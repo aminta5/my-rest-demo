@@ -1,6 +1,6 @@
-package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
+package com.webfactory.mavenDemoRest.services.serviceImplementations;
 
-import com.webfactory.mavenDemoRest.daoServices.PostDaoService;
+import com.webfactory.mavenDemoRest.services.PostService;
 import com.webfactory.mavenDemoRest.exceptions.PostNotFoundException;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.Location;
@@ -15,20 +15,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PostDaoImpl implements PostDaoService {
+public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
     //constructor
-    public PostDaoImpl(PostRepository postRepository,
-                       UserRepository userRepository) {
+    public PostServiceImpl(PostRepository postRepository,
+                           UserRepository userRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
     }
 
     @Override
-    public List<Post> findAllPosts() {
+    public List<Post> getAllPosts() {
         List<Post> posts = new ArrayList<>();
         postRepository.findAll().forEach(posts::add);
         System.out.println(posts);
@@ -36,17 +36,17 @@ public class PostDaoImpl implements PostDaoService {
     }
 
     @Override
-    public Post findPostById(Long id) {
+    public Post getPostById(Long id) {
         return postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id.toString()));
     }
 
     @Override
-    public List<Post> findPostByTitle(String title) {
+    public List<Post> getPostByTitle(String title) {
         return postRepository.findByTitleContainingIgnoreCase(title).orElseThrow(() -> new PostNotFoundException(title));
     }
 
     @Override
-    public Post savePost(Post newPost) {
+    public Post createPost(Post newPost) {
         return postRepository.save(newPost);
     }
 
@@ -96,7 +96,7 @@ public class PostDaoImpl implements PostDaoService {
     }
 
     @Override
-    public List<Post> findPostsByUserId(Long userId) {
+    public List<Post> getPostsByUserId(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId.toString()));
         return user.getPosts();
     }

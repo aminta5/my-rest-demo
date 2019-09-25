@@ -1,6 +1,6 @@
-package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
+package com.webfactory.mavenDemoRest.services.serviceImplementations;
 
-import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
+import com.webfactory.mavenDemoRest.services.UserService;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.model.User;
@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class UserDaoImpl implements UserDaoService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserDaoImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public List<User> findAllUsers() {
+    public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         userRepository.findAll().forEach(users::add);
         return users;
@@ -27,17 +27,17 @@ public class UserDaoImpl implements UserDaoService {
     }
 
     @Override
-    public User findUserById(Long id) {
+    public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id.toString()));
     }
 
     @Override
-    public User findUserByNickname(String nickname) {
+    public User getUserByNickname(String nickname) {
         return userRepository.findByNicknameContainingIgnoreCase(nickname).orElseThrow(() -> new UserNotFoundException(nickname));
     }
 
     @Override
-    public User saveUser(User user) {
+    public User createUser(User user) {
         return userRepository.save(user);
     }
 
@@ -92,7 +92,7 @@ public class UserDaoImpl implements UserDaoService {
     }
 
     @Override
-    public User findUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
 

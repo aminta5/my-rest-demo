@@ -1,7 +1,7 @@
 package com.webfactory.mavenDemoRest.managers;
 
-import com.webfactory.mavenDemoRest.daoServices.PostDaoService;
-import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
+import com.webfactory.mavenDemoRest.services.PostService;
+import com.webfactory.mavenDemoRest.services.UserService;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -9,24 +9,24 @@ import org.springframework.stereotype.Service;
 @Service
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AccessManager {
-    private final UserDaoService userService;
-    private final PostDaoService postDaoService;
+    private final UserService userService;
+    private final PostService postService;
 
     //constructor
-    public AccessManager(UserDaoService userService, PostDaoService postDaoService) {
+    public AccessManager(UserService userService, PostService postService) {
         this.userService = userService;
-        this.postDaoService = postDaoService;
+        this.postService = postService;
     }
 
     public boolean authorizedUser(Authentication authentication, Long userId) {
-        return userService.findUserByNickname(authentication.getName()).getId().equals(userId);
+        return userService.getUserByNickname(authentication.getName()).getId().equals(userId);
     }
 
     public boolean userCanBeUpdated(Authentication authentication, Long id) {
-        return userService.findUserByNickname(authentication.getName()).getId().equals(id);
+        return userService.getUserByNickname(authentication.getName()).getId().equals(id);
     }
 
     public boolean postCanBeUpdatedOrSeen(Authentication authentication, Long postId) {
-        return postDaoService.findPostById(postId).getUser().equals(userService.findUserByNickname(authentication.getName()));
+        return postService.getPostById(postId).getUser().equals(userService.getUserByNickname(authentication.getName()));
     }
 }

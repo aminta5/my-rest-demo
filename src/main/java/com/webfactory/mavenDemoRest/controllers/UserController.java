@@ -1,9 +1,9 @@
 package com.webfactory.mavenDemoRest.controllers;
 
 import com.webfactory.mavenDemoRest.converters.RequestBodyUserToUser;
-import com.webfactory.mavenDemoRest.daoServices.VerificationTokenDaoService;
+import com.webfactory.mavenDemoRest.services.UserService;
+import com.webfactory.mavenDemoRest.services.VerificationTokenService;
 import com.webfactory.mavenDemoRest.events.OnRegistrationSuccessEvent;
-import com.webfactory.mavenDemoRest.daoServices.UserDaoService;
 import com.webfactory.mavenDemoRest.exceptions.ExpiredTokenException;
 import com.webfactory.mavenDemoRest.exceptions.InvalidTokenException;
 import com.webfactory.mavenDemoRest.model.PasswordChange;
@@ -27,18 +27,18 @@ import java.util.Locale;
 @RestController
 public class UserController {
 
-    private final UserDaoService userDaoService;
+    private final UserService userService;
     private final ApplicationEventPublisher eventPublisher;
-    private final VerificationTokenDaoService tokenDaoService;
+    private final VerificationTokenService tokenDaoService;
     private final MessageSource messages;
     private final RequestBodyUserToUser requestBodyUserToUser;
 
-    public UserController(UserDaoService userDaoService,
+    public UserController(UserService userService,
                           ApplicationEventPublisher eventPublisher,
-                          VerificationTokenDaoService tokenDaoService,
+                          VerificationTokenService tokenDaoService,
                           @Qualifier("messageSource") MessageSource messages,
                           RequestBodyUserToUser requestBodyUserToUser) {
-        this.userDaoService = userDaoService;
+        this.userService = userService;
         this.eventPublisher = eventPublisher;
         this.tokenDaoService = tokenDaoService;
         this.messages = messages;
@@ -49,39 +49,31 @@ public class UserController {
     @GetMapping(path = "/users")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public List<User> getAllUsers() {
-        return userDaoService.findAllUsers();
+        return userService.getAllUsers();
     }
 
     //find specific user (by id)
     @GetMapping(path = "/users/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication, #userId)")
     public User getUser(@P("userId") @PathVariable Long userId) {
-        return userDaoService.findUserById(userId);
+        return userService.getUserById(userId);
     }
 
     //delete user
     @DeleteMapping(path = "/users/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<User> deleteUser(@PathVariable Long userId) {
-        userDaoService.deleteUserById(userId);
-        return userDaoService.findAllUsers();
+        userService.deleteUserById(userId);
+        return userService.getAllUsers();
     }
 
     //create user
     @PostMapping(path = "/users/new")
     public ResponseEntity<User> createUser(@Valid @RequestBody RequestBodyUser requestBodyUser) {
-        User savedUser = userDaoService.saveUser(requestBodyUserToUser.convert(requestBodyUser));
+        User savedUser = userService.createUser(requestBodyUserToUser.convert(requestBodyUser));
         eventPublisher.publishEvent(new OnRegistrationSuccessEvent(savedUser));
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
-
-//    UserService {
-//        userDaoService;
-//
-//        createUser;
-//        updateUser;
-//        deleteUser;
-//    }
 
     //confirm user
     @GetMapping("/users/new/confirm")
@@ -98,7 +90,7 @@ public class UserController {
         }
 
         user.setEnabled(true);
-        userDaoService.saveUser(user);
+        userService.createUser(user);
         return null;
     }
 
@@ -106,7 +98,7 @@ public class UserController {
     @PutMapping(path = "/users/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.userCanBeUpdated(authentication, #userId)")
     public ResponseEntity<User> updateUser(@Valid @RequestBody RequestBodyUser requestBodyUser, @P("userId") @PathVariable Long userId) {
-        User savedUser = userDaoService.updateUser(requestBodyUserToUser.convert(requestBodyUser), userId);
+        User savedUser = userService.updateUser(requestBodyUserToUser.convert(requestBodyUser), userId);
         return new ResponseEntity<>(savedUser, HttpStatus.ACCEPTED);
     }
 
@@ -114,10 +106,10 @@ public class UserController {
     @RequestMapping(value = "/users/{userId}/reset/password", method = RequestMethod.POST)
     @PreAuthorize("@accessManager.userCanBeUpdated(authentication, #userId)")
     public boolean resetPassword(@Valid @RequestBody PasswordChange passwordChange, @PathVariable Long userId) {
-        User user = userDaoService.findUserByEmail(passwordChange.getEmail());
+        User user = userService.getUserByEmail(passwordChange.getEmail());
         if (user != null && user.getId().equals(userId)) {
             user.setPassword(passwordChange.getPassword());
-            userDaoService.saveUser(user);
+            userService.createUser(user);
             return true;
         }
         return false;

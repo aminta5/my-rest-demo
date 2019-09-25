@@ -1,6 +1,6 @@
 package com.webfactory.mavenDemoRest.events;
 
-import com.webfactory.mavenDemoRest.daoServices.VerificationTokenDaoService;
+import com.webfactory.mavenDemoRest.services.VerificationTokenService;
 import com.webfactory.mavenDemoRest.model.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
@@ -20,12 +20,12 @@ public class RegistrationEmailListener implements ApplicationListener<OnRegistra
 
     private final MailSender mailSender;
 
-    private final VerificationTokenDaoService tokenDaoService;
+    private final VerificationTokenService tokenDaoService;
 
 
     private Logger logger = Logger.getLogger(getClass().getName());
 
-    public RegistrationEmailListener(@Qualifier("messageSource") MessageSource messages, MailSender mailSender, VerificationTokenDaoService tokenDaoService) {
+    public RegistrationEmailListener(@Qualifier("messageSource") MessageSource messages, MailSender mailSender, VerificationTokenService tokenDaoService) {
         this.messages = messages;
         this.mailSender = mailSender;
         this.tokenDaoService = tokenDaoService;

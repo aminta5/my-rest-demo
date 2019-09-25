@@ -1,22 +1,22 @@
-package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
+package com.webfactory.mavenDemoRest.services.serviceImplementations;
 
-import com.webfactory.mavenDemoRest.daoServices.LocationDaoService;
+import com.webfactory.mavenDemoRest.services.LocationService;
 import com.webfactory.mavenDemoRest.exceptions.LocationNotFoundException;
 import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.repositories.LocationRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LocationDaoImpl implements LocationDaoService {
+public class LocationServiceImpl implements LocationService {
 
     private final LocationRepository locationRepository;
 
-    public LocationDaoImpl(LocationRepository locationRepository) {
+    public LocationServiceImpl(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
     }
 
     @Override
-    public Location findLocationByCity(String city) {
+    public Location getLocationByCity(String city) {
         return locationRepository.findByCityContainingIgnoreCase(city).orElseThrow(() -> new LocationNotFoundException(city));
     }
 

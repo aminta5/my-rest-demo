@@ -1,4 +1,4 @@
-package com.webfactory.mavenDemoRest.daoServices.DaoImplementations;
+package com.webfactory.mavenDemoRest.services.serviceImplementations;
 
 import com.webfactory.mavenDemoRest.exceptions.LocationNotFoundException;
 import com.webfactory.mavenDemoRest.model.Location;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
 public class LocationDaoImplTest {
-    private LocationDaoImpl locationService;
+    private LocationServiceImpl locationService;
 
     @Mock
     LocationRepository locationRepository;
@@ -24,7 +24,7 @@ public class LocationDaoImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        locationService = new LocationDaoImpl(locationRepository);
+        locationService = new LocationServiceImpl(locationRepository);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class LocationDaoImplTest {
         location.setCity("Skopje");
         Optional<Location> locationOptional = Optional.of(location);
         when(locationRepository.findByCityContainingIgnoreCase(anyString())).thenReturn(locationOptional);
-        Location foundLocation = locationService.findLocationByCity(anyString());
+        Location foundLocation = locationService.getLocationByCity(anyString());
         assertNotNull("Location by city not found", foundLocation);
         verify(locationRepository, times(1)).findByCityContainingIgnoreCase(anyString());
     }
@@ -41,6 +41,6 @@ public class LocationDaoImplTest {
     @Test(expected = LocationNotFoundException.class)
     public void throwExceptionIfLocationNotFound() {
         when(locationRepository.findByCityContainingIgnoreCase(anyString())).thenReturn(Optional.empty());
-        locationService.findLocationByCity(anyString());
+        locationService.getLocationByCity(anyString());
     }
 }
