@@ -33,6 +33,7 @@ dependencies {
 
     compile 'org.springframework.security.oauth:spring-security-oauth2:2.3.6.RELEASE'
     runtime 'org.springframework.boot:spring-boot-devtools:2.1.6.RELEASE'
+    
     //runtime 'com.h2database:h2:1.4.199'
     testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE'
     compileOnly 'org.projectlombok:lombok:1.18.4'
@@ -49,6 +50,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
     testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.0.0'
 
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.1.6.RELEASE'
 }
 
 group = 'com.example'

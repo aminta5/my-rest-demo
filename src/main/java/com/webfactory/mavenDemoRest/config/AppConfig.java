@@ -74,7 +74,7 @@ public class AppConfig {
 
         @Override
         public void send(SimpleMailMessage... simpleMessages) throws MailException {
-//            logger.info(String.format("Sending message: {}", simpleMessage.getText()));
+            //logger.info(String.format("Sending message: {}", simpleMessage.getText()));
         }
     }
 }

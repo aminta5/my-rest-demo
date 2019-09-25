@@ -1,11 +1,12 @@
 package com.webfactory.mavenDemoRest.controllers;
 
 import com.webfactory.mavenDemoRest.converters.RequestBodyUserToUser;
+import com.webfactory.mavenDemoRest.exceptionHandler.CustomizedResponseEntityExceptionHandler;
+import com.webfactory.mavenDemoRest.model.VerificationToken;
 import com.webfactory.mavenDemoRest.services.UserService;
 import com.webfactory.mavenDemoRest.services.VerificationTokenService;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.User;
-import com.webfactory.mavenDemoRest.requestBodies.RequestBodyUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,13 +17,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserControllerTest {
@@ -51,7 +56,7 @@ public class UserControllerTest {
                 messageSource,
                 requestBodyUserToUser);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(userController).setControllerAdvice(new CustomizedResponseEntityExceptionHandler()).build();
     }
 
     @Test
@@ -73,9 +78,8 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test(expected = UserNotFoundException.class)
+    @Test
     public void getUserNotFound() throws Exception {
-        //User user = User.builder().id(1L).build();
         when(userService.getUserById(anyLong())).thenThrow(UserNotFoundException.class);
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isNotFound());
@@ -89,30 +93,44 @@ public class UserControllerTest {
 
     @Test
     public void createUser() throws Exception{
-        RequestBodyUser requestBodyUser = new RequestBodyUser();
-        requestBodyUser.setId(1L);
+//        RequestBodyUser requestBodyUser = new RequestBodyUser();
+//        requestBodyUser.setNickname("werto");
+//        requestBodyUser.setPassword("password");
+//        requestBodyUser.setEmail("gogo@webmail.com");
+//        User user = requestBodyUserToUser.convert(requestBodyUser);
+        User user = User.builder().nickname("werto").password("password").email("dodo@webmail.com").build();
 
-        when(userService.createUser(any())).thenReturn(requestBodyUserToUser.convert(requestBodyUser));
 
-        mockMvc.perform(post("/users/new")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .param("id", "")
-                .param("nickname", "gogo"))
-                .andExpect(status().isForbidden());
+        when(userService.createUser(any())).thenReturn(user);
+
+        mockMvc.perform(post("/users/new").contentType(MediaType.APPLICATION_JSON)).andDo(print())
+                .andExpect(status().isCreated());
 
     }
 
     @Test
-    public void confirmRegistration() {
+    public void confirmRegistration() throws Exception{
+        User user = User.builder().id(1L).build();
+        VerificationToken token = new VerificationToken();
+        token.setUser(user);
+        token.setToken("token");
+        token.setExpiryDate(LocalDateTime.now().plusDays(1));
+        when(tokenDaoService.getVerificationToken(anyString())).thenReturn(token);
+        when(userService.createUser(any())).thenReturn(user);
+        mockMvc.perform(get("/users/new/confirm")).andDo(print());
+
+        assert(user.isEnabled());
     }
 
     @Test
     public void updateUser() throws Exception{
         User user = User.builder().id(1L).build();
-        User updateUserData = User.builder().nickname("wert").build();
-        when(userService.updateUser(updateUserData, 1L)).thenReturn(user);
-        mockMvc.perform(put("/users/1"))
+        User updateUserData = User.builder().nickname("wert").password("123456789").email("geto@gmail.com").build();
+
+        when(userService.updateUser(updateUserData, 1L)).thenReturn(updateUserData);
+        mockMvc.perform(put("/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
+
 
     }
 
