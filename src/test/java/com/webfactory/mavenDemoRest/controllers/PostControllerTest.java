@@ -1,26 +1,34 @@
 package com.webfactory.mavenDemoRest.controllers;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import com.webfactory.mavenDemoRest.converters.RequestBodyPostToPost;
 import com.webfactory.mavenDemoRest.exceptionHandler.CustomizedResponseEntityExceptionHandler;
 import com.webfactory.mavenDemoRest.exceptions.PostNotFoundException;
 import com.webfactory.mavenDemoRest.model.Post;
+import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.services.PostService;
 import com.webfactory.mavenDemoRest.services.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.json.JacksonJsonParser;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class PostControllerTest {
@@ -80,9 +88,44 @@ public class PostControllerTest {
     public void deletePost() throws Exception {
         mockMvc.perform(delete("/posts/1")).andExpect(status().isOk());
     }
-    
+
     @Test
-    public void createPost() {
+    @WithMockUser
+    public void createPost() throws Exception{
+        User user = User.builder().id(1L).build();
+        Post post = Post.builder().title("some post").description("whats up?").user(user).build();
+
+        when(userService.getUserByNickname(anyString())).thenReturn(user);
+        when(postService.createPost(any())).thenReturn(post);
+        //String token = obtainAccessToken(user.getNickname(), user.getPassword());
+        mockMvc.perform(post("/posts/new")
+                //.header("Authorization", "Bearer " + token)
+                .content(new ObjectMapper().writeValueAsString(post))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+    }
+
+    private String obtainAccessToken(String username, String password) throws Exception {
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "password");
+        params.add("client_id", "filip-client");
+        params.add("username", username);
+        params.add("password", password);
+
+        ResultActions result
+                = mockMvc.perform(post("/oauth/token")
+                .params(params)
+                .with(httpBasic("filip-client","filip-secret"))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        String resultString = result.andReturn().getResponse().getContentAsString();
+
+        JacksonJsonParser jsonParser = new JacksonJsonParser();
+        return jsonParser.parseMap(resultString).get("access_token").toString();
     }
 
     @Test

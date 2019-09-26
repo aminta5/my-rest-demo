@@ -7,6 +7,7 @@ import com.webfactory.mavenDemoRest.services.UserService;
 import com.webfactory.mavenDemoRest.services.VerificationTokenService;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.User;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,12 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -103,7 +101,10 @@ public class UserControllerTest {
 
         when(userService.createUser(any())).thenReturn(user);
 
-        mockMvc.perform(post("/users/new").contentType(MediaType.APPLICATION_JSON)).andDo(print())
+        mockMvc.perform(post("/users/new")
+                .content(new ObjectMapper().writeValueAsString(user))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
     }
