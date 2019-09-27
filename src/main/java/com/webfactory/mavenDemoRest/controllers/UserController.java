@@ -13,6 +13,8 @@ import com.webfactory.mavenDemoRest.model.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Locale;
 
 @RestController
@@ -48,8 +49,9 @@ public class UserController {
     //find all users only for admins
     @GetMapping(path = "/users")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+
+    public Page<User> getAllUsers() {
+        return userService.getAllUsers(PageRequest.of(0, 2));
     }
 
     //find specific user (by id)
@@ -62,9 +64,9 @@ public class UserController {
     //delete user
     @DeleteMapping(path = "/users/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public List<User> deleteUser(@PathVariable Long userId) {
+    public Page<User> deleteUser(@PathVariable Long userId) {
         userService.deleteUserById(userId);
-        return userService.getAllUsers();
+        return userService.getAllUsers(PageRequest.of(0, 2));
     }
 
     //create user

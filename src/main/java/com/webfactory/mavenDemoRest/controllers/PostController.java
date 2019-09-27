@@ -6,6 +6,9 @@ import com.webfactory.mavenDemoRest.services.UserService;
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.requestBodies.RequestBodyPost;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
@@ -31,14 +34,15 @@ public class PostController {
 
     @GetMapping(path = "/posts")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    public Page<Post> getAllPosts() {
+        return postService.getAllPosts(PageRequest.of(0,2));
     }
 
     //show posts from authenticated user
     @GetMapping(path = "/users/{userId}/posts")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication, #userId)")
-    public List<Post> getUsersPosts(@PathVariable Long userId) {
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication.name, #userId)")
+    public List<Post> getUsersPosts(@P("userId") @PathVariable Long userId) {
         return postService.getPostsByUserId(userId);
     }
 

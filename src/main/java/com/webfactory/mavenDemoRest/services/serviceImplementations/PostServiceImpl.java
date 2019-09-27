@@ -8,6 +8,8 @@ import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.PostRepository;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,11 +30,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        List<Post> posts = new ArrayList<>();
-        postRepository.findAll().forEach(posts::add);
-        System.out.println(posts);
-        return posts;
+    public Page<Post> getAllPosts(Pageable pageable) {
+        //List<Post> posts = new ArrayList<>();
+        return postRepository.findAll(pageable).orElse(null);/*.forEach(posts::add)*/
+        ///System.out.println(posts);
+        //return posts;
     }
 
     @Override

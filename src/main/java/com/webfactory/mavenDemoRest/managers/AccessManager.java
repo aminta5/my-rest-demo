@@ -18,8 +18,9 @@ public class AccessManager {
         this.postService = postService;
     }
 
-    public boolean authorizedUser(Authentication authentication, Long userId) {
-        return userService.getUserByNickname(authentication.getName()).getId().equals(userId);
+
+    public boolean authorizedUser(String name, Long userId) {
+        return userService.getUserByNickname(name).getId().equals(userId);
     }
 
     public boolean userCanBeUpdated(Authentication authentication, Long id) {
