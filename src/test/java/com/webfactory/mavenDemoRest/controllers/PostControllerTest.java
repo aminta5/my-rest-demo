@@ -67,7 +67,7 @@ public class PostControllerTest {
         userPosts.add(Post.builder().id(1L).build());
         userPosts.add(Post.builder().id(2L).build());
 
-        when(postService.getPostsByUserId(anyLong())).thenReturn(userPosts);
+       // when(postService.getPostsByUserId(anyLong())).thenReturn(userPosts);
         mockMvc.perform(get("/users/1/posts")).andExpect(status().isOk());
     }
 

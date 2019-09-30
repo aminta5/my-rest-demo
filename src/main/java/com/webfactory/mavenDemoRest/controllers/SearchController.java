@@ -7,8 +7,12 @@ import com.webfactory.mavenDemoRest.exceptions.PostNotFoundException;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -33,24 +37,29 @@ public class SearchController {
 
     //Search Users by Location
     @GetMapping(path = "/users/location/{city}")
-    public List<User> findUsersByLocation(@PathVariable String city) {
+    public Page<User> findUsersByLocation(@PathVariable String city) {
         if (!locationService.getLocationByCity(city).getUsers().isEmpty()) {
-            return locationService.getLocationByCity(city).getUsers();
+            return new PageImpl<>(locationService.getLocationByCity(city).getUsers());
         }
         throw new UserNotFoundException(city);
     }
 
     //Search Posts by title
     @GetMapping(path = "/posts/find/{title}")
-    public List<Post> findPostsByTitle(@PathVariable String title) {
-        return postService.getPostByTitle(title);
+    public Page<Post> findPostsByTitle(@PathVariable String title,
+                                       @RequestParam("page") int page,
+                                       @RequestParam("size") int size) {
+        return postService.getPostByTitle(title, PageRequest.of(page, size));
     }
 
     //Search Posts by Location
     @GetMapping(path = "/posts/location/{city}")
-    public List<Post> findPostsByLocation(@PathVariable String city) {
+    public Page<Post> findPostsByLocation(@PathVariable String city,
+                                          @RequestParam("page") int page,
+                                          @RequestParam("size") int size) {
         if (!locationService.getLocationByCity(city).getPosts().isEmpty()) {
-            return locationService.getLocationByCity(city).getPosts();
+            List<Post> posts = locationService.getLocationByCity(city).getPosts();
+            return new PageImpl<>(posts, PageRequest.of(page, size), posts.size());
         }
         throw new PostNotFoundException(city);
     }

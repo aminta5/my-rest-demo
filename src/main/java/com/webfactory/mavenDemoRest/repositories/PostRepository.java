@@ -10,5 +10,5 @@ import java.util.Optional;
 
 public interface PostRepository extends CrudRepository<Post, Long> {
     Optional<Page<Post>> findAll(Pageable pageable);
-    Optional<List<Post>> findByTitleContainingIgnoreCase(String title);
+    Optional<Page<Post>> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 }

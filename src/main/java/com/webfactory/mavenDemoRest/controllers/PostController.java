@@ -34,16 +34,18 @@ public class PostController {
 
     @GetMapping(path = "/posts")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Page<Post> getAllPosts() {
-        return postService.getAllPosts(PageRequest.of(0,2));
+    public Page<Post> getAllPosts(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return postService.getAllPosts(PageRequest.of(page, size));
     }
 
     //show posts from authenticated user
     @GetMapping(path = "/users/{userId}/posts")
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication.name, #userId)")
-    public List<Post> getUsersPosts(@P("userId") @PathVariable Long userId) {
-        return postService.getPostsByUserId(userId);
+    public Page<Post> getUsersPosts(@PathVariable Long userId,
+                                    @RequestParam("page") int page,
+                                    @RequestParam("size") int size) {
+        return postService.getPostsByUserId(userId, PageRequest.of(page, size));
     }
 
     //find specific post (by id)

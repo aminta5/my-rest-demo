@@ -22,9 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> getAllUsers(Pageable pageable) {
-        //List<User> users = new ArrayList<>();
-        return userRepository.findAll(pageable).orElse(null);/*.forEach(users::add)*/
-        //return users;
+        return userRepository.findAll(pageable).orElse(null);
 
     }
 

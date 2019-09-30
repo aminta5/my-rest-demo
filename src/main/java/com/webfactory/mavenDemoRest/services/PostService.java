@@ -12,7 +12,7 @@ public interface PostService {
 
     Post getPostById(Long Id);
 
-    List<Post> getPostByTitle(String title);
+    Page<Post> getPostByTitle(String title, Pageable pageable);
 
     Post createPost(Post newPost);
 
@@ -20,7 +20,7 @@ public interface PostService {
 
     void deletePostById(Long id);
 
-    List<Post> getPostsByUserId(Long userId);
+    Page<Post> getPostsByUserId(Long userId, Pageable pageable);
 
 }
 

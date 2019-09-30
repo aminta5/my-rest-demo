@@ -50,8 +50,9 @@ public class UserController {
     @GetMapping(path = "/users")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 
-    public Page<User> getAllUsers() {
-        return userService.getAllUsers(PageRequest.of(0, 2));
+    public Page<User> getAllUsers(@RequestParam("page") int page,
+                                  @RequestParam("size") int size) {
+        return userService.getAllUsers(PageRequest.of(page, size));
     }
 
     //find specific user (by id)

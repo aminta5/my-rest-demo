@@ -9,6 +9,7 @@ import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.PostRepository;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -40,8 +41,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getPostByTitle(String title) {
-        return postRepository.findByTitleContainingIgnoreCase(title).orElseThrow(() -> new PostNotFoundException(title));
+    public Page<Post> getPostByTitle(String title, Pageable pageable) {
+        return postRepository.findByTitleContainingIgnoreCase(title, pageable).orElseThrow(() -> new PostNotFoundException(title));
     }
 
     @Override
@@ -95,8 +96,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getPostsByUserId(Long userId) {
+    public Page<Post> getPostsByUserId(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId.toString()));
-        return user.getPosts();
+        return new PageImpl<>(user.getPosts());
     }
 }
