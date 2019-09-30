@@ -10,11 +10,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -43,10 +49,16 @@ public class PostServiceImplTest {
         List<Post> postData = new ArrayList<>();
         postData.add(post1);
         postData.add(post2);
+        Pageable pageable = PageRequest.of(0,1);
+        Page<Post> postsPage = new PageImpl<>(postData);
+        Optional<Page<Post>> postsPageOptional = Optional.of(postsPage);
 
-        when(postRepository.findAll()).thenReturn(postData);
-        List<Post> posts = postService.getAllPosts();
-        assertEquals(posts.size(), 2);
+        when(postRepository.findAll(any(Pageable.class))).thenReturn(postsPageOptional);
+        Page<Post> returnedPostsPage = postService.getAllPosts(pageable);
+        assertThat(returnedPostsPage.getContent(), hasSize(2));
+        assertThat(returnedPostsPage.isFirst(), is(true));
+        assertThat(returnedPostsPage.isLast(), is(true));
+        assertThat(returnedPostsPage.hasNext(), is(false));
     }
 
     @Test

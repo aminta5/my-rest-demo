@@ -7,11 +7,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -36,10 +44,13 @@ public class UserServiceImplTest {
         List<User> userData = new ArrayList<>();
         userData.add(user1);
         userData.add(user2);
+        Pageable pageable = PageRequest.of(0, 1);
+        Page<User> usersPage = new PageImpl<>(Collections.singletonList(user1), pageable, userData.size());
+        Optional<Page<User>> userPageOptional = Optional.of(usersPage);
 
-        when(userRepository.findAll()).thenReturn(userData);
-        List<User> users = userService.getAllUsers();
-        assertEquals(users.size(), 2);
+        when(userRepository.findAll(any(Pageable.class))).thenReturn(userPageOptional);
+        Page<User> returnedUsersPage = userService.getAllUsers(pageable);
+        assertEquals(userPageOptional.get(), returnedUsersPage);
     }
 
     @Test
@@ -105,7 +116,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void locationCreatedIfNull(){
+    public void locationCreatedIfNull() {
         User userToUpdate = User.builder().nickname("gogo").build();
         Optional<User> userOptional = Optional.of(userToUpdate);
         User userUpdateData = User.builder().build();

@@ -18,7 +18,7 @@ public class UserTest {
     public void getFirstName() {
         String firstname = "Jonny";
         user.setFirstName(firstname);
-        assertEquals(firstname, user.getNickname());
+        assertEquals(firstname, user.getFirstName());
     }
 
     @Test

@@ -3,7 +3,6 @@ package com.webfactory.mavenDemoRest.managers;
 import com.webfactory.mavenDemoRest.services.PostService;
 import com.webfactory.mavenDemoRest.services.UserService;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,11 +22,11 @@ public class AccessManager {
         return userService.getUserByNickname(name).getId().equals(userId);
     }
 
-    public boolean userCanBeUpdated(Authentication authentication, Long id) {
-        return userService.getUserByNickname(authentication.getName()).getId().equals(id);
+    public boolean userCanBeUpdated(String name, Long id) {
+        return userService.getUserByNickname(name).getId().equals(id);
     }
 
-    public boolean postCanBeUpdatedOrSeen(Authentication authentication, Long postId) {
-        return postService.getPostById(postId).getUser().equals(userService.getUserByNickname(authentication.getName()));
+    public boolean postCanBeUpdatedOrSeen(String name, Long postId) {
+        return postService.getPostById(postId).getUser().equals(userService.getUserByNickname(name));
     }
 }

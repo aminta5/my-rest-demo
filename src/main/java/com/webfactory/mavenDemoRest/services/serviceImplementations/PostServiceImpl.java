@@ -31,10 +31,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> getAllPosts(Pageable pageable) {
-        //List<Post> posts = new ArrayList<>();
-        return postRepository.findAll(pageable).orElse(null);/*.forEach(posts::add)*/
-        ///System.out.println(posts);
-        //return posts;
+        return postRepository.findAll(pageable).orElse(null);
     }
 
     @Override

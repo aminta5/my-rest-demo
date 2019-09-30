@@ -48,14 +48,14 @@ public class PostController {
 
     //find specific post (by id)
     @GetMapping(path = "/posts/{postId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication.name, #postId)")
     public Post findPostById(@PathVariable Long postId) {
         return postService.getPostById(postId);
     }
 
     //delete post(authenticated user or admin)
     @DeleteMapping(path = "/posts/{postId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication.name, #postId)")
     public void deletePost(@PathVariable Long postId) {
         postService.deletePostById(postId);
     }
@@ -72,7 +72,7 @@ public class PostController {
 
     //update post
     @PutMapping(path = "/posts/{postId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication, #postId)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.postCanBeUpdatedOrSeen(authentication.name, #postId)")
     public Post updatePost(@Valid @RequestBody RequestBodyPost requestBodyPost, @P("postId") @PathVariable Long postId) {
         return postService.updatePost(requestBodyPostToPost.convert(requestBodyPost), postId);
     }

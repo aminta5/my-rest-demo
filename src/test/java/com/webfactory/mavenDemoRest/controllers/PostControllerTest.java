@@ -57,7 +57,7 @@ public class PostControllerTest {
         listPosts.add(Post.builder().id(1L).build());
         listPosts.add(Post.builder().id(2L).build());
 
-        when(postService.getAllPosts()).thenReturn(listPosts);
+      //  when(postService.getAllPosts()).thenReturn(listPosts);
         mockMvc.perform(get("/posts")).andExpect(status().isOk());
     }
 

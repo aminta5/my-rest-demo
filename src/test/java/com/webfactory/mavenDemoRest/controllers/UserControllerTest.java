@@ -14,6 +14,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -54,7 +60,9 @@ public class UserControllerTest {
                 messageSource,
                 requestBodyUserToUser);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).setControllerAdvice(new CustomizedResponseEntityExceptionHandler()).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(userController)
+                .setControllerAdvice(new CustomizedResponseEntityExceptionHandler())
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver()).build();
     }
 
     @Test
@@ -62,8 +70,10 @@ public class UserControllerTest {
         List<User> users = new ArrayList<>();
         users.add(User.builder().id(1L).build());
         users.add(User.builder().id(2L).build());
+        Page<User> usersPage = new PageImpl<>(users);
+        Pageable pageable = PageRequest.of(0,1);
 
-        when(userService.getAllUsers()).thenReturn(users);
+        when(userService.getAllUsers(pageable)).thenReturn(usersPage);
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk());
     }
