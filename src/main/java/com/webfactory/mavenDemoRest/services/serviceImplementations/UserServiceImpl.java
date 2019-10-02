@@ -5,11 +5,15 @@ import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.Location;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,19 +24,26 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    private Logger logger = Logger.getLogger(getClass().getName());
+
+
     @Override
     public Page<User> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable).orElse(null);
 
     }
 
+    @Cacheable(value = "usersIds", key = "#id")
     @Override
     public User getUserById(Long id) {
+        logger.info("getUserById invoked");
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id.toString()));
     }
 
+    @Cacheable(value = "usersNickname", key = "#nickname")
     @Override
     public User getUserByNickname(String nickname) {
+        logger.info("getUserByNickname invoked");
         return userRepository.findByNicknameContainingIgnoreCase(nickname).orElseThrow(() -> new UserNotFoundException(nickname));
     }
 
@@ -41,8 +52,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @CachePut("usersIds")
     @Override
     public User updateUser(User updatedUserObject, Long userId) {
+        logger.info("updateUser invoked");
         Optional<User> userToUpdateOptional = userRepository.findById(userId);
         User userToUpdate = userToUpdateOptional.orElseThrow(() -> new UserNotFoundException(userId.toString()));
         Location locationToUpdate = userToUpdate.getLocation();
@@ -86,13 +99,16 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(userToUpdate);
     }
 
+    @CacheEvict("usersIds")
     @Override
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
 
+    @Cacheable(value = "usersEmails", key = "#email")
     @Override
     public User getUserByEmail(String email) {
+        logger.info("getUserByEmail invoked");
         return userRepository.findByEmail(email).orElse(null);
     }
 

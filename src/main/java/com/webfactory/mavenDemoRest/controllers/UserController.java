@@ -57,7 +57,7 @@ public class UserController {
 
     //find specific user (by id)
     @GetMapping(path = "/users/{userId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication, #userId)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.authorizedUser(authentication.name, #userId)")
     public User getUser(@P("userId") @PathVariable Long userId) {
         return userService.getUserById(userId);
     }
