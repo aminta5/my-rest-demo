@@ -1,5 +1,6 @@
 package com.webfactory.mavenDemoRest.services.serviceImplementations;
 
+import com.webfactory.mavenDemoRest.repositories.LocationRepository;
 import com.webfactory.mavenDemoRest.services.PostService;
 import com.webfactory.mavenDemoRest.exceptions.PostNotFoundException;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
@@ -17,8 +18,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,12 +25,14 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final LocationRepository locationRepository;
 
     //constructor
     public PostServiceImpl(PostRepository postRepository,
-                           UserRepository userRepository) {
+                           UserRepository userRepository, LocationRepository locationRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.locationRepository = locationRepository;
     }
 
     @Override
@@ -53,6 +54,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(Post newPost) {
+        Optional<Location> locationOptional = locationRepository.findByCityContainingIgnoreCase(newPost.getLocation().getCity());
+        if(locationOptional.isPresent()){
+            Location location = locationOptional.get();
+            location.addPost(newPost);
+            newPost.setLocation(location);
+            locationRepository.save(location);
+        }
         return postRepository.save(newPost);
     }
 

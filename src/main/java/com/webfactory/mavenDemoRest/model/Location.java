@@ -15,7 +15,7 @@ public class Location extends BaseEntity {
     //city max 120 chars
     @NotNull
     @Size(max = 120)
-    @Column
+    @Column(unique = true, name = "city")
     private String city;
 
     //country max 120 chars
@@ -102,6 +102,16 @@ public class Location extends BaseEntity {
 
     public List<Post> getPosts() {
         return posts;
+    }
+
+    //add user
+    public void addUser(User user){
+        this.users.add(user);
+    }
+
+    //add post
+    public void addPost(Post post){
+        this.posts.add(post);
     }
 
 }

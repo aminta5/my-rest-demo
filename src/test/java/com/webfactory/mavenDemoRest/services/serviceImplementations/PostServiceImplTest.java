@@ -38,7 +38,7 @@ public class PostServiceImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        postService = new PostServiceImpl(postRepository, userRepository);
+        postService = new PostServiceImpl(postRepository, userRepository, locationRepository);
     }
 
 

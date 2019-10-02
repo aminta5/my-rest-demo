@@ -1,5 +1,6 @@
 package com.webfactory.mavenDemoRest.services.serviceImplementations;
 
+import com.webfactory.mavenDemoRest.repositories.LocationRepository;
 import com.webfactory.mavenDemoRest.services.UserService;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.Location;
@@ -20,9 +21,11 @@ import java.util.logging.Logger;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final LocationRepository locationRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, LocationRepository locationRepository) {
         this.userRepository = userRepository;
+        this.locationRepository = locationRepository;
     }
 
     private Logger logger = Logger.getLogger(getClass().getName());
@@ -50,6 +53,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        Optional<Location> locationOptional = locationRepository.findByCityContainingIgnoreCase(user.getLocation().getCity());
+        if(locationOptional.isPresent()){
+            Location location = locationOptional.get();
+            location.addUser(user);
+            user.setLocation(location);
+            locationRepository.save(location);
+        }
         return userRepository.save(user);
     }
 

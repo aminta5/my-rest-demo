@@ -29,7 +29,7 @@ public class UserServiceImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        userService = new UserServiceImpl(userRepository);
+        userService = new UserServiceImpl(userRepository, postRepository);
     }
 
     @Test
