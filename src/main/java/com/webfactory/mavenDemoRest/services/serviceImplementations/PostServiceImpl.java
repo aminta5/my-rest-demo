@@ -53,6 +53,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Caching(put = {
+            @CachePut(value = "postsByIds", key = "#newPost.getId()"),
+            @CachePut(value = "postsByTitle", key = "#newPost.getTitle()")
+    })
     public Post createPost(Post newPost) {
         Optional<Location> locationOptional = locationRepository.findByCityContainingIgnoreCase(newPost.getLocation().getCity());
         if(locationOptional.isPresent()){

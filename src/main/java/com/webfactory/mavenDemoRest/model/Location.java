@@ -33,11 +33,11 @@ public class Location extends BaseEntity {
     private Float latitude;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location", fetch = FetchType.EAGER)
     private List<User> users = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location", fetch = FetchType.EAGER)
     private List<Post> posts = new ArrayList<>();
 
     //constructors

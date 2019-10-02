@@ -52,6 +52,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Caching(put = {
+            @CachePut(value = "usersIds", key = "#user.getId()"),
+            @CachePut(value = "usersNickname", key = "#user.getNickname()")
+    })
     public User createUser(User user) {
         Optional<Location> locationOptional = locationRepository.findByCityContainingIgnoreCase(user.getLocation().getCity());
         if(locationOptional.isPresent()){
