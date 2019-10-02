@@ -8,6 +8,7 @@ import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    @CachePut("usersIds")
+    @CachePut(value = "usersIds", key = "#userId")
     @Override
     public User updateUser(User updatedUserObject, Long userId) {
         logger.info("updateUser invoked");
@@ -99,9 +100,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(userToUpdate);
     }
 
-    @CacheEvict("usersIds")
+    @Caching(evict = {
+            @CacheEvict(value = "usersIds", key = "#id"),
+            @CacheEvict(value = "postsByUserIds", key = "#id"),
+    })
     @Override
     public void deleteUserById(Long id) {
+        logger.info("deleteUserById invoked");
         userRepository.deleteById(id);
     }
 

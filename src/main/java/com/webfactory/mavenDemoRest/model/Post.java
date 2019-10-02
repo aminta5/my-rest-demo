@@ -28,7 +28,7 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)/*(cascade = CascadeType.ALL)*/
     private Location location;
 
     //constructors

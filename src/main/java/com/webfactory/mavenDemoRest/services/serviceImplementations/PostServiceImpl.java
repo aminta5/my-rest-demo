@@ -8,6 +8,10 @@ import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
 import com.webfactory.mavenDemoRest.repositories.PostRepository;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,11 +40,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Cacheable(value = "postsByIds", key = "#id")
     public Post getPostById(Long id) {
         return postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id.toString()));
     }
 
     @Override
+    @Cacheable(value = "postsByTitle", key = "#title")
     public Page<Post> getPostByTitle(String title, Pageable pageable) {
         return postRepository.findByTitleContainingIgnoreCase(title, pageable).orElseThrow(() -> new PostNotFoundException(title));
     }
@@ -51,6 +57,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @CachePut(value = "postsByIds", key = "#postId")
     public Post updatePost(Post postUpdateObject, Long postId) {
         Optional<Post> postToUpdateOptional = postRepository.findById(postId);
         Post postToUpdate = postToUpdateOptional.orElseThrow(() -> new PostNotFoundException(postId.toString()));
@@ -90,12 +97,17 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(postToUpdate);
     }
 
+
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "postsByIds", key = "#id"),
+    })
     public void deletePostById(Long id) {
         postRepository.deleteById(id);
     }
 
     @Override
+    @Cacheable(value = "postsByUserIds", key = "#userId")
     public Page<Post> getPostsByUserId(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId.toString()));
         return new PageImpl<>(user.getPosts());

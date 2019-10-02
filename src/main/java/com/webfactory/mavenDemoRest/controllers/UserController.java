@@ -99,7 +99,7 @@ public class UserController {
 
     //update user
     @PutMapping(path = "/users/{userId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.userCanBeUpdated(authentication, #userId)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @accessManager.userCanBeUpdated(authentication.name, #userId)")
     public ResponseEntity<User> updateUser(@Valid @RequestBody RequestBodyUser requestBodyUser, @P("userId") @PathVariable Long userId) {
         User savedUser = userService.updateUser(requestBodyUserToUser.convert(requestBodyUser), userId);
         return new ResponseEntity<>(savedUser, HttpStatus.ACCEPTED);
@@ -107,7 +107,7 @@ public class UserController {
 
     // Reset password
     @RequestMapping(value = "/users/{userId}/reset/password", method = RequestMethod.POST)
-    @PreAuthorize("@accessManager.userCanBeUpdated(authentication, #userId)")
+    @PreAuthorize("@accessManager.userCanBeUpdated(authentication.name, #userId)")
     public boolean resetPassword(@Valid @RequestBody PasswordChange passwordChange, @PathVariable Long userId) {
         User user = userService.getUserByEmail(passwordChange.getEmail());
         if (user != null && user.getId().equals(userId)) {
