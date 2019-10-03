@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
             Location location = locationOptional.get();
             location.addUser(user);
             user.setLocation(location);
-            locationRepository.save(location);
+            //locationRepository.save(location);
         }
         return userRepository.save(user);
     }
@@ -77,10 +77,25 @@ public class UserServiceImpl implements UserService {
     public User updateUser(User updatedUserObject, Long userId) {
         logger.info("updateUser invoked");
         Optional<User> userToUpdateOptional = userRepository.findById(userId);
+
         User userToUpdate = userToUpdateOptional.orElseThrow(() -> new UserNotFoundException(userId.toString()));
-        if(updatedUserObject.getLocation() != null && updatedUserObject.getLocation() != userToUpdate.getLocation()){
-            userToUpdate.setLocation(updatedUserObject.getLocation());
+
+        if(updatedUserObject.getLocation() != null){
+            Optional<Location> locationExists = locationRepository.findByCityContainingIgnoreCase(updatedUserObject.getLocation().getCity());
+            Location location;
+            if(locationExists.isPresent()){
+                location = locationExists.get();
+            }else{
+                location = updatedUserObject.getLocation();
+            }
+
+            location.addUser(userToUpdate);
+            userToUpdate.setLocation(location);
+
         }
+        /*if(updatedUserObject.getLocation() != null && updatedUserObject.getLocation() != userToUpdate.getLocation()){
+            userToUpdate.setLocation(updatedUserObject.getLocation());
+        }*/
 
         //Location locationToUpdate = userToUpdate.getLocation();
         /*if (locationToUpdate == null) {
@@ -125,12 +140,14 @@ public class UserServiceImpl implements UserService {
 
     @Caching(evict = {
             @CacheEvict(value = "usersIds", key = "#id"),
-            @CacheEvict(value = "postsByUserIds", key = "#id"),
+            @CacheEvict(value = "postsByUserIds", key = "#id")
     })
     @Override
-    public void deleteUserById(Long id) {
+    public User deleteUserById(Long id) {
         logger.info("deleteUserById invoked");
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id.toString()));
         userRepository.deleteById(id);
+        return user;
     }
 
     @Cacheable(value = "usersEmails", key = "#email")

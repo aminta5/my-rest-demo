@@ -90,6 +90,7 @@ public class PostServiceImpl implements PostService {
         if(newLocation != postToUpdate.getLocation() && newLocation != null){
             postToUpdate.setLocation(newLocation);
         }
+
         /*Location locationToUpdate = postToUpdate.getLocation();
         if (locationToUpdate == null) {
             locationToUpdate = new Location();
