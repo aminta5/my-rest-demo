@@ -83,7 +83,7 @@ drop table if exists locations;
 create table locations
 (
     id        SERIAL PRIMARY KEY not null,
-    city      VARCHAR(120),
+    city      VARCHAR(120) UNIQUE,
     country   VARCHAR(120),
     latitude  REAL,
     longitude REAL

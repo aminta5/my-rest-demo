@@ -2,7 +2,6 @@ package com.webfactory.mavenDemoRest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,11 +23,11 @@ public class Post extends BaseEntity {
     private String description;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)/*(cascade=CascadeType.ALL)*/
+    @ManyToOne(/*fetch = FetchType.LAZY*/)/*(cascade=CascadeType.ALL)*/
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)/*(cascade = CascadeType.ALL)*/
+    @ManyToOne(/*fetch = FetchType.LAZY,*/ cascade = CascadeType.PERSIST)/*(cascade = CascadeType.ALL)*/
     @JoinColumn(name = "location_id")
     private Location location;
 

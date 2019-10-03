@@ -53,8 +53,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Caching(put = {
-            @CachePut(value = "usersIds", key = "#user.getId()"),
-            @CachePut(value = "usersNickname", key = "#user.getNickname()")
+            @CachePut(value = "usersIds", key = "#result.id"),
+            @CachePut(value = "usersNickname", key = "#result.nickname"),
+            @CachePut(value = "usersEmails", key = "#result.email")
     })
     public User createUser(User user) {
         Optional<Location> locationOptional = locationRepository.findByCityContainingIgnoreCase(user.getLocation().getCity());
@@ -67,17 +68,25 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    @CachePut(value = "usersIds", key = "#userId")
     @Override
+    @Caching(put = {
+            @CachePut(value = "usersIds", key = "#userId"),
+            @CachePut(value = "userNickname", key = "#result.nickname"),
+            @CachePut(value = "usersEmails", key = "#result.email")
+    })
     public User updateUser(User updatedUserObject, Long userId) {
         logger.info("updateUser invoked");
         Optional<User> userToUpdateOptional = userRepository.findById(userId);
         User userToUpdate = userToUpdateOptional.orElseThrow(() -> new UserNotFoundException(userId.toString()));
-        Location locationToUpdate = userToUpdate.getLocation();
-        if (locationToUpdate == null) {
+        if(updatedUserObject.getLocation() != null && updatedUserObject.getLocation() != userToUpdate.getLocation()){
+            userToUpdate.setLocation(updatedUserObject.getLocation());
+        }
+
+        //Location locationToUpdate = userToUpdate.getLocation();
+        /*if (locationToUpdate == null) {
             locationToUpdate = new Location();
         }
-        Location newLocation = updatedUserObject.getLocation();
+        Location newLocation = updatedUserObject.getLocation();*/
 
         //updating the user
         if (updatedUserObject.getFirstName() != null) {
@@ -94,7 +103,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //updating the location
-        if (newLocation != null) {
+        /*if (newLocation != null) {
             if (newLocation.getCity() != null) {
                 locationToUpdate.setCity(newLocation.getCity());
             }
@@ -107,9 +116,9 @@ public class UserServiceImpl implements UserService {
             if (newLocation.getLatitude() != null) {
                 locationToUpdate.setLatitude(newLocation.getLatitude());
             }
-        }
+        }*/
 
-        userToUpdate.setLocation(locationToUpdate);
+       //userToUpdate.setLocation(locationToUpdate);
 
         return userRepository.save(userToUpdate);
     }
