@@ -86,7 +86,11 @@ public class PostServiceImpl implements PostService {
         }
 
         //update of the location
-        Location locationToUpdate = postToUpdate.getLocation();
+        Location newLocation = postUpdateObject.getLocation();
+        if(newLocation != postToUpdate.getLocation() && newLocation != null){
+            postToUpdate.setLocation(newLocation);
+        }
+        /*Location locationToUpdate = postToUpdate.getLocation();
         if (locationToUpdate == null) {
             locationToUpdate = new Location();
         }
@@ -107,7 +111,7 @@ public class PostServiceImpl implements PostService {
             }
         }
 
-        postToUpdate.setLocation(locationToUpdate);
+        postToUpdate.setLocation(locationToUpdate);*/
 
         return postRepository.save(postToUpdate);
     }
