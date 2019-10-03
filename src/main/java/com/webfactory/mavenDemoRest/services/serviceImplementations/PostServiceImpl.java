@@ -54,8 +54,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Caching(put = {
-            @CachePut(value = "postsByIds", key = "#newPost.getId()"),
-            @CachePut(value = "postsByTitle", key = "#newPost.getTitle()")
+            @CachePut(value = "postsByIds", key = "#result.id"),
+            @CachePut(value = "postsByTitle", key = "#result.title")
     })
     public Post createPost(Post newPost) {
         Optional<Location> locationOptional = locationRepository.findByCityContainingIgnoreCase(newPost.getLocation().getCity());
@@ -69,7 +69,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @CachePut(value = "postsByIds", key = "#postId")
+    @Caching(put = {
+            @CachePut(value = "postsByIds", key = "#postId"),
+            @CachePut(value = "postsByTitle", key = "#result.title")
+    })
     public Post updatePost(Post postUpdateObject, Long postId) {
         Optional<Post> postToUpdateOptional = postRepository.findById(postId);
         Post postToUpdate = postToUpdateOptional.orElseThrow(() -> new PostNotFoundException(postId.toString()));
