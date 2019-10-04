@@ -4,6 +4,7 @@ import com.webfactory.mavenDemoRest.exceptions.PostNotFoundException;
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.Post;
 import com.webfactory.mavenDemoRest.model.User;
+import com.webfactory.mavenDemoRest.repositories.LocationRepository;
 import com.webfactory.mavenDemoRest.repositories.PostRepository;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import org.junit.Before;
@@ -34,6 +35,9 @@ public class PostServiceImplTest {
 
     @Mock
     UserRepository userRepository;
+
+    @Mock
+    LocationRepository locationRepository;
 
     @Before
     public void setUp() {

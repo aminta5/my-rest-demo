@@ -37,6 +37,7 @@ dependencies {
     //runtime 'com.h2database:h2:1.4.199'
     testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE'
     compileOnly 'org.projectlombok:lombok:1.18.4'
+    annotationProcessor 'org.projectlombok:lombok:1.18.4'
 
     // https://mvnrepository.com/artifact/org.springframework/spring-context-support
     compile group: 'org.springframework', name: 'spring-context-support', version: '5.1.9.RELEASE'
@@ -58,6 +59,13 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-cache
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: '2.1.8.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.1.9.RELEASE'
+
+    // https://mvnrepository.com/artifact/redis.clients/jedis
+    compile group: 'redis.clients', name: 'jedis', version: '3.1.0'
+
 }
 
 group = 'com.example'

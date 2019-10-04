@@ -2,6 +2,8 @@ package com.webfactory.mavenDemoRest.services.serviceImplementations;
 
 import com.webfactory.mavenDemoRest.exceptions.UserNotFoundException;
 import com.webfactory.mavenDemoRest.model.User;
+import com.webfactory.mavenDemoRest.repositories.LocationRepository;
+import com.webfactory.mavenDemoRest.repositories.PostRepository;
 import com.webfactory.mavenDemoRest.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,10 +28,12 @@ public class UserServiceImplTest {
     @Mock
     UserRepository userRepository;
 
+    @Mock
+    LocationRepository locationRepository;
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        userService = new UserServiceImpl(userRepository, postRepository);
+        userService = new UserServiceImpl(userRepository, locationRepository);
     }
 
     @Test

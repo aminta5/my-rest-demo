@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -26,6 +27,9 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final LocationRepository locationRepository;
+
+    private Logger logger = Logger.getLogger(getClass().getName());
+
 
     //constructor
     public PostServiceImpl(PostRepository postRepository,
@@ -43,12 +47,14 @@ public class PostServiceImpl implements PostService {
     @Override
     @Cacheable(value = "postsByIds", key = "#id")
     public Post getPostById(Long id) {
+        logger.info("getPostById invoked");
         return postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id.toString()));
     }
 
     @Override
     @Cacheable(value = "postsByTitle", key = "#title")
     public Page<Post> getPostByTitle(String title, Pageable pageable) {
+        logger.info("getPostByTitle invoked");
         return postRepository.findByTitleContainingIgnoreCase(title, pageable).orElseThrow(() -> new PostNotFoundException(title));
     }
 
@@ -58,12 +64,14 @@ public class PostServiceImpl implements PostService {
             @CachePut(value = "postsByTitle", key = "#result.title")
     })
     public Post createPost(Post newPost) {
-        Optional<Location> locationOptional = locationRepository.findByCityContainingIgnoreCase(newPost.getLocation().getCity());
-        if(locationOptional.isPresent()){
-            Location location = locationOptional.get();
-            location.addPost(newPost);
-            newPost.setLocation(location);
-            locationRepository.save(location);
+        if (newPost.getLocation() != null) {
+            Optional<Location> locationOptional = locationRepository.findByCityContainingIgnoreCase(newPost.getLocation().getCity());
+            if (locationOptional.isPresent()) {
+                Location location = locationOptional.get();
+                location.addPost(newPost);
+                newPost.setLocation(location);
+                locationRepository.save(location);
+            }
         }
         return postRepository.save(newPost);
     }
@@ -74,6 +82,8 @@ public class PostServiceImpl implements PostService {
             @CachePut(value = "postsByTitle", key = "#result.title")
     })
     public Post updatePost(Post postUpdateObject, Long postId) {
+        logger.info("updatePost invoked");
+
         Optional<Post> postToUpdateOptional = postRepository.findById(postId);
         Post postToUpdate = postToUpdateOptional.orElseThrow(() -> new PostNotFoundException(postId.toString()));
 
@@ -86,33 +96,12 @@ public class PostServiceImpl implements PostService {
         }
 
         //update of the location
-        Location newLocation = postUpdateObject.getLocation();
-        if(newLocation != postToUpdate.getLocation() && newLocation != null){
-            postToUpdate.setLocation(newLocation);
+        if (postUpdateObject.getLocation() != null) {
+            Optional<Location> locationExist = locationRepository.findByCityContainingIgnoreCase(postUpdateObject.getLocation().getCity());
+            Location location = locationExist.orElseGet(postUpdateObject::getLocation);
+            location.addPost(postToUpdate);
+            postToUpdate.setLocation(location);
         }
-
-        /*Location locationToUpdate = postToUpdate.getLocation();
-        if (locationToUpdate == null) {
-            locationToUpdate = new Location();
-        }
-        Location newLocation = postUpdateObject.getLocation();
-
-        if (newLocation != null) {
-            if (newLocation.getCity() != null) {
-                locationToUpdate.setCity(newLocation.getCity());
-            }
-            if (newLocation.getCountry() != null) {
-                locationToUpdate.setCountry(newLocation.getCountry());
-            }
-            if (newLocation.getLongitude() != null) {
-                locationToUpdate.setLongitude(newLocation.getLongitude());
-            }
-            if (newLocation.getLatitude() != null) {
-                locationToUpdate.setLatitude(newLocation.getLatitude());
-            }
-        }
-
-        postToUpdate.setLocation(locationToUpdate);*/
 
         return postRepository.save(postToUpdate);
     }
