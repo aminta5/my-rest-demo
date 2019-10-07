@@ -66,6 +66,8 @@ dependencies {
     // https://mvnrepository.com/artifact/redis.clients/jedis
     compile group: 'redis.clients', name: 'jedis', version: '3.1.0'
 
+    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis
+    compile group: 'org.springframework.data', name: 'spring-data-redis', version: '2.2.0.RELEASE'
 }
 
 group = 'com.example'
