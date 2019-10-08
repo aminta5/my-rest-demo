@@ -64,10 +64,10 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.1.9.RELEASE'
 
     // https://mvnrepository.com/artifact/redis.clients/jedis
-    compile group: 'redis.clients', name: 'jedis', version: '3.1.0'
-
+    //compile group: 'redis.clients', name: 'jedis', version: '2.6.2'
+    //3.1.0
     // https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis
-    compile group: 'org.springframework.data', name: 'spring-data-redis', version: '2.2.0.RELEASE'
+    //compile group: 'org.springframework.data', name: 'spring-data-redis', version: '2.2.0.RELEASE'
 }
 
 group = 'com.example'
